@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#eee6d6" />
+  <meta name="color-scheme" content="light dark" />
+  <title>一班集</title>
+  <meta name="description" content="《一班集》在线阅读" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <header class="site-header">
+    <button class="icon-btn mobile-only" id="menu-btn" aria-label="打开目录">☰</button>
+    <a class="brand" href="#/home" aria-label="返回首页"><span class="brand-main">一班集</span><span class="brand-dot">·</span><span class="brand-edition">第二版</span></a>
+    <nav class="desktop-nav" id="top-nav"></nav>
+    <div class="header-actions">
+      <button class="icon-btn favorites-header-btn" id="favorites-btn" aria-label="打开收藏夹" title="收藏夹"><span class="favorites-header-icon">☆</span><span class="favorites-count" id="favorites-count" hidden>0</span></button>
+      <button class="icon-btn" id="search-btn" aria-label="搜索">⌕</button>
+      <button class="icon-btn" id="theme-btn" aria-label="切换夜间模式">◐</button>
+      <button class="icon-btn" id="settings-btn" aria-label="阅读设置">Aa</button>
+    </div>
+  </header>
+
+  <div id="drawer-backdrop" class="backdrop"></div>
+  <aside id="drawer" class="drawer" aria-label="目录"></aside>
+
+  <main id="app" tabindex="-1"></main>
+
+  <div id="search-panel" class="modal" role="dialog" aria-modal="true" aria-label="搜索">
+    <div class="modal-card search-card">
+      <div class="search-row"><span>⌕</span><input id="search-input" autocomplete="off" placeholder="搜索篇名、作者或正文" /><button id="search-close" class="text-btn">关闭</button></div>
+      <div class="search-hint">Ctrl / ⌘ + K</div>
+      <div id="search-results" class="search-results"></div>
+    </div>
+  </div>
+
+  <div id="settings-panel" class="popover settings-popover" aria-label="阅读设置">
+    <div class="setting-row"><span>字号</span><div><button data-font="-1">A−</button><button data-font="1">A＋</button></div></div>
+    <div class="setting-row"><span>行距</span><div><button data-line="compact">紧</button><button data-line="normal">中</button><button data-line="loose">松</button></div></div>
+    <div class="setting-row"><span>版心</span><div><button data-width="narrow">窄</button><button data-width="normal">中</button><button data-width="wide">宽</button></div></div>
+    <button id="reset-reading" class="settings-reset">恢复默认</button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="assets/js/core/content-registry.js"></script>
+  <script src="assets/js/core/favorites-store.js"></script>
+  <script src="data/book-meta.js"></script>
+  <script src="data/content-manifest.js"></script>
+  <script src="content/00-front-matter/01-preface2.js"></script>
+  <script src="content/00-front-matter/02-a01.js"></script>
+  <script src="content/00-front-matter/03-a02.js"></script>
+  <script src="content/01-guyuan/01-a03.js"></script>
+  <script src="content/01-guyuan/02-a04.js"></script>
+  <script src="content/01-guyuan/03-a06.js"></script>
+  <script src="content/01-guyuan/04-a07.js"></script>
+  <script src="content/01-guyuan/05-a08.js"></script>
+  <script src="content/01-guyuan/06-a09.js"></script>
+  <script src="content/01-guyuan/07-x_gangchengdong.js"></script>
+  <script src="content/01-guyuan/08-x_wanfangjie.js"></script>
+  <script src="content/02-xiaotan/01-a05.js"></script>
+  <script src="content/02-xiaotan/02-a22.js"></script>
+  <script src="content/02-xiaotan/03-a23.js"></script>
+  <script src="content/02-xiaotan/04-x_shenle.js"></script>
+  <script src="content/02-xiaotan/05-x_jiayou.js"></script>
+  <script src="content/02-xiaotan/06-x_pusa.js"></script>
+  <script src="content/02-xiaotan/07-x_wogui.js"></script>
+  <script src="content/02-xiaotan/08-x_zhaji.js"></script>
+  <script src="content/02-xiaotan/09-x_gouyade.js"></script>
+  <script src="content/03-shijian/01-a10.js"></script>
+  <script src="content/03-shijian/02-a11.js"></script>
+  <script src="content/03-shijian/03-a12.js"></script>
+  <script src="content/03-shijian/04-a13.js"></script>
+  <script src="content/03-shijian/05-a14.js"></script>
+  <script src="content/03-shijian/06-a15.js"></script>
+  <script src="content/03-shijian/07-a16.js"></script>
+  <script src="content/03-shijian/08-a17.js"></script>
+  <script src="content/03-shijian/09-a18.js"></script>
+  <script src="content/04-zhiyi/01-a19.js"></script>
+  <script src="content/04-zhiyi/02-a20.js"></script>
+  <script src="content/04-zhiyi/03-a21.js"></script>
+  <script src="content/04-zhiyi/04-x_shenquan.js"></script>
+  <script src="content/04-zhiyi/05-x_jia.js"></script>
+  <script src="content/04-zhiyi/06-x_zhouyu.js"></script>
+  <script src="content/04-zhiyi/07-a24.js"></script>
+  <script src="content/04-zhiyi/08-a25.js"></script>
+  <script src="content/05-mimeng/01-a26.js"></script>
+  <script src="content/05-mimeng/02-a27.js"></script>
+  <script src="content/05-mimeng/03-a28.js"></script>
+  <script src="content/05-mimeng/04-a29.js"></script>
+  <script src="content/06-tianwai/01-a30.js"></script>
+  <script src="content/06-tianwai/02-a31.js"></script>
+  <script src="content/06-tianwai/03-a32.js"></script>
+  <script src="content/06-tianwai/04-a33.js"></script>
+  <script src="content/06-tianwai/05-a34.js"></script>
+  <script src="content/06-tianwai/tianhuaban/meta.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/01.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/02.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/03.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/04.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/05.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/06.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/07.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/08.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/09.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/10.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/11.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/12.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/13.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/14.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/15.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/16.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/17.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/18.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/19.js"></script>
+  <script src="content/06-tianwai/tianhuaban/chapters/20.js"></script>
+  <script src="content/07-jiandao/01-a35.js"></script>
+  <script src="content/07-jiandao/02-a36.js"></script>
+  <script src="content/07-jiandao/03-a37.js"></script>
+  <script src="content/07-jiandao/04-a38.js"></script>
+  <script src="content/07-jiandao/05-a39.js"></script>
+  <script src="content/07-jiandao/06-a40.js"></script>
+  <script src="content/99-back-matter/01-postscript.js"></script>
+  <script src="assets/js/bootstrap.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
