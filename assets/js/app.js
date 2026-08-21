@@ -72,6 +72,7 @@
   }
 
   function hasInlinePreface(a){ return /并序$/.test((a?.title||'').trim()) && Array.isArray(a.body) && a.body.length>0; }
+  function hasVerseLeadNote(a){ return a?.kind==='verse' && Array.isArray(a.body) && /^(?:自评|题记|附记|按)[:：]/.test((a.body[0]||'').trim()); }
 
   function getSections(a){
     if(a.kind==='novel'){
@@ -192,13 +193,14 @@
     const sections=getSections(a);
     const byIndex=new Map(sections.map(s=>[s.bodyIndex,s]));
     const prefaced=hasInlinePreface(a);
+    const leadNote=hasVerseLeadNote(a);
     return a.body.map((p,i)=>{
       const s=byIndex.get(i);
       if(s){
         return `<h2 class="story-section-title" id="story-section-${a.id}-${s.index}" data-section-index="${s.index}"><span>${esc(s.title)}</span></h2>`;
       }
-      if(prefaced && i===0){
-        return `<p class="work-preface">${esc(p)}</p>`;
+      if((prefaced || leadNote) && i===0){
+        return `<p class="work-preface${leadNote?' work-author-note':''}">${esc(p)}</p>`;
       }
       return paraHTML(p);
     }).join('');
