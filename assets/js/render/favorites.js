@@ -4,7 +4,7 @@
 (function(){
   'use strict';
   const YB = window.YB;
-  const {$, esc, titleHTML, routeFor, fmtChars, unitLabel, rev, favoriteArticles} = YB;
+  const {$, $$, esc, titleHTML, routeFor, fmtChars, unitLabel, rev, favoriteArticles} = YB;
 
   function renderFavorites(){
     document.title='收藏夹｜一班集';

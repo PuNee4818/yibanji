@@ -15,7 +15,7 @@
 .section-page-head>div:last-child{display:flex;align-items:center;gap:18px}
 
 .section-list{border-bottom:1px solid var(--hair-strong)}
-.section-list a{display:grid;grid-template-columns:64px minmax(0,1fr) 170px 90px;gap:18px;align-items:baseline;text-decoration:none;color:var(--ink);padding:26px 0;border-bottom:1px solid var(--hair)}
+.section-list a{position:relative;display:grid;grid-template-columns:64px minmax(0,1fr) 170px 90px;gap:18px;align-items:baseline;text-decoration:none;color:var(--ink);padding:26px 0;border-bottom:1px solid var(--hair)}
 .section-list .idx{font:italic 14px Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums}
 .section-list .ttl{font-family:var(--serif);font-size:26px;font-weight:800;transition:color var(--dur-fast) var(--ease-soft)}
 .section-list .auth,.section-list .len{font-size:13px;color:var(--muted)}

@@ -1,5 +1,5 @@
 /* ============================================================
-   一班集 · base.css —— 变量 / 主题 / 基础 / 纸纹 / 启动遮罩
+   一班集 · base.css —— 变量 / 主题 / 基础 / 启动遮罩
    全部样式按组件拆分：header home catalog section reader
    overlays favorites immersive seals motion print responsive
    ============================================================ */
@@ -24,8 +24,10 @@
   --dur-fast:160ms;--dur:260ms;--dur-slow:520ms;
   --rise:14px;
 
-  /* 悬停"墨晕"：默认用朱色，印章作用域内会被 seal-ink 覆盖（见 motion.css 悬停系统） */
+  /* 悬停"墨晕"：默认用朱色，印章作用域内会被 seal-ink 覆盖（见 motion.css 悬停系统）。
+     浅色=正片叠底（加深），深色=滤色（提亮），两主题同一动效语言 */
   --wash:color-mix(in srgb,var(--accent) 7%,transparent);
+  --wash-blend:multiply;
 
   /* 字号阶梯 1.25 —— 新增组件使用 */
   --step--1:.8rem;--step-0:1rem;--step-1:1.25rem;--step-2:1.563rem;
@@ -40,26 +42,22 @@ html[data-theme="dark"]{
   --paper:#181510;--paper-deep:#201c15;--panel:#23201a;--ink:#e9e0cc;
   --muted:#ab9f88;--soft:#7a7060;--accent:#d07a5e;--accent-2:#d9a273;--rule:#d6cab2;
   --shadow:0 18px 48px rgba(0,0,0,.52);
+  /* 深色下墨晕改为提亮，强度略升以匹配浅色的可感知度 */
+  --wash:color-mix(in srgb,var(--accent) 11%,transparent);
+  --wash-blend:screen;
 }
 html[data-theme="dark"] .modal-card,
 html[data-theme="dark"] .popover,
 html[data-theme="dark"] .drawer{border-color:color-mix(in srgb,var(--rule) 20%,transparent)}
+/* 深色下遮罩加深，保证浮层与背景的层次和浅色一致 */
+html[data-theme="dark"] .backdrop{background:rgba(0,0,0,.55)}
+html[data-theme="dark"] .modal{background:rgba(0,0,0,.58)}
 
 /* ---------- 基础 ---------- */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;color:var(--ink);background:var(--paper);font-family:var(--ui);min-height:100vh;transition:background var(--dur) var(--ease-soft),color var(--dur) var(--ease-soft);-webkit-font-smoothing:antialiased}
-
-/* 纸纹：分形噪声（纤维 + 斑驳两层），替代原来的规律网点 */
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.5;
-  mix-blend-mode:multiply;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)' opacity='.4'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.02' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23c)' opacity='.3'/%3E%3C/svg%3E");
-  background-size:200px 200px,420px 420px;
-}
-html[data-theme="dark"] body:before{opacity:.15;mix-blend-mode:screen}
+/* 背景为纯净纸色（分形噪声纸纹已按需求移除） */
 
 button,input{font:inherit;color:inherit}
 ::selection{background:var(--accent);color:var(--paper)}

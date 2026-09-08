@@ -5,20 +5,24 @@
 /* ---------- 悬停系统：墨晕着纸 ----------
    规范（全站悬停必须遵守）：
    1. 禁止给文字容器铺"背景高光框"——方框边界会切字、显生硬。
-      统一用 ::before 伪元素铺"墨晕"：径向/线性渐变 + mix-blend-mode:multiply，
+      统一用 ::before 伪元素铺"墨晕"：径向/线性渐变 + 混合模式，
       墨从纸上洇开，没有可见边界，文字永远不贴框。
+      混合模式走 token --wash-blend：浅色 multiply（加深）/ 深色 screen（提亮），
+      两主题同一动效语言、同等可感知度。
    2. 卡片类（有呼吸空间）用径向墨晕，自左下角洇开；
       列表行类用线性墨晕，自左侧洇开、向右淡出。
    3. 辅助表达：标题转印色、序号字距舒展、箭头前移、底部朱线从左长出。
    4. 不用 box-shadow、不用 scale（纸不会浮起来）。
-   5. 控件（按钮/图标钮）允许保留边框+微底色的悬停，它们不是文字容器。 */
+   5. 控件（按钮/图标钮）允许保留边框+微底色的悬停，它们不是文字容器。
+   6. 墨晕宿主元素必须自身 position:relative——否则 ::before 会相对
+      页面（或最近定位祖先）定位，铺满整页。 */
 
 /* 卡片墨晕：径向，自左下角洇开 */
 .work-card:before,
 .favorite-mini-card:before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(105% 150% at 0% 100%,var(--wash) 0%,transparent 62%);
-  opacity:0;mix-blend-mode:multiply;
+  opacity:0;mix-blend-mode:var(--wash-blend,multiply);
   transition:opacity 560ms var(--ease-soft);
 }
 .work-card:hover:before,
@@ -31,7 +35,7 @@
 .chapter-nav a:before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,var(--wash) 0%,transparent 58%);
-  opacity:0;mix-blend-mode:multiply;
+  opacity:0;mix-blend-mode:var(--wash-blend,multiply);
   transition:opacity 460ms var(--ease-soft);
 }
 .section-list a:hover:before,

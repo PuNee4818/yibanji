@@ -47,7 +47,7 @@
 .search-hint{font-size:10px;color:var(--muted);letter-spacing:.14em;padding:9px 20px;border-bottom:1px solid color-mix(in srgb,var(--rule) 14%,transparent)}
 .search-results{max-height:62vh;overflow:auto;scrollbar-width:none;-ms-overflow-style:none}
 .search-results::-webkit-scrollbar{display:none}
-.search-item{display:block;text-decoration:none;color:var(--ink);padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--rule) 12%,transparent)}
+.search-item{position:relative;display:block;text-decoration:none;color:var(--ink);padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--rule) 12%,transparent)}
 .search-item:hover strong{color:var(--accent)}
 .search-item.enter{animation:item-in var(--dur) var(--ease-out) both}
 @keyframes item-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
