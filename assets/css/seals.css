@@ -1,0 +1,25 @@
+/* ============================================================
+   一班集 · seals.css —— 印章母题与分卷印色
+   阳文（实底+印框）/ 阴文（描边微倾）。全部 CSS+SVG 生成，零图片依赖
+   ============================================================ */
+.seal{flex:none;display:grid;place-items:center;font-family:var(--serif);font-weight:900;user-select:none;position:relative}
+
+/* 引首章（阴文椭圆）：手盖感，保留微倾 */
+.seal-oval{width:24px;height:36px;border:1.5px solid var(--seal-ink,var(--accent));border-radius:50%/44%;color:var(--seal-ink,var(--accent));font-size:11px;letter-spacing:.08em;writing-mode:vertical-rl;transform:rotate(-3deg);transition:transform var(--dur) var(--ease-out)}
+.seal-oval:hover{transform:rotate(0) translateY(-2px)}
+
+/* 名章（阴文方印）：落款用，保留微倾 */
+.seal-name{width:34px;height:34px;border:1.5px solid var(--seal-ink,var(--accent));color:var(--seal-ink,var(--accent));font-size:12px;letter-spacing:.06em;writing-mode:vertical-rl;transform:rotate(-2deg);transition:transform var(--dur) var(--ease-out)}
+.seal-name:hover{transform:rotate(1deg) translateY(-2px)}
+
+/* 分卷印色 */
+[data-seal="shou"]{--seal-ink:#8f2f3f}
+[data-seal="guyuan"]{--seal-ink:#96543a}
+[data-seal="xiaotan"]{--seal-ink:#a8632c}
+[data-seal="shijian"]{--seal-ink:#7a6a2f}
+[data-seal="zhiyi"]{--seal-ink:#6a4a6b}
+[data-seal="mimeng"]{--seal-ink:#4a5a72}
+[data-seal="tianwai"]{--seal-ink:#3f6a63}
+[data-seal="jiandao"]{--seal-ink:#8a3b2a}
+[data-seal="mo"]{--seal-ink:#2b261d}
+html[data-theme="dark"] [data-seal]{--seal-ink:color-mix(in srgb,var(--accent) 78%,var(--ink))}

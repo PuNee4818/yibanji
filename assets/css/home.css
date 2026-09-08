@@ -1,0 +1,48 @@
+/* ============================================================
+   一班集 · home.css —— 封面 / 刊头带 / 首页收藏条
+   （首页目录网格在 catalog.css）
+   ============================================================ */
+
+/* ---------- 封面 ---------- */
+.hero{max-width:1260px;margin:0 auto;padding:66px 28px 18px}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;min-height:412px;border-top:6px double var(--rule)}
+.cover-block{padding:38px 48px 40px 6px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--hair-strong)}
+.issue-kicker{font-family:var(--kai);font-size:13px;letter-spacing:.28em;color:var(--accent);font-weight:700}
+.cover-title{font-family:var(--serif);font-size:clamp(72px,11vw,156px);font-weight:900;line-height:.94;letter-spacing:.1em;margin:26px 0}
+.cover-meta{display:flex;gap:22px;font-size:13px;letter-spacing:.14em;color:var(--muted);padding-top:16px}
+.dedication{padding:44px 30px 40px 46px;display:flex;flex-direction:column;justify-content:flex-end}
+.dedication-mark{font-family:var(--serif);font-size:60px;color:var(--accent);line-height:.7}
+.dedication p{font-family:var(--kai);font-size:21px;line-height:2;margin:18px 0 0}
+/* 续读：单行编辑式链接 */
+.continue-link{display:inline-flex;align-items:baseline;gap:14px;margin-top:24px;padding-top:18px;border-top:1px solid var(--hair-strong);color:var(--ink);text-decoration:none}
+.continue-link em{font-family:var(--kai);font-style:normal;font-size:13px;color:var(--muted);letter-spacing:.22em;padding-right:14px;border-right:1px solid var(--hair)}
+.continue-link span{font-family:var(--serif);font-size:18px;letter-spacing:.04em}
+.continue-link i{font-style:normal;color:var(--accent);display:inline-block;margin-left:4px;transition:transform 380ms var(--ease-out)}
+.continue-link:hover i{transform:translateX(6px)}
+
+/* ---------- 刊头规则带：缝合封面与目录的连续版面 ---------- */
+.masthead{max-width:1260px;margin:0 auto;padding:0 28px}
+.masthead-rule{position:relative;display:flex;align-items:center;gap:22px;padding:38px 0 10px;border-top:1px solid var(--rule)}
+.masthead-rule .mr-text{font-family:var(--serif);font-size:15px;letter-spacing:.18em;color:var(--muted);font-weight:500}
+.masthead-rule .mr-meta{margin-left:auto;font-family:var(--serif);font-size:15px;letter-spacing:.14em;color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
+
+/* ---------- 首页收藏条 ---------- */
+.favorites-home{max-width:1260px;margin:8px auto 0;padding:30px 28px 10px}
+.favorites-home-head{display:flex;justify-content:space-between;align-items:end;gap:24px;padding:22px 0 16px;border-top:1px solid var(--rule)}
+.favorites-home-head>div{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.favorites-home-head h2{margin:0;font-family:var(--serif);font-size:27px;letter-spacing:.12em}
+.favorites-kicker{font-family:var(--kai);font-size:12.5px;letter-spacing:.3em;color:var(--accent);font-weight:700;font-style:normal}
+.favorites-home-head>a{font-size:13.5px;text-decoration:none;color:var(--muted);padding-bottom:3px;border-bottom:1px solid var(--hair-strong);transition:color var(--dur-fast) var(--ease-soft),border-color var(--dur-fast) var(--ease-soft)}
+.favorites-home-head>a:hover{color:var(--accent);border-color:var(--accent)}
+.favorites-home-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:32px;border-top:1px solid var(--hair)}
+.favorite-mini-card{min-width:0;position:relative;display:grid;grid-template-columns:24px minmax(0,1fr) 18px;gap:10px;align-items:center;padding:18px 6px 18px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:var(--ink)}
+.favorite-mini-card:hover h3{color:var(--accent)}
+.favorite-mini-star{color:var(--accent);font-size:13px;display:inline-block;transition:transform 560ms var(--ease-back)}
+.favorite-mini-card:hover .favorite-mini-star{transform:scale(1.25) rotate(-10deg)}
+.favorite-mini-card h3{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0;font-family:var(--serif);font-size:18px;font-weight:700;transition:color 340ms var(--ease-soft)}
+.favorite-mini-card p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.favorite-mini-arrow{color:var(--soft);font-family:Georgia,serif;transition:transform 440ms var(--ease-out),color 380ms var(--ease-out)}
+.favorite-mini-card:hover .favorite-mini-arrow{color:var(--accent);transform:translateX(5px)}
+.favorites-empty-home{display:flex;align-items:center;gap:13px;padding:18px 0 26px;color:var(--muted);border-top:1px solid var(--hair)}
+.favorites-empty-home>span{font-size:22px;color:var(--soft)}
+.favorites-empty-home p{margin:0;font-family:var(--kai);font-size:15px;line-height:1.8}

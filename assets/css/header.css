@@ -1,0 +1,33 @@
+/* ============================================================
+   一班集 · header.css —— 顶栏 / 品牌 / 导航 / 头部操作
+   ============================================================ */
+.site-header{position:sticky;top:0;z-index:50;height:66px;display:flex;align-items:center;gap:18px;padding:0 max(18px,calc((100vw - 1340px)/2));border-bottom:1px solid var(--hair);background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(14px)}
+.brand{text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand-main{font-family:var(--serif);font-weight:900;letter-spacing:.18em;font-size:21px;transition:color var(--dur-fast) var(--ease-soft)}
+.brand:hover .brand-main{color:var(--accent)}
+.brand-edition{font-size:12px;letter-spacing:.18em;color:var(--muted);font-weight:500}
+.desktop-nav{display:flex;gap:2px;align-items:center;flex:1;overflow:hidden}
+.desktop-nav a{position:relative;padding:9px 12px;text-decoration:none;color:var(--muted);font-size:14px;border-radius:3px;white-space:nowrap;transition:color 200ms var(--ease-soft)}
+.desktop-nav a:after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 360ms var(--ease-out);opacity:.7}
+.desktop-nav a:hover{color:var(--ink)}
+.desktop-nav a:hover:after{transform:scaleX(1)}
+.desktop-nav a.current{color:var(--accent);font-weight:700}
+.desktop-nav a.current:after{transform:scaleX(1)}
+.header-actions{display:flex;gap:8px;align-items:center;margin-left:auto}
+
+.icon-btn,.text-btn{border:0;background:transparent;cursor:pointer}
+.icon-btn{width:44px;height:44px;border-radius:999px;display:grid;place-items:center;font-weight:700;font-size:19px;border:1px solid transparent;transition:border-color var(--dur-fast) var(--ease-soft),background var(--dur-fast) var(--ease-soft),color var(--dur-fast) var(--ease-soft),transform var(--dur-fast) var(--ease-out)}
+.icon-btn:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);border-color:var(--hair)}
+.icon-btn:active{transform:scale(.94)}
+.mobile-only{display:none}
+
+.search-trigger{height:44px;display:flex;align-items:center;gap:9px;padding:0 16px;border:1px solid var(--hair-strong);border-radius:999px;background:color-mix(in srgb,var(--panel) 60%,transparent);cursor:pointer;transition:border-color var(--dur-fast) var(--ease-soft),color var(--dur-fast) var(--ease-soft),background var(--dur-fast) var(--ease-soft)}
+.search-trigger .st-glyph{font-size:17px;font-weight:700}
+.search-trigger .st-text{font-size:14px;letter-spacing:.12em}
+.search-trigger .st-kbd{font-size:10px;color:var(--muted);border:1px solid var(--hair);border-radius:4px;padding:2px 6px;letter-spacing:.06em}
+.search-trigger:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);color:var(--accent);background:color-mix(in srgb,var(--accent) 4%,transparent)}
+.favorites-header-btn{position:relative}
+.favorites-header-btn.has-favorites{color:var(--accent)}
+.favorites-header-icon{font-size:19px;line-height:1;display:inline-block;transition:transform var(--dur) var(--ease-back)}
+.favorites-header-icon.pop{animation:star-pop 460ms var(--ease-back)}
+.favorites-count{position:absolute;right:-2px;top:-1px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--accent);color:var(--paper);border:2px solid var(--paper);font:700 10px/14px var(--ui);text-align:center}

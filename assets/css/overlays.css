@@ -1,0 +1,74 @@
+/* ============================================================
+   一班集 · overlays.css —— 抽屉目录 / 搜索浮层 / 设置面板 / 提示
+   ============================================================ */
+
+/* ---------- 抽屉目录 ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(20,16,8,.3);z-index:70;opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease-soft)}
+.backdrop.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;left:0;top:0;bottom:0;width:min(90vw,380px);z-index:80;background:var(--panel);transform:translateX(-102%);transition:transform var(--dur) var(--ease-out);box-shadow:var(--shadow);overflow:auto;padding:20px 22px 30px;scrollbar-width:none;-ms-overflow-style:none}
+.drawer::-webkit-scrollbar{display:none}
+.drawer.open{transform:none}
+.drawer-title{font-family:var(--serif);font-size:32px;border-bottom:3px double var(--rule);padding-bottom:14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.drawer-title>a{font-family:var(--serif);font-size:32px;color:var(--ink);text-decoration:none;letter-spacing:.14em}
+.drawer-home{border:0;background:transparent;font-size:25px;line-height:1;cursor:pointer;color:var(--muted);padding:4px 0 4px 12px;transition:color var(--dur-fast) var(--ease-soft),transform var(--dur-fast) var(--ease-out)}
+.drawer-home:hover{color:var(--accent);transform:rotate(90deg)}
+.drawer-favorites-entry{display:flex;justify-content:space-between;align-items:center;margin:6px 0 12px;padding:11px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);font-size:13px;letter-spacing:.08em;color:var(--muted);text-decoration:none;transition:color var(--dur-fast) var(--ease-soft)}
+.drawer-favorites-entry small{font-size:10px;color:var(--soft)}
+.drawer-favorites-entry:hover,.drawer-favorites-entry.current{color:var(--accent)}
+.drawer-section{margin:18px 0 26px}
+.drawer-section-title{display:block;font-size:11px;letter-spacing:.2em;color:var(--accent);padding:8px 0 9px;border-bottom:1px solid var(--hair);text-decoration:none}
+.drawer-section-title.current{font-weight:800}
+.drawer-work-title{min-width:0}
+.drawer-work-link,.drawer-work-main{font-family:var(--serif);font-size:16px;line-height:1.5}
+.drawer-work-link{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:9px 0 9px 24px;text-decoration:none;color:var(--ink)}
+.drawer-work-main{display:flex;justify-content:space-between;gap:8px;align-items:baseline;padding:9px 0;text-decoration:none;color:var(--ink)}
+.drawer-work-link small,.drawer-work-main small{font-family:var(--ui);font-size:11px;color:var(--muted);white-space:nowrap}
+.drawer-work-link.current,.drawer-work-main.current{color:var(--accent);font-weight:800}
+.drawer-work-row{display:grid;grid-template-columns:20px minmax(0,1fr);gap:4px;align-items:start}
+.drawer-sublist{display:none;padding:0 0 7px 24px;border-bottom:1px solid color-mix(in srgb,var(--rule) 10%,transparent)}
+.drawer-work.open .drawer-sublist{display:block}
+.drawer-sub-link{display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;padding:7px 0;font-size:13.5px;color:var(--muted);line-height:1.5;text-decoration:none;transition:color var(--dur-fast) var(--ease-soft)}
+.drawer-sub-link>span{font:italic 10.5px Georgia,serif;color:var(--soft);font-variant-numeric:tabular-nums}
+.drawer-sub-link.current{color:var(--accent);font-weight:800}
+.drawer-sub-link:hover{color:var(--ink)}
+
+/* ---------- 搜索浮层 ----------
+   display 不可动画 —— 用 opacity + visibility + transform，消除硬闪 */
+.modal{position:fixed;inset:0;background:rgba(24,19,12,.42);z-index:90;display:grid;place-items:start center;padding:10vh 18px 18px;backdrop-filter:blur(8px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--dur) var(--ease-soft),visibility 0s linear var(--dur)}
+.modal.open{opacity:1;visibility:visible;pointer-events:auto;transition:opacity var(--dur) var(--ease-soft),visibility 0s}
+.modal-card{background:var(--panel);width:min(720px,100%);box-shadow:var(--shadow);border:1px solid var(--hair);scrollbar-width:none;-ms-overflow-style:none;transform:translateY(-14px) scale(.985);transition:transform var(--dur) var(--ease-out)}
+.modal.open .modal-card{transform:none}
+.modal-card::-webkit-scrollbar{display:none}
+.search-row{height:64px;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--hair)}
+.search-row>span{font-size:20px;font-weight:700;color:var(--muted)}
+.search-row input{flex:1;border:0;background:transparent;outline:0;font-size:17.5px;min-width:0}
+.text-btn{font-size:13px;letter-spacing:.1em;color:var(--muted);padding:8px 4px;transition:color var(--dur-fast) var(--ease-soft)}
+.text-btn:hover{color:var(--accent)}
+.search-hint{font-size:10px;color:var(--muted);letter-spacing:.14em;padding:9px 20px;border-bottom:1px solid color-mix(in srgb,var(--rule) 14%,transparent)}
+.search-results{max-height:62vh;overflow:auto;scrollbar-width:none;-ms-overflow-style:none}
+.search-results::-webkit-scrollbar{display:none}
+.search-item{display:block;text-decoration:none;color:var(--ink);padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--rule) 12%,transparent)}
+.search-item:hover strong{color:var(--accent)}
+.search-item.enter{animation:item-in var(--dur) var(--ease-out) both}
+@keyframes item-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.search-item strong{font-family:var(--serif);font-size:19px;transition:color var(--dur-fast) var(--ease-soft)}
+.search-item .smeta{font-size:11px;color:var(--muted);margin-left:10px}
+.search-item p{font-family:var(--kai);font-size:13px;line-height:1.75;color:var(--muted);margin:6px 0 0}
+.search-empty{padding:36px 20px;color:var(--muted);text-align:center}
+body.search-open{overflow:hidden}
+
+/* ---------- 设置面板 ---------- */
+.popover{position:fixed;right:18px;top:76px;z-index:97;width:286px;background:var(--panel);box-shadow:var(--shadow);border:1px solid var(--hair);padding:14px;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px) scale(.98);transform-origin:top right;transition:opacity var(--dur) var(--ease-soft),transform var(--dur) var(--ease-out),visibility 0s linear var(--dur)}
+.popover.open{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity var(--dur) var(--ease-soft),transform var(--dur) var(--ease-out),visibility 0s}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid color-mix(in srgb,var(--rule) 14%,transparent);font-size:13px;letter-spacing:.06em;gap:10px}
+.setting-row>span{flex:none}
+.setting-row>div{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+.setting-row button{min-width:42px;height:34px;border:1px solid var(--hair-strong);background:transparent;padding:0 10px;margin-left:0;cursor:pointer;font-size:13px;transition:border-color var(--dur-fast) var(--ease-soft),color var(--dur-fast) var(--ease-soft),background var(--dur-fast) var(--ease-soft)}
+.setting-row button:hover{border-color:var(--accent);color:var(--accent)}
+.setting-row button.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);font-weight:700}
+.settings-reset{width:100%;border:0;background:transparent;color:var(--muted);padding:12px 0 2px;cursor:pointer;letter-spacing:.1em;transition:color var(--dur-fast) var(--ease-soft)}
+.settings-reset:hover{color:var(--accent)}
+
+/* ---------- 提示条 ---------- */
+.toast{position:fixed;left:50%;bottom:36px;z-index:120;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;font-size:13px;letter-spacing:.04em;border-radius:2px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease-soft),transform var(--dur) var(--ease-out)}
+.toast.show{opacity:1;transform:translate(-50%,0)}

@@ -1,0 +1,83 @@
+/* ============================================================
+   一班集 · base.css —— 变量 / 主题 / 基础 / 纸纹 / 启动遮罩
+   全部样式按组件拆分：header home catalog section reader
+   overlays favorites immersive seals motion print responsive
+   ============================================================ */
+
+/* ---------- 变量与主题 ---------- */
+:root{
+  --paper:#f3ecdb;--paper-deep:#eadfc9;--panel:#faf5e8;--ink:#231f18;
+  --muted:#6e6252;--soft:#a3947d;--accent:#9d3b26;--accent-2:#b3703f;--rule:#2b261d;
+  --shadow:0 18px 48px rgba(56,42,20,.14);
+  --hair:color-mix(in srgb,var(--rule) 22%,transparent);
+  --hair-strong:color-mix(in srgb,var(--rule) 34%,transparent);
+  --reading-size:19px;--reading-line:1.95;--reading-width:760px;
+  --ui:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --serif:"Songti SC","STSong","STZhongsong","SimSun","Noto Serif CJK SC","Source Han Serif SC",serif;
+  --kai:"Kaiti SC","STKaiti","KaiTi","楷体",var(--serif);
+  --body-font:var(--serif);
+
+  /* 动效 token —— 全站只允许用这三个时长、三条曲线 */
+  --ease-out:cubic-bezier(.22,.61,.36,1);
+  --ease-soft:cubic-bezier(.4,0,.2,1);
+  --ease-back:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:160ms;--dur:260ms;--dur-slow:520ms;
+  --rise:14px;
+
+  /* 悬停"墨晕"：默认用朱色，印章作用域内会被 seal-ink 覆盖（见 motion.css 悬停系统） */
+  --wash:color-mix(in srgb,var(--accent) 7%,transparent);
+
+  /* 字号阶梯 1.25 —— 新增组件使用 */
+  --step--1:.8rem;--step-0:1rem;--step-1:1.25rem;--step-2:1.563rem;
+  --step-3:1.953rem;--step-4:2.441rem;--step-5:3.052rem;--step-6:3.815rem;
+}
+
+/* 纸色：米 / 宣 / 褐 */
+html[data-paper="xuan"]{--paper:#faf7f0;--paper-deep:#f2ecdf;--panel:#fffdf8}
+html[data-paper="sepia"]{--paper:#efe1c2;--paper-deep:#e5d3ae;--panel:#f7ecda}
+
+html[data-theme="dark"]{
+  --paper:#181510;--paper-deep:#201c15;--panel:#23201a;--ink:#e9e0cc;
+  --muted:#ab9f88;--soft:#7a7060;--accent:#d07a5e;--accent-2:#d9a273;--rule:#d6cab2;
+  --shadow:0 18px 48px rgba(0,0,0,.52);
+}
+html[data-theme="dark"] .modal-card,
+html[data-theme="dark"] .popover,
+html[data-theme="dark"] .drawer{border-color:color-mix(in srgb,var(--rule) 20%,transparent)}
+
+/* ---------- 基础 ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:var(--ui);min-height:100vh;transition:background var(--dur) var(--ease-soft),color var(--dur) var(--ease-soft);-webkit-font-smoothing:antialiased}
+
+/* 纸纹：分形噪声（纤维 + 斑驳两层），替代原来的规律网点 */
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.5;
+  mix-blend-mode:multiply;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)' opacity='.4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.02' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23c)' opacity='.3'/%3E%3C/svg%3E");
+  background-size:200px 200px,420px 420px;
+}
+html[data-theme="dark"] body:before{opacity:.15;mix-blend-mode:screen}
+
+button,input{font:inherit;color:inherit}
+::selection{background:var(--accent);color:var(--paper)}
+:focus-visible{outline:2px solid color-mix(in srgb,var(--accent) 75%,transparent);outline-offset:3px;border-radius:1px}
+kbd{font-family:var(--ui)}
+
+#scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));z-index:100;transition:height var(--dur-fast) var(--ease-soft)}
+#scroll-progress.pulse{height:5px;box-shadow:0 0 10px color-mix(in srgb,var(--accent) 60%,transparent)}
+
+/* ---------- 启动遮罩（掩盖正文脚本加载） ---------- */
+.boot-veil{position:fixed;inset:0;z-index:200;background:var(--paper);display:grid;place-items:center;transition:opacity var(--dur-slow) var(--ease-soft),visibility 0s linear var(--dur-slow)}
+html[data-app-ready="true"] .boot-veil{opacity:0;visibility:hidden;pointer-events:none}
+.boot-veil .bv-inner{text-align:center;animation:bv-breathe 2.4s var(--ease-soft) infinite}
+.boot-veil .bv-title{font-family:var(--serif);font-weight:900;font-size:38px;letter-spacing:.28em;color:var(--ink);opacity:.72}
+.boot-veil .bv-rule{width:132px;height:6px;margin:18px auto 0;border-top:3px double var(--rule);opacity:.28}
+@keyframes bv-breathe{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* 致命错误页 */
+.fatal-error{max-width:760px;margin:80px auto;padding:32px;border-top:6px double var(--rule);font-family:var(--serif)}
+.fatal-error h1{font-size:32px;margin:0 0 18px}
+.fatal-error p{font-size:16px;line-height:1.8;color:var(--muted)}

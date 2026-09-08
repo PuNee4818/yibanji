@@ -15,5 +15,7 @@
       const app=document.getElementById('app');
       if(app) app.innerHTML=`<section class="fatal-error"><h1>内容加载失败</h1><p>${String(err.message||err)}</p><p>请确认网页文件夹结构完整，不要只复制 index.html。</p></section>`;
     });
+    // 无论成功失败都要撤掉启动遮罩，否则错误页会被盖住
+    document.documentElement.dataset.appReady='true';
   }
 })();

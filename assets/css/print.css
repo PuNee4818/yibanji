@@ -1,0 +1,41 @@
+/* ============================================================
+   一班集 · print.css —— 打印导出 PDF
+   ============================================================ */
+#print-root{display:none}
+@media print{
+  @page{size:A4;margin:21mm 20mm}
+  body.printing{background:#fff}
+  body.printing>*:not(#print-root){display:none!important}
+  body.printing #print-root{display:block}
+  #print-root{display:block;color:#111;font-family:var(--serif)}
+  [data-reveal]{opacity:1!important;transform:none!important}
+  #print-root .p-head{padding-bottom:16pt;border-bottom:2.2pt double #1c1c1c;margin-bottom:24pt}
+  #print-root .p-kicker{font-family:var(--ui);font-size:8.5pt;letter-spacing:.32em;color:#8f3a26;margin-bottom:12pt}
+  #print-root .p-head h1{font-size:27pt;line-height:1.28;letter-spacing:.05em;margin:0 0 8pt;font-weight:900}
+  #print-root .p-head .title-suffix{font-size:12pt;letter-spacing:.2em;color:#555;font-weight:500;margin-left:.4em;vertical-align:baseline}
+  #print-root .p-sub{font-family:var(--kai);font-size:10.5pt;color:#444;margin-bottom:6pt}
+  #print-root .p-authorline{font-size:10.5pt;letter-spacing:.28em;color:#333;margin-top:8pt}
+  #print-root .prose-body{max-width:none;font-size:11.5pt;line-height:2.05;letter-spacing:.03em}
+  #print-root .prose-body p{margin:0 0 .4em;text-indent:2em;text-align:justify;orphans:2;widows:2}
+  #print-root .prose-body.verse p{margin:.14em 0;text-indent:0;text-align:left}
+  #print-root .prose-body p.work-preface{font-size:10.5pt;margin:.2em 1.2em 1.6em;padding-bottom:1em}
+  #print-root .prose-body p.section-line{font-size:12pt;margin:1.8em 0 .9em}
+  #print-root .story-section-title{font-size:13.5pt;margin:1.9em 0 .9em;padding-top:14pt;border-top:.6pt solid #999;break-after:avoid;page-break-after:avoid}
+  #print-root .story-section-title:first-child{border-top:0;padding-top:0;margin-top:0}
+  #print-root .story-section-title span:after{display:none}
+  #print-root .chapter-head{grid-template-columns:70px 1fr;padding-top:12pt;margin-bottom:18pt;border-top:.6pt solid #999}
+  #print-root .chapter-number{font-size:34pt}
+  #print-root .chapter-head h2{font-size:17pt;letter-spacing:.08em}
+  #print-root .chapter-head h2:after{display:none}
+  #print-root .chapter-head small{font-size:9pt}
+  #print-root .chapter-map{display:none}
+  .p-chapter{break-before:page;page-break-before:always}
+  .p-chapter:first-of-type{break-before:auto;page-break-before:auto}
+  #print-root .work-notes{max-width:none;margin-top:26pt;padding-top:10pt;border-top-color:#bbb}
+  #print-root .work-notes-title{font-size:9pt;letter-spacing:.3em}
+  #print-root .work-notes p{font-size:8.5pt;line-height:1.7;color:#333}
+  #print-root .work-colophon{max-width:none;margin-top:20pt}
+  #print-root .colophon-signature{font-size:10pt}
+  #print-root .colophon-date{font-size:9pt}
+  #print-root .colophon-seal{display:none}
+}

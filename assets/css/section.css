@@ -1,0 +1,23 @@
+/* ============================================================
+   一班集 · section.css —— 面包屑 / 卷目页 / 篇章列表
+   悬停效果统一走 motion.css 的"墨晕着纸"系统
+   ============================================================ */
+.page-breadcrumb{max-width:1120px;margin:0 auto 18px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;color:var(--muted);letter-spacing:.04em}
+.page-breadcrumb a{color:var(--muted);text-decoration:none;transition:color var(--dur-fast) var(--ease-soft)}
+.page-breadcrumb a:hover{color:var(--accent)}
+.page-breadcrumb strong{font-weight:600;color:var(--ink)}
+.reader-breadcrumb{max-width:none;margin:0 0 20px}
+
+.section-page{max-width:1120px;margin:0 auto;padding:64px 28px 104px}
+.section-page-head{border-top:6px double var(--rule);display:flex;align-items:end;justify-content:space-between;padding:30px 0;border-bottom:1px solid var(--rule)}
+.section-page-head h1{font-family:var(--serif);font-size:clamp(50px,7.5vw,92px);margin:0;letter-spacing:.14em;font-weight:900}
+.section-page-head p{font:italic 46px Georgia,serif;color:var(--accent);margin:0;font-variant-numeric:tabular-nums}
+.section-page-head>div:last-child{display:flex;align-items:center;gap:18px}
+
+.section-list{border-bottom:1px solid var(--hair-strong)}
+.section-list a{display:grid;grid-template-columns:64px minmax(0,1fr) 170px 90px;gap:18px;align-items:baseline;text-decoration:none;color:var(--ink);padding:26px 0;border-bottom:1px solid var(--hair)}
+.section-list .idx{font:italic 14px Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums}
+.section-list .ttl{font-family:var(--serif);font-size:26px;font-weight:800;transition:color var(--dur-fast) var(--ease-soft)}
+.section-list .auth,.section-list .len{font-size:13px;color:var(--muted)}
+.section-list .len{font-variant-numeric:tabular-nums}
+.section-list a:hover .ttl{color:var(--accent)}

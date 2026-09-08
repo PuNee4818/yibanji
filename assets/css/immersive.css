@@ -1,0 +1,21 @@
+/* ============================================================
+   一班集 · immersive.css —— 沉浸模式
+   ============================================================ */
+body.immersive{--imm-measure:min(94vw,calc(var(--reading-width) + 240px))}
+body.immersive .site-header,body.immersive .page-breadcrumb,body.immersive .left-rail,body.immersive .right-rail,body.immersive .article-tools{display:none}
+body.immersive .read-shell{display:block;max-width:none;padding:clamp(28px,5vh,64px) clamp(18px,6vw,72px) 150px}
+body.immersive .article-head,body.immersive .prose-body,body.immersive .chapter-head,body.immersive .chapter-map,body.immersive .chapter-nav,body.immersive .work-notes,body.immersive .work-colophon{max-width:var(--imm-measure)}
+body.immersive .prose-body{font-size:calc(var(--reading-size) + 1px);letter-spacing:.025em}
+.imx-bar{position:fixed;top:max(14px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:96;display:none;gap:8px;transition:opacity var(--dur) var(--ease-soft)}
+body.immersive .imx-bar{display:flex}
+.imx-btn{width:42px;height:42px;border-radius:999px;border:1px solid var(--hair-strong);background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);font-size:16px;font-weight:700;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(30,20,5,.12);transition:color var(--dur-fast) var(--ease-soft),border-color var(--dur-fast) var(--ease-soft),transform var(--dur-fast) var(--ease-out)}
+.imx-btn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 50%,transparent);transform:scale(1.06)}
+.imx-btn.on{color:var(--accent)}
+.imx-nav{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:96;display:none;align-items:center;gap:2px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair-strong);border-radius:999px;padding:5px;box-shadow:var(--shadow);transition:opacity var(--dur) var(--ease-soft)}
+body.immersive .imx-nav{display:flex}
+.imx-nav button{height:38px;min-width:52px;padding:0 16px;border-radius:999px;border:0;background:transparent;font-size:19px;line-height:1;cursor:pointer;color:var(--ink);transition:background var(--dur-fast) var(--ease-soft),color var(--dur-fast) var(--ease-soft)}
+.imx-nav button:hover:not(:disabled){background:color-mix(in srgb,var(--ink) 7%,transparent);color:var(--accent)}
+.imx-nav button:disabled{color:var(--soft);cursor:default;opacity:.45}
+.imx-pos{font:italic 13px Georgia,serif;color:var(--muted);min-width:72px;text-align:center;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+body.chrome-hidden .imx-bar,body.chrome-hidden .imx-nav{opacity:0;pointer-events:none}
+body.immersive .settings-popover{top:74px;right:18px}
