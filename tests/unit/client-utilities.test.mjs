@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 import { parseBookmarks } from '../../src/lib/storage.ts';
 import { searchArticles } from '../../src/lib/search.ts';
 import { normalizePreferences, defaults } from '../../src/lib/preferences.ts';
+import {safeLocalPath} from '../../src/lib/navigation.ts';
+
+test('login destinations reject protocol-relative, control-character and backslash redirects',()=>{
+ for(const input of ['//evil.example','/\n/evil.example','/\\evil.example','https://evil.example',null])assert.equal(safeLocalPath(input,'https://example.com'),'/me/settings/');
+ assert.equal(safeLocalPath('/articles/a01/?resume=1#comments','https://example.com'),'/articles/a01/?resume=1#comments');
+});
 
 test('legacy bookmarks reject malformed values without losing valid article ids', () => {
   assert.deepEqual(parseBookmarks('["a01","a01",4,"<script>","tianhuaban"]'), ['a01', 'tianhuaban']);

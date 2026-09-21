@@ -1,4 +1,4 @@
-import {supabase,rpc} from '../lib/supabase';
+import {supabase,rpc,getCurrentUser} from '../lib/supabase';
 import {announce} from './site';
 import {parseBookmarks,readStorage,writeStorage} from '../lib/storage';
 interface Context{liked:boolean;bookmarked:boolean;my_eggs:number;balance:number|null;stats:{view_count:number;like_count:number;egg_count:number;comment_count:number;bookmark_count:number}|null}
@@ -7,7 +7,7 @@ if(root){
  const id=root.dataset.interactions!;const like=root.querySelector<HTMLButtonElement>('[data-like]')!;const bookmark=root.querySelector<HTMLButtonElement>('[data-article-bookmark]')!;
  const dialog=root.querySelector<HTMLDialogElement>('#egg-dialog')!;const form=root.querySelector<HTMLFormElement>('#egg-form')!;
  const localMarked=parseBookmarks(readStorage('yb_favs')).includes(id);bookmark.setAttribute('aria-pressed',String(localMarked));bookmark.textContent=localMarked?'已收藏':'收藏';
- const {data:{user}}=await supabase.auth.getUser();let context:Context|undefined;
+ const user=await getCurrentUser();let context:Context|undefined;
  async function refresh(){
   context=await rpc<Context>('article_context',{p_article:id});const s=context.stats;
   like.setAttribute('aria-pressed',String(context.liked));like.textContent=context.liked?'已点赞':'点赞';
@@ -16,6 +16,7 @@ if(root){
   root!.querySelector('[data-egg-wallet]')!.textContent=`你有 ${context.balance??0} 枚臭鸡蛋 · 已向本文投出 ${context.my_eggs} 枚`;
  }
  const login=()=>{location.href=`/auth/?next=${encodeURIComponent(location.pathname)}`;};
+ document.addEventListener('discussion-mutated',()=>void refresh().catch(()=>{}));
  async function change(kind:string,button:HTMLButtonElement){
   if(!user){if(kind==='like'){login();return;}const ids=parseBookmarks(readStorage('yb_favs'));const marked=ids.includes(id);const next=marked?ids.filter(x=>x!==id):[...ids,id];if(!writeStorage('yb_favs',JSON.stringify(next))){announce('此浏览器无法保存收藏。');return;}button.setAttribute('aria-pressed',String(!marked));button.textContent=marked?'收藏':'已收藏';announce(marked?'已移除书签。':'书签已夹好。');return;}
   button.disabled=true;try{await rpc('set_article_state',{p_article:id,p_kind:kind,p_active:button.getAttribute('aria-pressed')!=='true'});await refresh();}catch(error){announce((error as Error).message);}finally{button.disabled=false;}

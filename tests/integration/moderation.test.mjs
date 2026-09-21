@@ -46,6 +46,9 @@ test('real aggregated notifications, reporting, admin authorization, moderation 
   const after=(await b.rpc('growth_summary')).data;assert.equal(after.wallet.egg_balance,before.wallet.egg_balance+4);assert.equal(after.progress.exp,before.progress.exp+20);
   assert.ok((await admin.rpc('admin_adjust_economy',{...adjustment,p_key:randomUUID(),p_eggs:-10000})).error);
   assert.equal((await b.from('economy_transactions').select('*').eq('idempotency_key',`admin:${key}`)).data.length,2);
+  assert.equal((await admin.rpc('admin_adjust_economy',{...adjustment,p_key:randomUUID(),p_eggs:-1,p_exp:-5})).error,null);
+  assert.equal((await b.rpc('daily_checkin')).error,null);
+  assert.equal((await b.from('user_achievements').select('unlocked_at').eq('user_id',ub.id).eq('achievement_id','egg1').single()).data.unlocked_at,null);
   assert.equal((await client().rpc('profile_community',{p_user:ua.id})).data.progress.exp,5);
   console.log('Verified aggregated/private notifications, read isolation, replies/follows/badges, report dedup, hidden-parent RLS, admin denial, suspension, idempotent audited adjustments and nonnegative balance.');
  }finally{sql(`delete from app_private.moderation_audit where admin_id=${quote(um.id)}`);f.cleanup();}

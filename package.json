@@ -16,7 +16,9 @@
     "preview": "astro preview --host 127.0.0.1 --port 4321 --ignore-lock",
     "dev": "node tools/generate-content.mjs && astro dev --host 127.0.0.1 --ignore-lock",
     "db:migrate": "node tools/apply-migrations.mjs",
-    "test:db": "node --test --test-concurrency=1 tests/integration/*.test.mjs"
+    "test:db": "node --test --test-concurrency=1 tests/integration/*.test.mjs",
+    "start": "node dist/server/entry.mjs",
+    "admin": "node tools/admin.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -29,7 +31,8 @@
     "globals": "^17.12.0",
     "supabase": "^2.117.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.70.0"
+    "typescript-eslint": "^8.70.0",
+    "undici": "^8.10.2"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",

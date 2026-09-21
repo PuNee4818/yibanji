@@ -1,8 +1,8 @@
-import {supabase,rpc} from '../lib/supabase';
+import {supabase,rpc,getCurrentUser} from '../lib/supabase';
 import type {Growth,Checkin} from '../lib/growth';
 const dialog=document.querySelector<HTMLDialogElement>('#checkin-dialog');
 const button=document.querySelector<HTMLButtonElement>('#checkin-submit');
-async function menuStatus(){const{data:{user}}=await supabase.auth.getUser();if(!user)return;try{const g=await rpc<Growth>('growth_summary');document.querySelectorAll<HTMLElement>('[data-open-checkin]').forEach(el=>{el.textContent=g.today_checkin?'每日签到 · 已签到':'每日签到 · 今日未签到';el.dataset.unchecked=String(!g.today_checkin);});}catch{/* The dialog offers a retry when opened. */}}
+async function menuStatus(){const user=await getCurrentUser();if(!user)return;try{const g=await rpc<Growth>('growth_summary');document.querySelectorAll<HTMLElement>('[data-open-checkin]').forEach(el=>{el.textContent=g.today_checkin?'每日签到 · 已签到':'每日签到 · 今日未签到';el.dataset.unchecked=String(!g.today_checkin);});}catch{/* The dialog offers a retry when opened. */}}
 void menuStatus();
 async function renderCheckin(){
  if(!dialog||!button)return;
@@ -17,7 +17,7 @@ async function renderCheckin(){
  document.dispatchEvent(new CustomEvent('growth-updated',{detail:summary}));
 }
 document.querySelectorAll('[data-open-checkin]').forEach(el=>el.addEventListener('click',async()=>{
- const {data:{user}}=await supabase.auth.getUser();if(!user){location.href='/auth/';return;}
+ const user=await getCurrentUser();if(!user){location.href='/auth/';return;}
  dialog?.showModal();try{await renderCheckin();}catch(error){document.querySelector('#checkin-summary')!.textContent=(error as Error).message;}
 }));
 button?.addEventListener('click',async()=>{

@@ -1,6 +1,7 @@
 import {rpc} from '../lib/supabase';
 import {announce} from './site';
 import {discussionUrl,type Discussion} from '../lib/discussion';
+let catalog:Promise<{id:string;title:string;author:string}[]>|undefined;
 export function discussionCard(item:Discussion,userId:string|undefined,refresh:()=>Promise<void>,reply?:(item:Discussion)=>void):HTMLElement{
  const card=document.createElement('article');card.className='discussion-card';card.id=`comment-${item.id}`;
  const meta=document.createElement('div');meta.className='discussion-meta';const author=document.createElement('a');author.href=`/u/${item.username}/`;author.textContent=item.display_name;meta.append(author);
@@ -18,9 +19,11 @@ export function discussionCard(item:Discussion,userId:string|undefined,refresh:(
     const save=document.createElement('button');save.textContent='保存修改';const cancel=document.createElement('button');cancel.type='button';cancel.textContent='取消';cancel.addEventListener('click',()=>form.remove());form.append(save,cancel);card.append(form);area.focus();
     form.addEventListener('submit',async event=>{event.preventDefault();save.disabled=true;try{await rpc('save_discussion',{p_kind:item.kind,p_target:item.target,p_content:area.value,p_id:item.id});await refresh();}catch(error){announce((error as Error).message);}finally{save.disabled=false;}});
    });
-   button('删除',async()=>{await rpc('delete_discussion',{p_kind:item.kind,p_id:item.id});await refresh();});
+   button('删除',async()=>{await rpc('delete_discussion',{p_kind:item.kind,p_id:item.id});await refresh();document.dispatchEvent(new Event('discussion-mutated'));});
   }
   button('举报',()=>{document.dispatchEvent(new CustomEvent('report-content',{detail:{kind:item.kind==='article'?'comment':item.kind==='post'?'community_post':'community_post_comment',id:item.id}}));});
  }
- const link=document.createElement('a');link.href=discussionUrl(item);link.textContent=item.kind==='post'?'打开动态与讨论':'查看原文讨论';actions.append(link);card.append(actions);return card;
+ const link=document.createElement('a');link.href=discussionUrl(item);link.textContent=item.kind==='post'?'打开动态与讨论':'查看原文讨论';actions.append(link);card.append(actions);
+ if(item.kind==='article'){catalog??=fetch('/article-index.json').then(r=>r.json());void catalog.then(rows=>{const article=rows.find(a=>a.id===item.target);if(article)link.textContent=`《${article.title}》 · ${article.author}`;}).catch(()=>{});}
+ return card;
 }

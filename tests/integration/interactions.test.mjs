@@ -30,6 +30,10 @@ test('real concurrent egg spending, idempotency, repeat throws, likes, private b
   assert.equal((await b.from('reading_progress').select('*').eq('user_id',u)).data.length,0);
   assert.ok((await a.from('article_stats').update({egg_count:900}).eq('article_id',article)).error);
   const ledger=(await a.from('economy_transactions').select('delta').eq('asset_type','egg')).data;assert.equal(ledger.reduce((s,r)=>s+r.delta,0),6);
+  sql(`select app_private.award(${quote(f.users[1].id)},5,0,'migration','test','second-wallet')`);
+  const shared=randomUUID();const collision=await Promise.all([a.rpc('throw_eggs',{p_article:article,p_quantity:2,p_idempotency_key:shared}),a.rpc('throw_eggs',{p_article:article,p_quantity:2,p_idempotency_key:shared}),b.rpc('throw_eggs',{p_article:article,p_quantity:3,p_idempotency_key:randomUUID()})]);
+  assert.ok(collision.every(r=>r.error===null));assert.equal(collision.slice(0,2).filter(r=>r.data.replayed).length,1);
+  ctx=(await a.rpc('article_context',{p_article:article})).data;assert.equal(ctx.stats.egg_count,14);assert.equal(ctx.stats.egg_thrower_count,2);assert.equal(ctx.balance,4);
   console.log('Balance 5 + concurrent spend 5/5: exactly one success, balance 0, article +5. Repeat/multi-egg/like coexistence/idempotency and reading RLS verified.');
  }finally{f.cleanup();sql(`delete from public.articles where id=${quote(article)}`);}
 });

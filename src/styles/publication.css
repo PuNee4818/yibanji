@@ -107,6 +107,7 @@ dialog::backdrop { background:#0007; }
 .discussion-meta {display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:14px;}
 .discussion-meta time {font-size:12px;color:var(--muted);}
 .discussion-meta a {text-decoration:none;color:var(--accent);}
+.page-head,.discussion-card,.notification-card {overflow-wrap:anywhere;min-width:0;}
 .discussion-content {white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9;}
 .discussion-actions {display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px;}
 .discussion-actions button {padding:8px 10px;min-height:36px;background:transparent;}

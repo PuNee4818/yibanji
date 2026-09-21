@@ -1,7 +1,7 @@
-import {supabase,rpc} from '../lib/supabase';
+import {supabase,rpc,getCurrentUser} from '../lib/supabase';
 import {parseBookmarks,readStorage} from '../lib/storage';
 import {announce} from './site';
-const {data:{user}}=await supabase.auth.getUser();
+const user=await getCurrentUser();
 if(user){
  if(document.querySelector('[data-bookmark-item]')){
   const refresh=async()=>{const {data,error}=await supabase.from('bookmarks').select('article_id').eq('user_id',user.id);if(error){announce('收藏暂时无法同步，请稍后重试。');return;}const ids=new Set(data.map(row=>row.article_id));document.querySelectorAll<HTMLElement>('[data-bookmark-item]').forEach(el=>el.hidden=!ids.has(el.dataset.bookmarkItem!));document.querySelector<HTMLElement>('#bookmark-empty')!.hidden=ids.size>0;};

@@ -10,11 +10,12 @@ create table if not exists supabase_migrations.schema_migrations(version text pr
 create schema if not exists app_migrations;
 revoke all on schema app_migrations from public,anon,authenticated;
 create table if not exists app_migrations.checksums(version text primary key,sha256 text not null);`);
+const history=sql('select m.version,c.sha256 from supabase_migrations.schema_migrations m left join app_migrations.checksums c using(version)');
 for (const file of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort()) {
   const version = file.split('_')[0];
   const migration = readFileSync(`supabase/migrations/${file}`, 'utf8').replaceAll('\r\n','\n');
   const hash = createHash('sha256').update(migration).digest('hex');
-  const applied = sql(`select m.version,c.sha256 from supabase_migrations.schema_migrations m left join app_migrations.checksums c using(version) where m.version=${quote(version)}`);
+  const applied = history.filter(row=>row.version===version);
   if (applied.length) {
     if (applied[0].sha256 !== hash) throw new Error(`Applied migration checksum mismatch: ${file}`);
     console.log(`Already applied: ${file}`); continue;

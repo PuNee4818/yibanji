@@ -1,4 +1,4 @@
-import {supabase,rpc} from '../lib/supabase';
+import {supabase,rpc,getCurrentUser} from '../lib/supabase';
 import {levelNames,type Growth,type Task} from '../lib/growth';
 import {announce} from './site';
 interface Badge {id:string;name:string;description:string;target:number;reward_eggs:number;reward_exp:number}
@@ -8,7 +8,7 @@ export function growthCard(g:{exp:number;level:number}):HTMLElement{
 }
 const center=document.querySelector('#reward-center');
 if(center){
- const {data:{user}}=await supabase.auth.getUser();let page=0;const more=document.querySelector<HTMLButtonElement>('#ledger-more')!;const asset=document.querySelector<HTMLSelectElement>('#ledger-asset')!;
+ const user=await getCurrentUser();let page=0;const more=document.querySelector<HTMLButtonElement>('#ledger-more')!;const asset=document.querySelector<HTMLSelectElement>('#ledger-asset')!;
  function tasks(target:string,items:Task[]){const list=document.querySelector(target)!;list.replaceChildren();for(const t of items){const box=document.createElement('article');box.className='task-card';const h=document.createElement('h3');h.textContent=t.name;const p=document.createElement('p');p.textContent=`${t.progress} / ${t.target} · ${t.reward_eggs} 枚臭鸡蛋 + ${t.reward_exp} EXP`;const status=document.createElement('span');status.className='muted';status.textContent=t.rewarded_at?'已完成 · 奖励已入账':'进行中';const bar=document.createElement('progress');bar.max=t.target;bar.value=t.progress;bar.setAttribute('aria-label',t.name);box.append(h,p,bar,status);list.append(box);}}
  async function summary(){const g=await rpc<Growth>('growth_summary');const box=document.querySelector('#reward-summary')!;box.replaceChildren(growthCard(g.progress));const p=document.createElement('p');p.className='wallet-summary';p.textContent=`${g.wallet.egg_balance} 枚臭鸡蛋 · 连续签到 ${g.streak_days} 天 · 累计签到 ${g.total_checkins} 天`;box.append(p);tasks('#daily-tasks',g.tasks.filter(t=>t.frequency==='daily'));tasks('#weekly-tasks',g.tasks.filter(t=>t.frequency==='weekly'));}
  async function badges(){if(!user)return;const[{data:defs,error},{data:owned},{data:profile}]=await Promise.all([supabase.from('achievement_definitions').select('*').eq('hidden',false).order('target'),supabase.from('user_achievements').select('*').eq('user_id',user.id),supabase.from('profiles').select('featured_achievement').eq('id',user.id).single()]);if(error)throw error;

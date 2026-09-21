@@ -2,7 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 const url = import.meta.env.PUBLIC_SUPABASE_URL;
 const key = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 if (!url || !key || !key.startsWith('sb_publishable_')) throw new Error('Supabase public configuration is missing');
-export const supabase = createClient(url, key, { auth: { persistSession: typeof window !== 'undefined', autoRefreshToken: typeof window !== 'undefined', detectSessionInUrl: typeof window !== 'undefined' } });
+export const supabase = createClient(url, key, { auth: { persistSession: typeof window !== 'undefined', autoRefreshToken: typeof window !== 'undefined', detectSessionInUrl: typeof window !== 'undefined' }, global:{fetch:(input,init)=>fetch(input,{...init,signal:init?.signal?AbortSignal.any([init.signal,AbortSignal.timeout(30000)]):AbortSignal.timeout(30000)})} });
+// Local session data controls presentation only. Every read/write is authorized again by Supabase JWT + RLS/RPC.
+export async function getCurrentUser(){const{data:{session}}=await supabase.auth.getSession();return session?.user??null;}
 export function friendlyError(error: { message?: string; code?: string } | null): string {
   const message=error?.message ?? '';
   if (/AUTH_REQUIRED|JWT|session|Invalid login credentials/i.test(message)) return '登录已失效或邮箱密码不正确，请重新登录。';

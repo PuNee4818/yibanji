@@ -11,3 +11,5 @@
 运行：`npm run db:migrate`、`npm run check`、`npm run test:db`。远程验收需要已登录的 CLI 和配置正确的 `.env.local`，失败应修复原因而非跳过检查。
 
 页面的个人主页采用 Astro Node 服务端路由，部署需启动 Node adapter 输出；不能仅把静态 HTML 上传到不支持服务端路由的空间。
+
+本地 Auth 站点与允许回调已通过 `supabase config diff` 审查后推送到 4321 端口，密码最低长度为 8，邮箱确认保持启用。配置文件仅声明有意管理的设置，避免将 `supabase init` 的本地默认值覆盖远程设置。生产部署前需改成真实 HTTPS 域名并再次审查 diff；不要把本地地址配置推送到已经正式运营的项目。

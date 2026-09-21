@@ -33,6 +33,8 @@ test('real transaction checkins, streak cycles, gaps, task caps, EXP, badges and
   assert.equal(ledger.data.filter(r=>r.reference_id==='daily_read'&&r.asset_type==='egg').length,1);
   assert.equal(g.wallet.egg_balance,2);assert.equal(g.progress.exp,10);
   assert.ok((await a.from('economy_transactions').delete().eq('user_id',ua.id)).error);
+  sql(`do $$ begin for i in 1..100 loop perform app_private.record_event(${quote(ua.id)},'read','qualified-reread',app_private.today()-i);end loop;end $$;`);
+  assert.ok((await a.from('user_achievements').select('unlocked_at').eq('user_id',ua.id).eq('achievement_id','read100').single()).data.unlocked_at);
   const reconciliation=sql(`select w.user_id,w.egg_balance,coalesce(sum(t.delta),0) ledger from public.user_wallets w left join public.economy_transactions t on t.user_id=w.user_id and t.asset_type='egg' where w.user_id in(${quote(ua.id)},${quote(ub.id)}) group by w.user_id`);
   assert.ok(reconciliation.every(r=>Number(r.ledger)===r.egg_balance));
   console.log('Verified daily uniqueness under concurrent requests, tier 7/8, reset after gap, 30-day badge/bonus, task deduplication, ledger reconciliation and private-data RLS.');

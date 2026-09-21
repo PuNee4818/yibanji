@@ -1,6 +1,6 @@
-import {supabase,rpc,friendlyError} from '../lib/supabase';
+import {supabase,rpc,friendlyError,getCurrentUser} from '../lib/supabase';
 import {announce} from './site';
-const {data:{user}}=await supabase.auth.getUser();
+const user=await getCurrentUser();
 const badge=document.querySelector('[data-notification-count]');
 async function unread(){if(!user)return;const {count}=await supabase.from('notifications').select('id',{count:'exact',head:true}).is('read_at',null);if(badge)badge.textContent=count?` · ${count} 条未读`:'';}
 if(user)void unread();
