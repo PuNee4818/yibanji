@@ -22,7 +22,7 @@ test('search, old bookmarks and reading history survive the migration', async ({
   await page.goto('/me/history/');
   await expect(page.locator('[data-history-item="a01"]')).toBeVisible();
   await page.goto('/search/');
-  await page.getByLabel('搜索文集').fill('第三关节');
+  await page.getByRole('searchbox', { name: '搜索文集' }).fill('第三关节');
   await page.getByRole('button', { name: '搜索', exact: true }).click();
   await expect(page.locator('#search-results')).toContainText('天花板');
 });

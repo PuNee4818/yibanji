@@ -1,8 +1,14 @@
 import { parseBookmarks, readStorage, writeStorage } from '../lib/storage';
+import './preferences';
 
+let announcementTimer: ReturnType<typeof setTimeout>;
 export function announce(message: string) {
   const status = document.querySelector('#status');
-  if (status) status.textContent = message;
+  if (status) {
+    clearTimeout(announcementTimer);
+    status.textContent = message;
+    announcementTimer = setTimeout(() => { status.textContent = ''; }, 5000);
+  }
 }
 
 function legacyRoute() {

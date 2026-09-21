@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 test('environment and secret paths cannot be accidentally staged', () => {
-  for (const path of ['.env', '.env.local', '.env.production', 'secrets/example.json', 'private.secret', 'private.pem', 'credentials.json']) {
+  for (const path of ['.env', '.env.local', '.env.production', 'secrets/example.json', 'private.secret', 'secret.json', '.secrets', 'private.pem', 'credentials.json']) {
     assert.equal(execFileSync('git', ['check-ignore', path], { encoding: 'utf8' }).trim(), path);
   }
   assert.equal(execFileSync('git', ['ls-files', '.env', '.env.local'], { encoding: 'utf8' }), '');

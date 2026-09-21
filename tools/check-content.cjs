@@ -3,7 +3,7 @@ const fs=require('fs'), path=require('path'), vm=require('vm');
 const ROOT=path.resolve(__dirname,'..');
 const window={}; const ctx=vm.createContext({window,console});
 function run(rel){vm.runInContext(fs.readFileSync(path.join(ROOT,rel),'utf8'),ctx,{filename:rel});}
-run('assets/js/core/content-registry.js'); run('data/book-meta.js'); run('data/content-manifest.js');
+run('tools/content-registry.cjs'); run('data/book-meta.js'); run('data/content-manifest.js');
 for(const f of window.YB_CONTENT_MANIFEST.files) run(f);
 const book=window.YB_CONTENT.finalize(window.YB_BOOK_META);
 if(book.articles.length!==window.YB_CONTENT_MANIFEST.expectedArticles) throw new Error('Article count mismatch');

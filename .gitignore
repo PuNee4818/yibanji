@@ -18,8 +18,15 @@ secrets/
 **/secrets/
 *.secret
 *.secrets
+secret
+secret.*
+secrets.*
+.secrets
+.secrets.*
 *.pem
 *.key
+*.p12
+*.pfx
 *service-account*.json
 *credentials*.json
 .workbuddy/screenshots/

@@ -1,5 +1,6 @@
 ---
 import { articleUrl, book, sections, type Article, type Chapter } from '../lib/book';
+import ReadingSettings from './ReadingSettings.astro';
 interface Props { article: Article; chapter?: Chapter }
 const { article, chapter } = Astro.props;
 const paragraphs = chapter?.body ?? article.body;
@@ -20,6 +21,7 @@ const related = book.articles.filter(a => a.category === article.category && a.i
       {article.subtitle && <p>{article.subtitle}</p>}
       <p class="muted">{article.author} · {chapter ? article.title : `${article.chars.toLocaleString()} 字`}</p>
     </header>
+    <div class="reader-options"><details><summary>阅读设置</summary><ReadingSettings /></details><button class="quiet-button" data-focus-reading aria-pressed="false">专注阅读</button></div>
     {!chapter && article.chapters && <section aria-label="章节列表"><h2>全书目录</h2><ol class="chapter-list">{article.chapters.map(c => <li><a href={articleUrl(article, c.index)}>{c.title}</a></li>)}</ol></section>}
     <div class:list={['prose', { verse: article.kind === 'verse' }]}>
       {paragraphs.map((text, i) => {
@@ -40,3 +42,4 @@ const related = book.articles.filter(a => a.category === article.category && a.i
     <section class="related"><h2>同卷再读</h2>{related.map(a => <p><a href={articleUrl(a)}>{a.title} <small>{a.author}</small></a></p>)}</section>
   </article>
 </div>
+<button class="exit-focus" hidden>退出专注阅读 <kbd>Esc</kbd></button>

@@ -4,7 +4,7 @@ const fs=require('fs'), path=require('path'), vm=require('vm');
 const ROOT=path.resolve(__dirname,'..');
 const window={}; const ctx=vm.createContext({window,console});
 function run(rel){vm.runInContext(fs.readFileSync(path.join(ROOT,rel),'utf8'),ctx,{filename:rel});}
-run('assets/js/core/content-registry.js');
+run('tools/content-registry.cjs');
 run('data/book-meta.js');
 run('data/content-manifest.js');
 for(const f of window.YB_CONTENT_MANIFEST.files) run(f);
@@ -26,7 +26,7 @@ for(const a of book.articles){
   for(const [i,n] of (a.notes||[]).entries()) scanText(a,`notes[${i}]`,n);
   for(const c of (a.chapters||[])) for(const [i,t] of (c.body||[]).entries()) scanText(a,`chapter${c.number}[${i}]`,t);
 }
-const css=fs.readdirSync(path.join(ROOT,'assets/css')).filter(file=>file.endsWith('.css')).map(file=>fs.readFileSync(path.join(ROOT,'assets/css',file),'utf8')).join('\n');
+const css=fs.readdirSync(path.join(ROOT,'src/styles')).filter(file=>file.endsWith('.css')).map(file=>fs.readFileSync(path.join(ROOT,'src/styles',file),'utf8')).join('\n');
 if(/\.prose-body\.verse p:first-child\s*\{[^}]*margin-bottom/i.test(css)) issues.push('CSS: verse first-child still has forced bottom gap');
 if(issues.length){ console.error(issues.join('\n')); process.exit(1); }
 console.log(`OK: typography audit passed for ${book.articles.length} works.`);
