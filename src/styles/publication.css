@@ -87,6 +87,11 @@
 .form-stack label { display:grid; gap:8px; }
 .form-stack input,.form-stack textarea { width:100%; }
 .form-stack textarea { min-height:120px; resize:vertical; }
+dialog { color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:4px; padding:28px; width:min(560px,calc(100vw - 32px)); max-height:85dvh; overflow:auto; }
+dialog::backdrop { background:#0007; }
+.dialog-close { float:right; }
+.reward-tiers { padding-left:22px; font-size:14px; }
+.reward-tiers li { padding:4px 0; }
 .user-menu button { width:100%; text-align:left; border:0; }
 .empty-state { text-align:center; padding:60px 24px; border:1px solid var(--line); }
 .empty-state h2 { font-size:24px; }

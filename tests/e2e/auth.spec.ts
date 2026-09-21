@@ -14,7 +14,14 @@ test('real login, profile edit, public profile and logout',async({page})=>{
     await page.getByLabel('显示名称',{exact:true}).fill('真实联调书友');
     await page.getByLabel('个人简介',{exact:true}).fill('阅读，也交流。');
     await page.getByRole('button',{name:'保存个人资料'}).click();
-    await expect(page.getByRole('status')).toHaveText('个人资料已更新。');
+    await expect(page.locator('#status')).toHaveText('个人资料已更新。');
+    await page.locator('.user-menu summary').click();
+    await page.locator('[data-open-checkin]').click();
+    await expect(page.locator('#checkin-dialog')).toBeVisible();
+    await page.locator('#checkin-submit').click();
+    await expect(page.locator('#checkin-result')).toContainText('1 枚臭鸡蛋、5 EXP');
+    await expect(page.locator('#checkin-submit')).toBeDisabled();
+    await page.getByRole('button',{name:'关闭签到面板'}).click();
     await page.goto(`/u/reader_${user.id.replaceAll('-','')}/`);
     await expect(page.getByRole('heading',{name:'真实联调书友',exact:true})).toBeVisible();
     await expect(page.locator('#main')).not.toContainText(user.email);

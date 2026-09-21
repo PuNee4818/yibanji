@@ -14,7 +14,16 @@ values('00000000-0000-0000-0000-000000000000',${quote(u.id)},'authenticated','au
 insert into auth.identities(id,provider_id,user_id,identity_data,provider,created_at,updated_at) values(gen_random_uuid(),${quote(u.id)},${quote(u.id)},jsonb_build_object('sub',${quote(u.id)},'email',${quote(u.email)}),'email',now(),now());`).join('\n')} commit;`);
   const cleanup=()=>sql(`delete from auth.users where id in (${users.map(u=>quote(u.id)).join(',')}) and email like 'yb-test-%@example.com'`);
   try {
-    const clients=await Promise.all(users.map(async u=>{const c=client();const {error}=await c.auth.signInWithPassword({email:u.email,password:u.password});if(error)throw new Error(`Test login failed: ${error.name} ${error.status} ${error.code ?? ''} ${error.message}`);return c;}));
+    const clients=[];
+    for(const u of users){
+      const c=client();let error;
+      for(let attempt=0;attempt<3;attempt++){
+        ({error}=await c.auth.signInWithPassword({email:u.email,password:u.password}));
+        if(!error || !/CONNECT_TIMEOUT/.test(error.message))break;
+      }
+      if(error)throw new Error(`Test login failed: ${error.name} ${error.status} ${error.code ?? ''} ${error.message}`);
+      clients.push(c);
+    }
     return {users,clients,cleanup};
   } catch(error) {cleanup();throw error;}
 }

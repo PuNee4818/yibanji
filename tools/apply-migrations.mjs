@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { parseEnv } from 'node:util';
 import { sql, quote } from './db.mjs';
 
 // Management API transport is used after CLI direct Postgres connection failed.
@@ -22,4 +23,11 @@ for (const file of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql
 insert into supabase_migrations.schema_migrations(version,name,statements) values(${quote(version)},${quote(file.slice(version.length+1,-4))},array[${quote(migration)}]);
 insert into app_migrations.checksums values(${quote(version)},${quote(hash)}); commit;`);
   console.log(`Applied: ${file}`);
+}
+const config=parseEnv(readFileSync('.env.local','utf8').replace(/^\uFEFF/,''));
+const timezone=config.SITE_TIMEZONE || process.env.SITE_TIMEZONE || 'Asia/Shanghai';
+if(sql("select to_regclass('app_private.site_config') as name")[0].name) {
+  if(!sql(`select name from pg_timezone_names where name=${quote(timezone)}`).length) throw new Error('Invalid SITE_TIMEZONE');
+  sql(`update app_private.site_config set timezone=${quote(timezone)} where id`);
+  console.log('Database calendar timezone synchronized from server configuration.');
 }
