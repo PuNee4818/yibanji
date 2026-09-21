@@ -3,4 +3,4 @@ import Layout from '../../layouts/Layout.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import { book } from '../../lib/book';
 ---
-<Layout title="我的收藏"><header class="page-head"><h1>我的收藏</h1><p>那些想再读一次的文字。</p></header><p id="bookmark-empty">还没有收藏。读到喜欢的篇章，可以为它留一枚书签。</p><ArticleList articles={book.articles} bookmarkList /><noscript>启用 JavaScript 后，可查看此设备保存的收藏。</noscript></Layout>
+<Layout title="我的收藏"><header class="page-head"><h1>我的收藏</h1><p>那些想再读一次的文字。</p></header><button id="import-bookmarks" hidden>导入此设备旧收藏</button><p id="bookmark-empty">还没有收藏。读到喜欢的篇章，可以为它留一枚书签。</p><ArticleList articles={book.articles} bookmarkList /><noscript>启用 JavaScript 后，可查看此设备保存的收藏。</noscript><script>import '../../scripts/library';</script></Layout>
