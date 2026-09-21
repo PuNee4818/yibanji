@@ -1,0 +1,27 @@
+{
+  "name": "yibanji",
+  "version": "0.6.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "node tools/build-legacy.mjs",
+    "typecheck": "tsc --noEmit && node tools/check-syntax.mjs",
+    "lint": "eslint . --max-warnings 0",
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:content": "node tools/check-content.js && node tools/content-integrity.mjs",
+    "test:smoke": "playwright test",
+    "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:content && npm run test:smoke",
+    "preview": "node tools/serve.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
+    "eslint": "^9.39.5",
+    "globals": "^17.12.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0"
+  }
+}
