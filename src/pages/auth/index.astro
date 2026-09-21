@@ -1,0 +1,4 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="登录与注册"><div class="narrow-page"><header class="page-head"><p class="eyebrow">一班集 · 我的书房</p><h1>欢迎回来</h1><p>用一个持续的身份，与文字和书友相遇。</p></header><form id="auth-form" class="form-stack" method="post"><label>邮箱<input name="email" type="email" autocomplete="email" required /></label><label>密码<input name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required /></label><label>进入方式<select name="mode"><option value="login">登录已有账号</option><option value="signup">注册新账号</option></select></label><button class="primary" disabled>继续</button><p id="auth-message" role="status"></p><noscript>登录与注册需要启用 JavaScript，文章正文仍可直接阅读。</noscript><p class="muted">注册即表示同意<a href="/community/guidelines/">社区规范</a>。新账号可能需要邮箱确认。</p></form></div></Layout>

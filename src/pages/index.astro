@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { book, articleUrl } from '../lib/book';
+const featured = book.articles.find(a => a.id === 'a01')!;
+const volumeDescriptions: Record<string, string> = { '故园':'旧日校园，纸上重逢。', '笑谈':'认真生活，也认真说笑。', '诗笺':'把一瞬心事，折成一行诗。', '志异':'平常日子背面，另有天地。', '迷梦':'醒来之后，故事还在。', '天外':'沿着想象，走得再远一点。', '剪刀':'从一个故事，走向另一个故事。' };
+---
+<Layout>
+  <section class="hero">
+    <div class="hero-copy"><p class="eyebrow"><span class="red-dot"></span> 第二版 · 一群人的文字，一段共同的时光</p><h1>把时光，<br />留在字里行间。</h1><p class="hero-description">从校园的一草一木，到想象之外的远方。<br />这些诗、故事与笑谈，合在一起，便是一班集。</p><div class="hero-actions"><a class="button primary" href="/catalog/">翻开这本文集 <span aria-hidden="true">↗</span></a><a href="/articles/preface2/">读第二版序 →</a></div><p class="hero-count"><strong>54</strong> 篇作品 <span>／</span> <strong>9</strong> 个卷目 <span>／</span> 写给我们，也写给你</p></div>
+    <aside class="cover-note" aria-label="文集献词"><span class="cover-edition">一班 · 文集 / 第二版</span><p class="cover-title">一班集</p><div class="cover-rule"></div><p>{book.dedication[0]}<br />{book.dedication[1]}<br />{book.dedication[2]}</p><span class="cover-foot">纸短，情长。</span></aside>
+  </section>
+  <div class="section-heading"><div><p class="eyebrow">从这里开始</p><h2>翻开第一页</h2></div><a href="/catalog/">完整目录 →</a></div>
+  <section class="editorial-grid" aria-label="开卷阅读">
+    <article class="featured-work"><p class="eyebrow">卷首 / {featured.author}</p><h3><a href={articleUrl(featured)}>{featured.title}</a></h3><p>“{featured.body[0]?.split('。')[0]}。”</p><p class="muted">我们用文字拉住情感，用笔墨挽留时光。这本文集的故事，从这里说起。</p><a class="text-link" href={articleUrl(featured)}>读这篇文章 →</a></article>
+    <div><ArticleList articles={['a03','a10','tianhuaban'].map(id => book.articles.find(a => a.id === id)!)} /></div>
+  </section>
+  <section class="volume-section"><div class="section-heading"><div><p class="eyebrow">各有天地</p><h2>循卷而读</h2></div><span class="muted">从故园，走向天外</span></div><div class="volume-grid">{book.categories.filter(c => volumeDescriptions[c.name]).map((c, i) => <a class="volume-card" href={`/catalog/#${c.id}`}><span class="volume-number">0{i + 1}</span><h3>{c.name}</h3><p>{volumeDescriptions[c.name]}</p><span class="volume-meta">{c.articles.length} 篇 <span aria-hidden="true">↗</span></span></a>)}</div></section>
+  <section class="community-invitation"><div><p class="eyebrow">文字之外，还有回声</p><h2>读完了，也聊两句。</h2><p>在书友之间，交换一段感想，或者一个新的故事。</p></div><a class="button" href="/community/">去社区看看 →</a></section>
+  <section class="related"><h2>最近讨论</h2><div data-recent-discussions>正在翻开讨论…</div></section><script>import '../scripts/community';</script>
+</Layout>

@@ -1,0 +1,8 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Reader from '../../../components/Reader.astro';
+import { book } from '../../../lib/book';
+export function getStaticPaths() { return book.articles.map(article => ({ params: { id: article.id }, props: { article } })); }
+const { article } = Astro.props;
+---
+<Layout title={article.title} description={`${article.title} · ${article.author} · 一班集${article.category}`}><Reader article={article} /></Layout>

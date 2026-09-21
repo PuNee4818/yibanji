@@ -1,0 +1,8 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Reader from '../../../components/Reader.astro';
+import { book } from '../../../lib/book';
+export function getStaticPaths() { return book.articles.flatMap(article => (article.chapters ?? []).map(chapter => ({ params: { id: article.id, chapter: String(chapter.index) }, props: { article, chapter } }))); }
+const { article, chapter } = Astro.props;
+---
+<Layout title={`${chapter.title} · ${article.title}`}><Reader article={article} chapter={chapter} /></Layout>

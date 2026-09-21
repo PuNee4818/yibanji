@@ -1,0 +1,10 @@
+---
+import { articleUrl, type Article } from '../lib/book';
+interface Props { articles: Article[]; bookmarkList?: boolean }
+const { articles, bookmarkList = false } = Astro.props;
+---
+<ul class="article-list">
+  {articles.map(article => <li data-bookmark-item={bookmarkList ? article.id : undefined} hidden={bookmarkList}>
+    <a href={articleUrl(article)}><span>{article.title}</span><small>{article.author} · {article.category}</small></a>
+  </li>)}
+</ul>

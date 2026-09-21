@@ -1,0 +1,10 @@
+# Only intentional hosted settings are declared. Undeclared settings remain unchanged.
+project_id = "yibanji"
+
+[auth]
+site_url = "http://127.0.0.1:4321"
+additional_redirect_urls = ["http://127.0.0.1:4321/auth/", "http://localhost:4321/auth/"]
+minimum_password_length = 8
+
+[auth.email]
+enable_confirmations = true

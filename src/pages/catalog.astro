@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { book } from '../lib/book';
+---
+<Layout title="目录"><header class="page-head"><p class="eyebrow">九卷 · 五十四篇</p><h1>一班集目录</h1><p>从故园出发，向天外行去。</p></header>
+  <nav class="tabs" aria-label="卷目">{book.categories.map(c => <a href={`#${c.id}`}>{c.name}</a>)}</nav>
+  <div class="catalog-grid">{book.categories.map(c => <section id={c.id}><h2>{c.name}</h2><ArticleList articles={book.articles.filter(a => a.category === c.name)} /></section>)}</div>
+</Layout>
