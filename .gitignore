@@ -32,3 +32,5 @@ secrets.*
 .workbuddy/screenshots/
 src/generated/
 .astro-sessions/
+
+.vercel/

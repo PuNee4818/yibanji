@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "private": true,
   "engines": {
-    "node": ">=22.18.0"
+    "node": "24.x"
   },
   "scripts": {
     "build": "node tools/generate-content.mjs && astro build",
@@ -18,7 +18,9 @@
     "db:migrate": "node tools/apply-migrations.mjs",
     "test:db": "node --test --test-concurrency=1 tests/integration/*.test.mjs",
     "start": "node dist/server/entry.mjs",
-    "admin": "node tools/admin.mjs"
+    "admin": "node tools/admin.mjs",
+    "test:deploy": "node tools/build-vercel.mjs && node --test tests/deployment/*.test.mjs",
+    "build:vercel": "node tools/build-vercel.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -36,8 +38,14 @@
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",
+    "@astrojs/vercel": "^11.0.10",
     "@supabase/supabase-js": "^2.116.0",
     "astro": "^7.3.3"
   },
-  "type": "module"
+  "type": "module",
+  "overrides": {
+    "@vercel/routing-utils": {
+      "path-to-regexp": "^6.3.0"
+    }
+  }
 }

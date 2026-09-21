@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync,readdirSync } from 'node:fs';
+import { readFileSync,readdirSync,existsSync } from 'node:fs';
 import {parseEnv} from 'node:util';
 
 test('environment and secret paths cannot be accidentally staged', () => {
@@ -23,4 +23,14 @@ test('built client assets contain no privileged environment values or secret key
  const env=parseEnv(readFileSync('.env.local','utf8').replace(/^\uFEFF/,''));
  const secrets=Object.entries(env).filter(([key,value])=>/SECRET|TOKEN|PASSWORD|SERVICE_ROLE/.test(key)&&value.length>7);
  for(const file of readdirSync('dist/client',{recursive:true}).filter(f=>/\.(js|html|json|css)$/.test(f))){const text=readFileSync(`dist/client/${file}`,'utf8');assert.doesNotMatch(text,/sb_secret_[A-Za-z0-9_-]{16,}/,file);assert.doesNotMatch(text,/SUPABASE_SECRET_KEY|PUBLIC_SUPABASE_ANON_KEY/,file);for(const[key,value]of secrets)assert.ok(!text.includes(value),`Privileged variable ${key} in client output`);}
+});
+
+
+test('deployment source excludes legacy entrypoints and generated artifacts', () => {
+  assert.equal(existsSync('index.html'), false, 'Root legacy index must not shadow the Astro app');
+  assert.equal(existsSync('assets'), false, 'Legacy SPA assets must be removed');
+  assert.equal(execFileSync('git', ['ls-files', '-ci', '--exclude-standard'], { encoding: 'utf8' }), '', 'Ignored files must not remain tracked');
+  for (const path of ['package.json', 'package-lock.json', 'astro.config.mjs', 'src/pages/index.astro', 'vercel.json']) {
+    assert.ok(existsSync(path), 'Missing deployment source: ' + path);
+  }
 });
