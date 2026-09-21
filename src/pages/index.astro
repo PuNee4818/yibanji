@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { book } from '../lib/book';
+---
+<Layout>
+  <section class="hero"><p class="eyebrow">第二版 · 中文数字刊物</p><h1>一班集</h1><p>{book.dedication.join(' · ')}</p><a class="button" href="/catalog/">翻开目录 →</a></section>
+  <section><h2>从这里开始</h2><ArticleList articles={book.articles.slice(0, 6)} /></section>
+</Layout>

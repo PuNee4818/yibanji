@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+interface Props { title?: string; description?: string }
+const { title = '一班集', description = '一班集，一间安静、克制、适合阅读的中文数字刊物。' } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title === '一班集' ? title : `${title} · 一班集`}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="site-header">
+      <a class="brand" href="/">一班集</a>
+      <nav aria-label="主导航">
+        <a href="/">首页</a><a href="/catalog/">目录</a><a href="/search/">搜索</a><a href="/me/bookmarks/">收藏</a><a href="/me/history/">历史</a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer"><span>一班集 · 第二版</span><a href="/catalog/">回到目录</a></footer>
+    <div id="status" role="status" aria-live="polite"></div>
+    <script>import '../scripts/site';</script>
+  </body>
+</html>

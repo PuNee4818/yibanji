@@ -1,0 +1,42 @@
+---
+import { articleUrl, book, sections, type Article, type Chapter } from '../lib/book';
+interface Props { article: Article; chapter?: Chapter }
+const { article, chapter } = Astro.props;
+const paragraphs = chapter?.body ?? article.body;
+const headings = sections(article);
+const category = book.categories.find(c => c.name === article.category)!;
+const related = book.articles.filter(a => a.category === article.category && a.id !== article.id).slice(0, 3);
+---
+<div class="reader-layout">
+  <aside class="reader-toc" aria-label="本篇目录">
+    <a href={`/catalog/#${category.id}`}>← {category.name}</a>
+    {article.chapters ? <ol>{article.chapters.map(c => <li><a href={articleUrl(article, c.index)} aria-current={chapter?.index === c.index ? 'page' : undefined}>{c.title}</a></li>)}</ol>
+      : headings.length > 0 && <ol>{headings.map((h, i) => <li><a href={`#section-${i + 1}`}>{h.text}</a></li>)}</ol>}
+  </aside>
+  <article class="reader" data-article-id={article.id} data-chapter={chapter?.index ?? 1}>
+    <header class="article-head">
+      <p class="eyebrow">{article.category} / {chapter ? `第 ${chapter.index} 章` : '一班集'}</p>
+      <h1>{chapter?.title ?? article.title}</h1>
+      {article.subtitle && <p>{article.subtitle}</p>}
+      <p class="muted">{article.author} · {chapter ? article.title : `${article.chars.toLocaleString()} 字`}</p>
+    </header>
+    {!chapter && article.chapters && <section aria-label="章节列表"><h2>全书目录</h2><ol class="chapter-list">{article.chapters.map(c => <li><a href={articleUrl(article, c.index)}>{c.title}</a></li>)}</ol></section>}
+    <div class:list={['prose', { verse: article.kind === 'verse' }]}>
+      {paragraphs.map((text, i) => {
+        const headingIndex = chapter ? -1 : headings.findIndex(h => h.bodyIndex === i);
+        return headingIndex >= 0 ? <h2 id={`section-${headingIndex + 1}`}>{text}</h2> : <p>{text}</p>;
+      })}
+    </div>
+    {article.notes && <aside class="notes" aria-label="原文注释"><h2>注释</h2>{article.notes.map(note => <p>{note}</p>)}</aside>}
+    {article.colophon && <footer class="colophon"><p>{article.colophon.signature}</p><p>{article.colophon.date}</p></footer>}
+    <div class="article-actions" aria-label="文章操作">
+      <button data-bookmark={article.id} aria-pressed="false">收藏</button>
+      <button data-share>分享链接</button>
+    </div>
+    {chapter && <nav class="chapter-nav" aria-label="翻章">
+      {chapter.index > 1 ? <a href={articleUrl(article, chapter.index - 1)}>← 上一章</a> : <a href={articleUrl(article)}>全书目录</a>}
+      {chapter.index < (article.chapters?.length ?? 0) ? <a href={articleUrl(article, chapter.index + 1)}>下一章 →</a> : <a href="/catalog/">读完了，回到目录 →</a>}
+    </nav>}
+    <section class="related"><h2>同卷再读</h2>{related.map(a => <p><a href={articleUrl(a)}>{a.title} <small>{a.author}</small></a></p>)}</section>
+  </article>
+</div>
