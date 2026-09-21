@@ -6,13 +6,13 @@
     "node": "24.x"
   },
   "scripts": {
-    "build": "node tools/generate-content.mjs && astro build",
+    "build": "node tools/generate-content.mjs && node tools/generate-pdfs.mjs && astro build",
     "typecheck": "node tools/generate-content.mjs && astro check",
     "lint": "eslint . --max-warnings 0",
     "test": "node --test tests/unit/*.test.mjs",
     "test:content": "node tools/check-content.cjs && node tools/content-integrity.mjs",
     "test:smoke": "playwright test",
-    "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:content && npm run test:smoke",
+    "check": "npm run build && npm run typecheck && npm run lint && npm run audit:styles && npm test && npm run test:content && npm run test:smoke",
     "preview": "astro preview --host 127.0.0.1 --port 4321 --ignore-lock",
     "dev": "node tools/generate-content.mjs && astro dev --host 127.0.0.1 --ignore-lock",
     "db:migrate": "node tools/apply-migrations.mjs",
@@ -20,7 +20,9 @@
     "start": "node dist/server/entry.mjs",
     "admin": "node tools/admin.mjs",
     "test:deploy": "node tools/build-vercel.mjs && node --test tests/deployment/*.test.mjs",
-    "build:vercel": "node tools/build-vercel.mjs"
+    "build:vercel": "node tools/build-vercel.mjs",
+    "pdf": "node tools/generate-pdfs.mjs",
+    "audit:styles": "node tools/audit-styles.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -31,6 +33,10 @@
     "eslint": "^9.39.5",
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.12.0",
+    "pdfkit": "^0.20.2",
+    "postcss": "^8.5.28",
+    "prettier": "^3.9.8",
+    "prettier-plugin-astro": "^1.0.1",
     "supabase": "^2.117.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",

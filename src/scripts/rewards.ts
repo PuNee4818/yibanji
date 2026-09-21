@@ -1,21 +1,186 @@
-import {supabase,rpc,getCurrentUser} from '../lib/supabase';
-import {levelNames,type Growth,type Task} from '../lib/growth';
-import {announce} from './site';
-interface Badge {id:string;name:string;description:string;target:number;reward_eggs:number;reward_exp:number}
-export function growthCard(g:{exp:number;level:number}):HTMLElement{
- const box=document.createElement('div');box.className='growth-card';const title=document.createElement('h2');title.textContent=`${levelNames[g.level-1]} · ${g.exp} EXP`;box.append(title);
- const next=[50,150,400,900,1800][g.level-1];if(next){const label=document.createElement('label');label.textContent=`距离下一阶段还需 ${next-g.exp} EXP`;const bar=document.createElement('progress');bar.max=next;bar.value=g.exp;bar.setAttribute('aria-label','社区经验进度');label.append(bar);box.append(label);}return box;
+import { supabase, rpc, getCurrentUser } from '../lib/supabase';
+import { levelNames, type Growth, type Task } from '../lib/growth';
+import { announce } from './site';
+interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  target: number;
+  reward_eggs: number;
+  reward_exp: number;
 }
-const center=document.querySelector('#reward-center');
-if(center){
- const user=await getCurrentUser();let page=0;const more=document.querySelector<HTMLButtonElement>('#ledger-more')!;const asset=document.querySelector<HTMLSelectElement>('#ledger-asset')!;
- function tasks(target:string,items:Task[]){const list=document.querySelector(target)!;list.replaceChildren();for(const t of items){const box=document.createElement('article');box.className='task-card';const h=document.createElement('h3');h.textContent=t.name;const p=document.createElement('p');p.textContent=`${t.progress} / ${t.target} · ${t.reward_eggs} 枚臭鸡蛋 + ${t.reward_exp} EXP`;const status=document.createElement('span');status.className='muted';status.textContent=t.rewarded_at?'已完成 · 奖励已入账':'进行中';const bar=document.createElement('progress');bar.max=t.target;bar.value=t.progress;bar.setAttribute('aria-label',t.name);box.append(h,p,bar,status);list.append(box);}}
- async function summary(){const g=await rpc<Growth>('growth_summary');const box=document.querySelector('#reward-summary')!;box.replaceChildren(growthCard(g.progress));const p=document.createElement('p');p.className='wallet-summary';p.textContent=`${g.wallet.egg_balance} 枚臭鸡蛋 · 连续签到 ${g.streak_days} 天 · 累计签到 ${g.total_checkins} 天`;box.append(p);tasks('#daily-tasks',g.tasks.filter(t=>t.frequency==='daily'));tasks('#weekly-tasks',g.tasks.filter(t=>t.frequency==='weekly'));}
- async function badges(){if(!user)return;const[{data:defs,error},{data:owned},{data:profile}]=await Promise.all([supabase.from('achievement_definitions').select('*').eq('hidden',false).order('target'),supabase.from('user_achievements').select('*').eq('user_id',user.id),supabase.from('profiles').select('featured_achievement').eq('id',user.id).single()]);if(error)throw error;
- const wall=document.querySelector('#achievement-wall')!;wall.replaceChildren();for(const d of (defs??[])as Badge[]){const a=owned?.find(x=>x.achievement_id===d.id);const card=document.createElement('article');card.className='task-card';const h=document.createElement('h3');h.textContent=d.name;const p=document.createElement('p');p.textContent=d.description;const state=document.createElement('p');state.className='muted';state.textContent=a?.unlocked_at?'已获得':`${a?.progress??0} / ${d.target}`;card.append(h,p,state);if(d.reward_eggs||d.reward_exp){const reward=document.createElement('small');reward.textContent=`解锁奖励：${d.reward_eggs} 枚臭鸡蛋、${d.reward_exp} EXP`;card.append(reward);}if(a?.unlocked_at){const b=document.createElement('button');const selected=profile?.featured_achievement===d.id;b.textContent=selected?'正在展示 · 取消':'展示这枚勋章';b.setAttribute('aria-pressed',String(selected));b.addEventListener('click',async()=>{b.disabled=true;try{await rpc('select_achievement',{p_achievement:selected?null:d.id});await badges();}catch(error){announce((error as Error).message);}finally{b.disabled=false;}});card.append(b);}wall.append(card);}}
- const reasons:Record<string,string>={daily_checkin:'每日签到',daily_task:'每日任务',weekly_task:'每周任务',achievement:'勋章奖励',egg_throw:'投掷臭鸡蛋',admin_adjustment:'管理员调整',migration:'初始迁移'};
- async function ledger(append=false){const {data,error}=await supabase.from('economy_transactions').select('*').eq('asset_type',asset.value).order('created_at',{ascending:false}).order('id',{ascending:false}).range(page*20,page*20+19);if(error)throw error;const list=document.querySelector('#ledger-list')!;if(!append)list.replaceChildren();for(const row of data??[]){const li=document.createElement('li');const text=document.createElement('span');text.textContent=`${reasons[row.reason]??'社区奖励'} · ${new Date(row.created_at).toLocaleString('zh-CN')}`;const amount=document.createElement('strong');amount.textContent=`${row.delta>0?'+':''}${row.delta} · 余额 ${row.balance_after}`;li.append(text,amount);if(row.reason==='admin_adjustment'&&row.metadata?.reason){const note=document.createElement('small');note.textContent=row.metadata.reason;li.append(note);}list.append(li);}if(!data?.length&&!append){const li=document.createElement('li');li.textContent='还没有流水，签到后就会留下第一笔记录。';list.append(li);}more.hidden=(data?.length??0)<20;}
- const safe=(fn:()=>Promise<void>)=>void fn().catch(error=>announce((error as Error).message));
- more.addEventListener('click',()=>{page++;safe(()=>ledger(true));});asset.addEventListener('change',()=>{page=0;safe(()=>ledger());});document.addEventListener('growth-updated',()=>safe(async()=>{await summary();await badges();page=0;await ledger();}));
- if(user)safe(async()=>{await Promise.all([summary(),badges(),ledger()]);});
+export function growthCard(g: { exp: number; level: number }): HTMLElement {
+  const box = document.createElement('div');
+  box.className = 'growth-card';
+  const title = document.createElement('h2');
+  title.textContent = `${levelNames[g.level - 1]} · ${g.exp} 墨迹`;
+  box.append(title);
+  const next = [50, 150, 400, 900, 1800][g.level - 1];
+  if (next) {
+    const label = document.createElement('label');
+    label.textContent = `距离下一阶段还需 ${next - g.exp} 墨迹`;
+    const bar = document.createElement('progress');
+    bar.max = next;
+    bar.value = g.exp;
+    bar.setAttribute('aria-label', '墨迹积累进度');
+    label.append(bar);
+    box.append(label);
+  }
+  return box;
+}
+const center = document.querySelector('#reward-center');
+if (center) {
+  const user = await getCurrentUser();
+  let page = 0;
+  const more = document.querySelector<HTMLButtonElement>('#ledger-more')!;
+  const asset = document.querySelector<HTMLSelectElement>('#ledger-asset')!;
+  function tasks(target: string, items: Task[]) {
+    const list = document.querySelector(target)!;
+    list.replaceChildren();
+    for (const t of items) {
+      const box = document.createElement('article');
+      box.className = 'task-card';
+      const h = document.createElement('h3');
+      h.textContent = t.name;
+      const p = document.createElement('p');
+      p.textContent = `${t.progress} / ${t.target} · ${t.reward_eggs} 枚臭鸡蛋 + ${t.reward_exp} 墨迹`;
+      const status = document.createElement('span');
+      status.className = 'muted';
+      status.textContent = t.rewarded_at ? '已完成 · 奖励已入账' : '进行中';
+      const bar = document.createElement('progress');
+      bar.max = t.target;
+      bar.value = t.progress;
+      bar.setAttribute('aria-label', t.name);
+      box.append(h, p, bar, status);
+      list.append(box);
+    }
+  }
+  async function summary() {
+    const g = await rpc<Growth>('growth_summary');
+    const box = document.querySelector('#reward-summary')!;
+    box.replaceChildren(growthCard(g.progress));
+    const p = document.createElement('p');
+    p.className = 'wallet-summary';
+    p.textContent = `${g.wallet.egg_balance} 枚臭鸡蛋 · 连续签到 ${g.streak_days} 天 · 累计签到 ${g.total_checkins} 天`;
+    box.append(p);
+    tasks(
+      '#daily-tasks',
+      g.tasks.filter((t) => t.frequency === 'daily'),
+    );
+    tasks(
+      '#weekly-tasks',
+      g.tasks.filter((t) => t.frequency === 'weekly'),
+    );
+  }
+  async function badges() {
+    if (!user) return;
+    const [{ data: defs, error }, { data: owned }, { data: profile }] = await Promise.all([
+      supabase.from('achievement_definitions').select('*').eq('hidden', false).order('target'),
+      supabase.from('user_achievements').select('*').eq('user_id', user.id),
+      supabase.from('profiles').select('featured_achievement').eq('id', user.id).single(),
+    ]);
+    if (error) throw error;
+    const wall = document.querySelector('#achievement-wall')!;
+    wall.replaceChildren();
+    for (const d of (defs ?? []) as Badge[]) {
+      const a = owned?.find((x) => x.achievement_id === d.id);
+      const card = document.createElement('article');
+      card.className = 'task-card';
+      const h = document.createElement('h3');
+      h.textContent = d.name;
+      const p = document.createElement('p');
+      p.textContent = d.description;
+      const state = document.createElement('p');
+      state.className = 'muted';
+      state.textContent = a?.unlocked_at ? '已获得' : `${a?.progress ?? 0} / ${d.target}`;
+      card.append(h, p, state);
+      if (d.reward_eggs || d.reward_exp) {
+        const reward = document.createElement('small');
+        reward.textContent = `解锁奖励：${d.reward_eggs} 枚臭鸡蛋、${d.reward_exp} 墨迹`;
+        card.append(reward);
+      }
+      if (a?.unlocked_at) {
+        const b = document.createElement('button');
+        const selected = profile?.featured_achievement === d.id;
+        b.textContent = selected ? '正在展示 · 取消' : '展示这枚勋章';
+        b.setAttribute('aria-pressed', String(selected));
+        b.addEventListener('click', async () => {
+          b.disabled = true;
+          try {
+            await rpc('select_achievement', { p_achievement: selected ? null : d.id });
+            await badges();
+          } catch (error) {
+            announce((error as Error).message);
+          } finally {
+            b.disabled = false;
+          }
+        });
+        card.append(b);
+      }
+      wall.append(card);
+    }
+  }
+  const reasons: Record<string, string> = {
+    daily_checkin: '每日签到',
+    daily_task: '每日任务',
+    weekly_task: '每周任务',
+    achievement: '勋章奖励',
+    egg_throw: '投掷臭鸡蛋',
+    admin_adjustment: '管理员调整',
+    migration: '初始迁移',
+  };
+  async function ledger(append = false) {
+    const { data, error } = await supabase
+      .from('economy_transactions')
+      .select('*')
+      .eq('asset_type', asset.value)
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(page * 20, page * 20 + 19);
+    if (error) throw error;
+    const list = document.querySelector('#ledger-list')!;
+    if (!append) list.replaceChildren();
+    for (const row of data ?? []) {
+      const li = document.createElement('li');
+      const text = document.createElement('span');
+      text.textContent = `${reasons[row.reason] ?? '社区奖励'} · ${new Date(row.created_at).toLocaleString('zh-CN')}`;
+      const amount = document.createElement('strong');
+      amount.textContent = `${row.delta > 0 ? '+' : ''}${row.delta} · 余额 ${row.balance_after}`;
+      li.append(text, amount);
+      if (row.reason === 'admin_adjustment' && row.metadata?.reason) {
+        const note = document.createElement('small');
+        note.textContent = row.metadata.reason;
+        li.append(note);
+      }
+      list.append(li);
+    }
+    if (!data?.length && !append) {
+      const li = document.createElement('li');
+      li.textContent = '还没有流水，签到后就会留下第一笔记录。';
+      list.append(li);
+    }
+    more.hidden = (data?.length ?? 0) < 20;
+  }
+  const safe = (fn: () => Promise<void>) =>
+    void fn().catch((error) => announce((error as Error).message));
+  more.addEventListener('click', () => {
+    page++;
+    safe(() => ledger(true));
+  });
+  asset.addEventListener('change', () => {
+    page = 0;
+    safe(() => ledger());
+  });
+  document.addEventListener('growth-updated', () =>
+    safe(async () => {
+      await summary();
+      await badges();
+      page = 0;
+      await ledger();
+    }),
+  );
+  if (user)
+    safe(async () => {
+      await Promise.all([summary(), badges(), ledger()]);
+    });
 }

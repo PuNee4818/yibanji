@@ -1,4 +1,64 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 ---
-<Layout title="社区管理"><section class="narrow-page"><header class="page-head"><p class="eyebrow">社区 / 管理</p><h1>让讨论继续</h1><p>每项处理都需要理由，并留下审计记录。</p></header><p id="admin-status" role="status">正在核验管理权限…</p><div id="admin-panel" hidden><nav class="tabs" aria-label="管理分类"><button data-admin-tab="pending" aria-pressed="true">待处理</button><button data-admin-tab="comments" aria-pressed="false">评论</button><button data-admin-tab="posts" aria-pressed="false">动态</button><button data-admin-tab="users" aria-pressed="false">用户</button><button data-admin-tab="resolved" aria-pressed="false">已处理</button></nav><div id="moderation-list"></div><button id="admin-more" hidden>下一页</button><details><summary>社区资产调整</summary><form id="adjust-form" class="form-stack"><label>用户 ID<input name="user" required pattern="[a-fA-F0-9-]{36}" /></label><label>臭鸡蛋增减<input name="eggs" type="number" min="-10000" max="10000" value="0" required /></label><label>EXP 增减<input name="exp" type="number" min="-10000" max="10000" value="0" required /></label><label>调整原因<textarea name="reason" minlength="5" maxlength="1000" required></textarea></label><button>记录并执行调整</button><p>负数表示扣减。余额不能低于零，每笔调整均写入用户流水。</p></form></details></div></section><script>import '../../scripts/moderation';</script></Layout>
+
+<Layout title="社区管理">
+  <section class="narrow-page">
+    <header class="page-head">
+      <p class="eyebrow">社区 / 管理</p>
+      <h1>让讨论继续</h1>
+      <p>每项处理都需要理由，并留下审计记录。</p>
+    </header>
+    <p id="admin-status" role="status">
+      正在核验管理权限…
+    </p>
+    <div id="admin-panel" hidden>
+      <nav class="tabs" aria-label="管理分类">
+        <button data-admin-tab="pending" aria-pressed="true">
+          待处理
+        </button>
+        <button data-admin-tab="comments" aria-pressed="false">
+          评论
+        </button>
+        <button data-admin-tab="posts" aria-pressed="false">
+          动态
+        </button>
+        <button data-admin-tab="users" aria-pressed="false">
+          用户
+        </button>
+        <button data-admin-tab="resolved" aria-pressed="false">
+          已处理
+        </button>
+      </nav>
+      <div id="moderation-list"></div>
+      <button id="admin-more" hidden>
+        下一页
+      </button>
+      <details>
+        <summary>社区资产调整</summary>
+        <form id="adjust-form" class="form-stack">
+          <label>
+            用户 ID
+            <input name="user" required pattern="[a-fA-F0-9-]{36}" />
+          </label>
+          <label>
+            臭鸡蛋增减
+            <input name="eggs" type="number" min="-10000" max="10000" value="0" required />
+          </label>
+          <label>
+            墨迹 增减
+            <input name="exp" type="number" min="-10000" max="10000" value="0" required />
+          </label>
+          <label>
+            调整原因<textarea name="reason" minlength="5" maxlength="1000" required></textarea>
+          </label>
+          <button>记录并执行调整</button>
+          <p>负数表示扣减。余额不能低于零，每笔调整均写入用户流水。</p>
+        </form>
+      </details>
+    </div>
+  </section>
+  <script>
+    import '../../scripts/moderation';
+  </script>
+</Layout>

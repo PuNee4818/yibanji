@@ -1,0 +1,21 @@
+---
+import SearchPanel from './SearchPanel.astro';
+---
+
+<dialog id="search-dialog" aria-labelledby="quick-search-title">
+  <div class="search-dialog-head">
+    <h2 id="quick-search-title">在字里行间寻找</h2>
+    <form method="dialog">
+      <button aria-label="关闭搜索">
+        关闭 <kbd>Esc</kbd>
+      </button>
+    </form>
+  </div>
+  <SearchPanel />
+  <a class="all-search-link" href="/search/" data-all-search>
+    打开完整搜索页 ↗
+  </a>
+</dialog>
+<script>
+  import '../scripts/search';
+</script>

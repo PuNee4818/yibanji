@@ -1,6 +1,79 @@
 ---
-interface Props{id:string}
-const {id}=Astro.props;
+import Icon from './Icon.astro';
+interface Props {
+  id: string;
+  chapter?: number;
+  novel?: boolean;
+}
+const { id, chapter, novel } = Astro.props;
+const pdf = '/pdf/' + id + (chapter ? '-' + chapter : '') + '.pdf';
 ---
-<section data-interactions={id} aria-label="文章互动"><div class="article-actions"><button data-like aria-pressed="false">点赞</button><button data-egg-open>臭鸡蛋</button><button data-article-bookmark aria-pressed="false">收藏</button><a class="button" href="#comments">评论</a><details class="more-actions"><summary>更多</summary><button data-share>分享链接</button></details></div><p class="muted" data-article-stats>正在查看文章互动…</p><dialog id="egg-dialog" aria-labelledby="egg-title"><form method="dialog"><button class="dialog-close" aria-label="关闭投掷面板">关闭</button></form><h2 id="egg-title">给文章扔臭鸡蛋</h2><p data-egg-wallet>正在打开钱包…</p><form id="egg-form"><label>投掷数量<input name="quantity" type="number" min="1" max="50" value="1" required /></label><div class="article-actions"><button type="button" data-quantity="1">扔 1 枚</button><button type="button" data-quantity="5">扔 5 枚</button><button>按数量投掷</button></div></form><p data-egg-result role="status"></p><p class="muted">只面向文章内容，可以重复投掷；点赞和臭鸡蛋互不冲突。</p></dialog></section>
-<script>import '../scripts/article-interactions';</script>
+
+<section class="reader-actions" data-interactions={id} aria-label="文章互动">
+  <div class="article-actions">
+    <button data-like aria-pressed="false">
+      <Icon name="heart" />
+      <span data-action-label>点赞</span>
+    </button>
+    <a class="rail-action" href="#comments">
+      <Icon name="comment" />
+      <span>评论</span>
+    </a>
+    <button data-article-bookmark aria-pressed="false">
+      <Icon name="bookmark" />
+      <span data-action-label>收藏</span>
+    </button>
+    <a class="rail-action" data-pdf-download href={pdf} download>
+      <Icon name="download" />
+      <span>下载 PDF</span>
+    </a>
+    <button data-share>
+      <Icon name="share" />
+      <span>分享链接</span>
+    </button>
+    <details class="more-actions">
+      <summary aria-label="更多文章操作">···</summary>
+      <div class="more-actions-menu">
+        <button data-egg-open>臭鸡蛋</button>
+        {novel && chapter && (
+          <a href={'/pdf/' + id + '.pdf'} download>
+            下载全书 PDF
+          </a>
+        )}
+        <button data-print>打印文章</button>
+      </div>
+    </details>
+  </div>
+  <p class="muted article-statistics" data-article-stats>
+    正在查看文章互动…
+  </p>
+  <dialog id="egg-dialog" aria-labelledby="egg-title">
+    <form method="dialog">
+      <button class="dialog-close" aria-label="关闭投掷面板">
+        关闭
+      </button>
+    </form>
+    <h2 id="egg-title">给文章扔臭鸡蛋</h2>
+    <p data-egg-wallet>正在打开钱包…</p>
+    <form id="egg-form">
+      <label>
+        投掷数量
+        <input name="quantity" type="number" min="1" max="50" value="1" required />
+      </label>
+      <div class="egg-actions">
+        <button type="button" data-quantity="1">
+          扔 1 枚
+        </button>
+        <button type="button" data-quantity="5">
+          扔 5 枚
+        </button>
+        <button>按数量投掷</button>
+      </div>
+    </form>
+    <p data-egg-result role="status"></p>
+    <p class="muted">只面向文章内容，可以重复投掷；点赞和臭鸡蛋互不冲突。</p>
+  </dialog>
+</section>
+<script>
+  import '../scripts/article-interactions';
+</script>

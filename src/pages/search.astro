@@ -1,44 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SearchPanel from '../components/SearchPanel.astro';
 ---
-<Layout title="搜索"><header class="page-head"><h1>在字里行间寻找</h1><p>搜索篇名、作者或正文。</p></header>
-  <form id="search-form" role="search"><label for="query">搜索文集</label><div class="search-row"><input id="query" name="q" type="search" maxlength="100" autocomplete="off" required /><button>搜索</button></div></form>
-  <p id="search-state" role="status"></p><ul id="search-results" class="article-list"></ul>
-  <script>
-    import { searchArticles, type SearchArticle } from '../lib/search';
-    const form = document.querySelector<HTMLFormElement>('#search-form')!;
-    const input = document.querySelector<HTMLInputElement>('#query')!;
-    const list = document.querySelector('#search-results')!;
-    const state = document.querySelector('#search-state')!;
-    let index: SearchArticle[] | undefined;
-    let requestId = 0;
-    async function search() {
-      const request = ++requestId;
-      const query = input.value.trim();
-      list.replaceChildren();
-      if (!query) { state.textContent = '输入几个字，开始寻找。'; return; }
-      state.textContent = '正在寻找…';
-      try {
-        if (!index) {
-          const response = await fetch('/search-index.json');
-          if (!response.ok) throw new Error('Search unavailable');
-          index = await response.json() as SearchArticle[];
-        }
-        if (request !== requestId) return;
-        const results = searchArticles(index, query);
-        for (const article of results) {
-          const li = document.createElement('li');
-          const link = document.createElement('a');
-          link.href = `/articles/${article.id}/`;
-          link.textContent = `${article.title} · ${article.author}`;
-          li.append(link); list.append(li);
-        }
-        state.textContent = results.length ? `找到 ${results.length} 篇作品` : '没有找到，再试试其他词语。';
-        history.replaceState(null, '', `?q=${encodeURIComponent(query)}`);
-      } catch { state.textContent = '搜索暂时不可用，请稍后重试。'; }
-    }
-    form.addEventListener('submit', event => { event.preventDefault(); void search(); });
-    input.value = new URLSearchParams(location.search).get('q') ?? '';
-    if (input.value) void search();
-  </script>
+
+<Layout title="搜索">
+  <header class="page-head">
+    <p class="eyebrow">找回记得的那一句</p>
+    <h1>在字里行间寻找</h1>
+    <p>从作品、章节与注释，到书友留下的回声。</p>
+  </header>
+  <SearchPanel full />
 </Layout>

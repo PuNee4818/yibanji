@@ -1,0 +1,54 @@
+@font-face {
+  font-family: 'Reading Serif';
+  src: url('/fonts/ReadingSerif.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  --paper: #f8f5ee;
+  --panel: #efebe2;
+  --raised: #fffdf8;
+  --ink: #2c2b28;
+  --muted: #655f58;
+  --line: #d8d2c7;
+  --accent: #9a4433;
+  --on-accent: #fffaf3;
+  --art-clay: #d5997e;
+  --art-sage: #a9b5a1;
+  --art-paper: #e9ddc5;
+  --shadow: 0 16px 60px #33271618;
+  --radius: 12px;
+  --serif: 'Reading Serif', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', serif;
+  --kai: 'KaiTi', 'STKaiti', var(--serif);
+  --ui: system-ui, 'Microsoft YaHei', sans-serif;
+  --reading-size: 19px;
+  --reading-line: 1.95;
+  --reading-width: 720px;
+  --reading-font: var(--serif);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+:root[data-paper='xuan'] {
+  --paper: #fdfbf6;
+  --panel: #f0eee6;
+}
+:root[data-paper='sepia'] {
+  --paper: #f2e7d2;
+  --panel: #e9dcc1;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #181b1e;
+  --panel: #22262a;
+  --raised: #2b3035;
+  --ink: #e9e4da;
+  --muted: #b9b3a9;
+  --line: #45494d;
+  --accent: #e4a08b;
+  --on-accent: #251a16;
+  --art-clay: #aa7059;
+  --art-sage: #647966;
+  --art-paper: #393b35;
+  --shadow: 0 18px 64px #0005;
+}

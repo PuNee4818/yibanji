@@ -34,3 +34,7 @@ src/generated/
 .astro-sessions/
 
 .vercel/
+
+public/pdf/
+
+tmp/

@@ -1,0 +1,64 @@
+---
+interface Props {
+  full?: boolean;
+}
+const { full = false } = Astro.props;
+const prefix = full ? 'search' : 'quick';
+---
+
+<div data-search-panel data-full={String(full)} class="search-panel">
+  <form id={prefix + '-form'} role="search">
+    <label for={full ? 'query' : 'quick-query'}>搜索文集</label>
+    <div class="search-row">
+      <input
+        id={full ? 'query' : 'quick-query'}
+        data-query
+        name="q"
+        type="search"
+        maxlength="100"
+        autocomplete="off"
+        placeholder="篇名、作者，或记得的一句话"
+      />
+      <button type="submit">搜索</button>
+    </div>
+    <div class="search-filters">
+      <label>
+        来源
+        <select data-search-source name="source">
+          <option value="works">文集</option>
+          <option value="all">全部来源</option>
+          <option value="community">社区讨论</option>
+          <option value="people">书友</option>
+        </select>
+      </label>
+      <label>
+        文体
+        <select data-search-genre name="genre">
+          <option value="">全部文体</option>
+          <option value="poetry">诗歌</option>
+          <option value="essay">散文</option>
+          <option value="story">短篇小说</option>
+          <option value="novel">长篇小说</option>
+        </select>
+      </label>
+    </div>
+  </form>
+  <div data-search-history class="search-history"></div>
+  <p id={prefix + '-state'} data-search-state role="status" class="muted small">
+    输入几个字，从这里找起。
+  </p>
+  <div class="search-workspace">
+    <div>
+      <ul id={prefix + '-results'} data-search-results class="search-results"></ul>
+      <button data-search-more hidden>
+        更多结果
+      </button>
+    </div>
+    <aside data-search-preview class="search-preview" aria-label="内容预览" hidden>
+      <button type="button" class="quiet-button" data-preview-close>
+        关闭预览 ×
+      </button>
+      <div data-preview-body></div>
+    </aside>
+  </div>
+</div>

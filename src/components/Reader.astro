@@ -1,45 +1,208 @@
 ---
 import { articleUrl, book, sections, type Article, type Chapter } from '../lib/book';
+import { genreOf, genreNames, readingMinutes } from '../lib/presentation';
 import ReadingSettings from './ReadingSettings.astro';
 import ArticleActions from './ArticleActions.astro';
 import Discussion from './Discussion.astro';
-interface Props { article: Article; chapter?: Chapter }
+import Prose from './Prose.astro';
+interface Props {
+  article: Article;
+  chapter?: Chapter;
+}
 const { article, chapter } = Astro.props;
-const paragraphs = chapter?.body ?? article.body;
 const headings = sections(article);
-const category = book.categories.find(c => c.name === article.category)!;
-const related = book.articles.filter(a => a.category === article.category && a.id !== article.id).slice(0, 3);
+const category = book.categories.find((c) => c.name === article.category)!;
+const siblings = book.articles.filter((a) => a.category === article.category);
+const position = siblings.findIndex((a) => a.id === article.id);
+const related = siblings.filter((a) => a.id !== article.id).slice(0, 3);
+const previous = chapter
+  ? chapter.index > 1
+    ? {
+        url: articleUrl(article, chapter.index - 1),
+        title: article.chapters![chapter.index - 2]!.title,
+      }
+    : null
+  : position > 0
+    ? { url: articleUrl(siblings[position - 1]!), title: siblings[position - 1]!.title }
+    : null;
+const next = chapter
+  ? chapter.index < article.chapters!.length
+    ? {
+        url: articleUrl(article, chapter.index + 1),
+        title: article.chapters![chapter.index]!.title,
+      }
+    : null
+  : position < siblings.length - 1
+    ? { url: articleUrl(siblings[position + 1]!), title: siblings[position + 1]!.title }
+    : null;
+const words = chapter ? chapter.body.join('').length : article.chars;
 ---
-<div class="reader-layout">
-  <aside class="reader-toc" aria-label="本篇目录">
-    <a href={`/catalog/#${category.id}`}>← {category.name}</a>
-    {article.chapters ? <ol>{article.chapters.map(c => <li><a href={articleUrl(article, c.index)} aria-current={chapter?.index === c.index ? 'page' : undefined}>{c.title}</a></li>)}</ol>
-      : headings.length > 0 && <ol>{headings.map((h, i) => <li><a href={`#section-${i + 1}`}>{h.text}</a></li>)}</ol>}
+
+<div class="reading-progress" aria-hidden="true">
+  <span data-reading-progress></span>
+</div>
+<div class="reader-layout" data-genre={genreOf(article)}>
+  <aside class="reader-toc" aria-label="本卷目录">
+    <details class="toc-tree" open>
+      <summary>
+        目录 <span>／ {category.name}</span>
+      </summary>
+      <nav aria-label="本卷作品">
+        <a class="toc-back" href={'/catalog/#' + category.id}>
+          ← 返回{category.name}
+        </a>
+        {siblings.map((a) => (
+          <div class="toc-work">
+            <a
+              href={articleUrl(a)}
+              aria-current={a.id === article.id && !chapter ? 'page' : undefined}
+            >
+              {a.title}
+            </a>
+            {a.id === article.id &&
+              (a.chapters ? (
+                <ol>
+                  {a.chapters.map((c) => (
+                    <li>
+                      <a
+                        href={articleUrl(a, c.index)}
+                        aria-current={c.index === chapter?.index ? 'page' : undefined}
+                      >
+                        {String(c.index).padStart(2, '0')} {c.title}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                headings.length > 0 && (
+                  <ol>
+                    {headings.map((h, i) => (
+                      <li>
+                        <a href={'#section-' + (i + 1)}>{h.text}</a>
+                      </li>
+                    ))}
+                  </ol>
+                )
+              ))}
+          </div>
+        ))}
+      </nav>
+    </details>
   </aside>
   <article class="reader" data-article-id={article.id} data-chapter={chapter?.index ?? 1}>
+    <nav class="reader-breadcrumb" aria-label="阅读位置">
+      <a href="/catalog/">文集</a>
+      <span>／</span>
+      <a href={'/catalog/#' + category.id}>{category.name}</a>
+      {chapter && (
+        <>
+          <span>／</span>
+          <a href={articleUrl(article)}>{article.title}</a>
+        </>
+      )}
+    </nav>
     <header class="article-head">
-      <p class="eyebrow">{article.category} / {chapter ? `第 ${chapter.index} 章` : '一班集'}</p>
+      <p class="eyebrow">
+        {genreNames[genreOf(article)]}{' '}
+        {chapter && ' / 第 ' + chapter.index + ' 章，共 ' + article.chapters!.length + ' 章'}
+      </p>
       <h1>{chapter?.title ?? article.title}</h1>
-      {article.subtitle && <p>{article.subtitle}</p>}
-      <p class="muted">{article.author} · {chapter ? article.title : `${article.chars.toLocaleString()} 字`}</p>
+      {article.subtitle && <p class="article-subtitle">{article.subtitle}</p>}
+      <p class="muted">
+        {article.author} <span>·</span> {words.toLocaleString()} 字 <span>·</span> 约{' '}
+        {readingMinutes(words)} 分钟
+      </p>
     </header>
-    <div class="reader-options"><details><summary>阅读设置</summary><ReadingSettings /></details><button class="quiet-button" data-focus-reading aria-pressed="false">专注阅读</button></div>
-    {!chapter && article.chapters && <section aria-label="章节列表"><h2>全书目录</h2><ol class="chapter-list">{article.chapters.map(c => <li><a href={articleUrl(article, c.index)}>{c.title}</a></li>)}</ol></section>}
-    <div class:list={['prose', { verse: article.kind === 'verse' }]}>
-      {paragraphs.map((text, i) => {
-        const headingIndex = chapter ? -1 : headings.findIndex(h => h.bodyIndex === i);
-        return headingIndex >= 0 ? <h2 id={`section-${headingIndex + 1}`}>{text}</h2> : <p>{text}</p>;
-      })}
+    <div class="reader-options">
+      <details>
+        <summary>
+          阅读设置 <span aria-hidden="true">Aa</span>
+        </summary>
+        <ReadingSettings />
+      </details>
+      <button class="quiet-button" data-focus-reading aria-pressed="false">
+        专注阅读
+      </button>
     </div>
-    {article.notes && <aside class="notes" aria-label="原文注释"><h2>注释</h2>{article.notes.map(note => <p>{note}</p>)}</aside>}
-    {article.colophon && <footer class="colophon"><p>{article.colophon.signature}</p><p>{article.colophon.date}</p></footer>}
-    <ArticleActions id={article.id} />
+    {!chapter && article.chapters && (
+      <section class="novel-overview" aria-label="章节列表">
+        <p>一部长篇，从这里开始。</p>
+        <a class="button primary" href={articleUrl(article, 1)}>
+          开始读第一章 →
+        </a>
+        <h2>全书目录</h2>
+        <ol class="chapter-list">
+          {article.chapters.map((c) => (
+            <li>
+              <a href={articleUrl(article, c.index)}>{c.title}</a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+    <Prose {article} {chapter} />
+    {article.notes && (
+      <aside id="article-notes" class="notes" aria-label="原文注释">
+        <h2>注释</h2>
+        {article.notes.map((note) => (
+          <p>{note}</p>
+        ))}
+      </aside>
+    )}
+    {article.colophon && (
+      <footer class="colophon">
+        <p>{article.colophon.signature}</p>
+        <p>{article.colophon.date}</p>
+      </footer>
+    )}
+    <div class="reading-end" aria-hidden="true">
+      · · ·
+    </div>
+    <nav class="chapter-nav" aria-label="翻章">
+      {previous ? (
+        <a data-read-prev href={previous.url}>
+          <small>← {chapter ? '上一章' : '上一篇'}</small>
+          <span>{previous.title}</span>
+        </a>
+      ) : (
+        <a href={'/catalog/#' + category.id}>
+          <small>← 返回本卷</small>
+          <span>{category.name}</span>
+        </a>
+      )}
+      {next ? (
+        <a data-read-next href={next.url}>
+          <small>{chapter ? '下一章' : '下一篇'} →</small>
+          <span>{next.title}</span>
+        </a>
+      ) : (
+        <a href="/catalog/">
+          <small>读完了</small>
+          <span>再翻一篇 →</span>
+        </a>
+      )}
+    </nav>
     <Discussion kind="article" target={article.id} />
-    {chapter && <nav class="chapter-nav" aria-label="翻章">
-      {chapter.index > 1 ? <a href={articleUrl(article, chapter.index - 1)}>← 上一章</a> : <a href={articleUrl(article)}>全书目录</a>}
-      {chapter.index < (article.chapters?.length ?? 0) ? <a href={articleUrl(article, chapter.index + 1)}>下一章 →</a> : <a href="/catalog/">读完了，回到目录 →</a>}
-    </nav>}
-    <section class="related"><h2>同卷再读</h2>{related.map(a => <p><a href={articleUrl(a)}>{a.title} <small>{a.author}</small></a></p>)}</section>
+    <section class="related">
+      <h2>同卷再读</h2>
+      {related.map((a) => (
+        <p>
+          <a href={articleUrl(a)}>
+            {a.title}
+            <small>{a.author}</small>
+          </a>
+        </p>
+      ))}
+    </section>
   </article>
+  <ArticleActions id={article.id} chapter={chapter?.index} novel={!!article.chapters} />
 </div>
-<button class="exit-focus" hidden>退出专注阅读 <kbd>Esc</kbd></button>
+<div class="focus-controls" hidden>
+  <button data-focus-settings>阅读设置 Aa</button>
+  <button class="exit-focus">
+    退出专注阅读 <kbd>Esc</kbd>
+  </button>
+</div>
+<script>
+  import '../scripts/reader';
+</script>

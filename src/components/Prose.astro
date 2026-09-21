@@ -1,0 +1,37 @@
+---
+import { sections, type Article, type Chapter } from '../lib/book';
+import { hasPreface } from '../lib/presentation';
+interface Props {
+  article: Article;
+  chapter?: Chapter;
+}
+const { article, chapter } = Astro.props;
+const paragraphs = chapter?.body ?? article.body;
+const headings = chapter ? [] : sections(article);
+const prefaced = !chapter && hasPreface(article);
+const firstBody = paragraphs.findIndex(
+  (_, i) => !(prefaced && i === 0) && !headings.some((h) => h.bodyIndex === i),
+);
+---
+
+<div class:list={['prose', { verse: article.kind === 'verse' }]}>
+  {paragraphs.map((text, i) => {
+    const headingIndex = headings.findIndex((h) => h.bodyIndex === i);
+    return headingIndex >= 0 ? (
+      <h2 id={'section-' + (headingIndex + 1)} data-paragraph={i}>
+        {text}
+      </h2>
+    ) : (
+      <p
+        id={'paragraph-' + (i + 1)}
+        data-paragraph={i}
+        class:list={{
+          'work-preface': prefaced && i === 0,
+          'opening-paragraph': article.kind !== 'verse' && i === firstBody,
+        }}
+      >
+        {text}
+      </p>
+    );
+  })}
+</div>

@@ -1,0 +1,197 @@
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ink-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes paper-open {
+  from {
+    opacity: 0;
+    transform: translateY(18px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes sun-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes tap-bloom {
+  45% {
+    transform: scale(1.16);
+  }
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes turn-next {
+  from {
+    opacity: 0.35;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes turn-prev {
+  from {
+    opacity: 0.35;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+a,
+button,
+input,
+select,
+textarea,
+summary {
+  transition:
+    color 0.18s,
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.24s var(--ease),
+    opacity 0.2s;
+}
+button:active,
+.button:active {
+  transform: translateY(1px) scale(0.98);
+}
+.site-header > nav a::after {
+  transition: transform 0.3s var(--ease);
+}
+.site-header > nav a:hover::after {
+  transform: scaleX(1);
+}
+.hero-copy {
+  animation: settle 0.8s var(--ease) both;
+}
+.art-pages {
+  transform-origin: 308px 386px;
+  animation: paper-open 1.5s var(--ease) both;
+}
+.draw-line {
+  stroke-dasharray: 1;
+  animation: ink-draw 2s var(--ease) both;
+}
+.second-line {
+  animation-delay: 0.35s;
+}
+.art-sun {
+  transform-origin: 412px 125px;
+  animation: sun-rise 1.7s var(--ease) both;
+}
+.art-leaf {
+  transform-origin: 450px 273px;
+  animation: leaf-sway 4s ease-in-out 1;
+}
+.art-bird {
+  animation: settle 1.8s var(--ease) both;
+}
+.preface-link:hover svg,
+.community-invitation .button:hover svg {
+  transform: translateX(4px);
+}
+.preface-link svg,
+.button svg {
+  transition: transform 0.3s var(--ease);
+}
+.hot-work:hover,
+.volume-card:hover {
+  transform: translateY(-3px);
+}
+.hot-work::after,
+.volume-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--accent) 5%, transparent),
+    transparent 65%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.volume-card {
+  position: relative;
+}
+.hot-work:hover::after,
+.volume-card:hover::after {
+  opacity: 1;
+}
+dialog[open],
+.user-menu[open] nav,
+.more-actions[open] .more-actions-menu {
+  animation: settle 0.24s var(--ease);
+}
+.article-actions button[aria-pressed='true'] svg {
+  animation: tap-bloom 0.35s var(--ease);
+}
+.discussion-card,
+.search-result {
+  animation: settle 0.3s var(--ease);
+}
+.reveal-in {
+  animation: settle 0.7s var(--ease) both;
+}
+.skeleton {
+  min-height: 90px;
+  background: linear-gradient(100deg, var(--panel), var(--paper));
+  border-radius: 12px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+html[data-turn='next'] .reader {
+  animation: turn-next 0.3s var(--ease);
+}
+html[data-turn='prev'] .reader {
+  animation: turn-prev 0.3s var(--ease);
+}
+.focus-controls {
+  transition: opacity 0.35s;
+}
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root) {
+  animation-duration: 0.16s;
+}
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+}

@@ -1,0 +1,333 @@
+.community-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: center;
+  max-width: none;
+  margin-bottom: 40px;
+}
+.community-head p:last-child {
+  color: var(--muted);
+  margin: 0;
+  max-width: 620px;
+}
+.community-head .button {
+  white-space: nowrap;
+}
+.community-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 64px;
+}
+.community-layout > section {
+  min-width: 0;
+}
+.community-layout > aside {
+  font-size: 13px;
+}
+.community-guide {
+  padding: 0 0 24px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.community-guide h2 {
+  font-size: 22px;
+}
+.community-guide p {
+  color: var(--muted);
+  line-height: 1.9;
+}
+.community-guide a {
+  display: block;
+  margin-top: 12px;
+  text-decoration: none;
+  color: var(--accent);
+}
+.community-layout > aside h2 {
+  font-size: 21px;
+  margin: 28px 0 18px;
+}
+.community-layout > aside [data-highlights] a {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  text-decoration: none;
+  padding: 8px 0;
+}
+.community-rules {
+  display: block;
+  border-top: 1px solid var(--line);
+  margin-top: 28px;
+  padding-top: 20px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.compose-section {
+  margin-bottom: 28px;
+}
+.guest-compose {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: var(--panel);
+  border-radius: 16px;
+}
+.compose-glyph {
+  color: var(--accent);
+  font-size: 48px;
+  font-family: var(--serif);
+}
+.guest-compose h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+.guest-compose p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.post-composer {
+  max-width: none;
+  padding: 22px;
+  background: var(--panel);
+  border-radius: 16px;
+  gap: 14px;
+}
+.post-composer > label {
+  font-size: 14px;
+}
+.post-composer textarea {
+  min-height: 96px;
+  border: 0;
+  background: transparent;
+  padding: 12px 0;
+  border-radius: 0;
+  font: 16px/1.8 var(--serif);
+}
+.composer-foot {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.composer-foot details {
+  margin-right: auto;
+  font-size: 12px;
+}
+.composer-foot summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.composer-foot details label {
+  margin: 12px 0;
+}
+.composer-foot > button {
+  color: var(--on-accent);
+  background: var(--accent);
+  font-size: 13px;
+}
+.post-composer [data-post-status]:empty {
+  display: none;
+}
+.discussion-section {
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+  padding-top: 30px;
+}
+.discussion-section .section-heading {
+  align-items: center;
+}
+.discussion-section .section-heading label {
+  font-size: 12px;
+}
+.discussion-section .form-stack {
+  max-width: none;
+  padding-bottom: 20px;
+}
+.discussion-section textarea {
+  background: var(--panel);
+  border-color: transparent;
+}
+.discussion-card {
+  position: relative;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.discussion-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.discussion-author {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-decoration: none;
+}
+.discussion-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: var(--panel);
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: var(--serif);
+  flex-shrink: 0;
+}
+.discussion-meta time {
+  color: var(--muted);
+  font-size: 11px;
+  margin-left: auto;
+}
+.discussion-kind {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 8px 0 0 44px;
+}
+.discussion-content {
+  white-space: pre-wrap;
+  font: 16px/1.95 var(--serif);
+  margin: 18px 0;
+}
+.discussion-content.is-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.discussion-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 12px;
+}
+.discussion-actions > button {
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 10px;
+  min-height: 38px;
+}
+.discussion-actions > a {
+  margin-left: auto;
+  text-decoration: none;
+  color: var(--accent);
+}
+.discussion-overflow {
+  margin-left: 4px;
+  position: relative;
+}
+.discussion-overflow summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 38px;
+  min-width: 38px;
+  text-align: center;
+  padding: 7px;
+}
+.discussion-overflow > div {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  top: 38px;
+  min-width: 130px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: var(--shadow);
+}
+.discussion-overflow button {
+  width: 100%;
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  background: transparent;
+}
+.discussion-replies {
+  padding: 18px 0 0 20px;
+}
+.discussion-replies > summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  min-height: 44px;
+}
+.quoted-article {
+  display: block;
+  border-left: 2px solid var(--accent);
+  padding: 10px 16px;
+  margin: 16px 0;
+  text-decoration: none;
+  font: 16px var(--serif);
+  background: linear-gradient(90deg, var(--panel), transparent);
+}
+.quoted-article small {
+  display: block;
+  font: 11px var(--ui);
+  margin-top: 8px;
+}
+.recent-grid .discussion-meta {
+  flex-wrap: wrap;
+}
+.recent-grid .discussion-meta time {
+  margin-left: 44px;
+}
+.recent-grid .discussion-content {
+  font-size: 14px;
+}
+.recent-grid .discussion-actions > a {
+  margin-left: 0;
+}
+@media (max-width: 900px) {
+  .community-layout {
+    gap: 32px;
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+}
+@media (max-width: 760px) {
+  .community-head {
+    align-items: start;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .community-layout {
+    grid-template-columns: 1fr;
+  }
+  .community-layout > aside {
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+  .guest-compose {
+    padding: 20px;
+    gap: 16px;
+  }
+  .compose-glyph {
+    font-size: 32px;
+  }
+  .guest-compose h2 {
+    font-size: 20px;
+  }
+  .discussion-section .section-heading {
+    flex-direction: column;
+    align-items: start;
+  }
+  .discussion-meta {
+    gap: 8px;
+  }
+  .discussion-meta time {
+    font-size: 10px;
+  }
+  .discussion-actions > a {
+    font-size: 11px;
+  }
+  .composer-foot {
+    gap: 8px;
+  }
+}
