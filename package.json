@@ -34,7 +34,8 @@
     "supabase": "^2.117.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",
-    "undici": "^8.10.2"
+    "undici": "^8.10.2",
+    "vite": "^8.3.0"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",

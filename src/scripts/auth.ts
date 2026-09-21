@@ -30,7 +30,7 @@ document.querySelector('[data-signout]')?.addEventListener('click',async()=>{
   const {error}=await supabase.auth.signOut(); if(error) announce(friendlyError(error)); else location.href='/';
 });
 const authForm=document.querySelector<HTMLFormElement>('#auth-form');
-if(authForm)authForm.querySelector('button')!.disabled=false;
+if(authForm){authForm.querySelector('button')!.disabled=false;document.querySelector('#auth-message')!.textContent='';}
 authForm?.addEventListener('submit',async event=>{
   event.preventDefault(); const data=new FormData(authForm); const button=authForm.querySelector('button')!; button.disabled=true;
   const email=String(data.get('email'));const password=String(data.get('password'));

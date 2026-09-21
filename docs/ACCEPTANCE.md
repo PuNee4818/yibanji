@@ -35,3 +35,23 @@
 ## 执行
 
 常规验收：`npm run check`、`npm run test:db`。依赖审计：`npm audit --omit=dev --audit-level=moderate`。若远程连接超时，应恢复连接后重新运行失败项，不删除断言、不关闭 RLS，也不改用假数据。
+
+## 2026-09-21 main 部署入口修复
+
+远程 main 的 1a853d82 仍保留旧版根 index.html，缺失 package.json、Astro 配置及重构源码；误跟踪了依赖、构建输出、日志和 .env.local。将 codex/community-v2 完整合入 main，删除旧 SPA 入口和 assets，并将被忽略的文件从 Git 索引移除，保留本地配置及依赖。未改写历史提交；历史版本中已经提交的 .env.local 不会因这次移出跟踪而消失（该文件仅有两个公开 Supabase 配置变量）。
+
+新增官方 Astro Vercel adapter、明确的 vercel.json 和 build:vercel / test:deploy 命令；本地 Node standalone 继续可用。Node 运行时固定 24.x。Vercel adapter 的路由依赖通过限定范围的 override 使用修复后的 path-to-regexp 6.3.x。
+
+本次验证：build、typecheck、lint、9 项单元测试、54 篇正文 SHA-256 完整性、18 项桌面/移动浏览器测试、7 项真实 Supabase 集成测试、2 项 Vercel 构建产物测试全部通过。npm audit 无已知漏洞。原 content/ 与 data/ 相对重构前提交逐文件无改动。
+
+尚未验证线上部署：本机没有可用 Vercel 登录态，GitHub 公共部署 API 遇到限流。用户自行提交、推送；Vercel 需以仓库根目录、main 为生产来源，并在环境变量中配置两个公开 Supabase 变量。生产 URL 与邮件回调仍须对应实际域名。
+
+## 2026-09-21 线上注册按钮无响应排查
+
+实际访问 https://yibanji.vercel.app/auth/：HTTP 200，继续按钮 disabled，浏览器抛出 `Supabase public configuration is missing`。注册请求未发出，直接原因是部署构建没有正确注入公开 Supabase 配置。
+
+已添加构建前环境校验（使用 Vite 与站点相同的环境加载规则），配置缺失或误用 secret key 时拒绝构建；登录模块不能加载时保留明确提示。已通过 CLI 将远程 Auth site_url 更新为 https://yibanji.vercel.app，并将 /auth/ 加入回调白名单，保留本地回调；远程配置复核无待应用变更。
+
+验证通过：build、typecheck、lint、11 项单元、54 篇正文完整性、18 项桌面/移动浏览器回归、2 项 Vercel 产物检查；真实构建在缺失变量时确实失败。额外在浏览器阻断登录脚本，验证页面能显示服务未就绪提示。
+
+仍需用户在 Vercel Production 环境配置 PUBLIC_SUPABASE_URL 与 PUBLIC_SUPABASE_PUBLISHABLE_KEY（取本地 .env.local），重新部署。未发送真实注册确认邮件，未验证邮件送达；未提交或推送本次代码修改。

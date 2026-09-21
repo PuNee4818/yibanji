@@ -2,8 +2,8 @@
 project_id = "yibanji"
 
 [auth]
-site_url = "http://127.0.0.1:4321"
-additional_redirect_urls = ["http://127.0.0.1:4321/auth/", "http://localhost:4321/auth/"]
+site_url = "https://yibanji.vercel.app"
+additional_redirect_urls = ["https://yibanji.vercel.app/auth/", "http://127.0.0.1:4321/auth/", "http://localhost:4321/auth/"]
 minimum_password_length = 8
 
 [auth.email]
