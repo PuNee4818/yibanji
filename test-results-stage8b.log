@@ -1,0 +1,201 @@
+
+> yibanji@0.6.0 check
+> npm run build && npm run typecheck && npm run lint && npm test && npm run test:content && npm run test:smoke
+
+
+> yibanji@0.6.0 build
+> node tools/generate-content.mjs && astro build
+
+Generated typed content input from original sources.
+19:31:57 [@astrojs/node] Enabling sessions with filesystem storage
+19:31:57 [types] Generated 47ms
+19:31:57 [build] output: "static"
+19:31:57 [build] mode: "server"
+19:31:57 [build] directory: D:\GitHub\yibanji\dist\
+19:31:57 [build] adapter: @astrojs/node
+19:31:57 [build] Collecting build info...
+19:31:57 [build] ✓ Completed in 76ms.
+19:31:57 [build] Building server entrypoints...
+19:31:57 [vite] ✓ built in 138ms
+19:31:57 [vite] ✓ built in 80ms
+19:31:57 [vite] ✓ built in 74ms
+
+ prerendering static routes 
+19:31:57   ├─ /404.html (+10ms) 
+19:31:57   ├─ /admin/moderation/index.html (+3ms) 
+19:31:57   ├─ /articles/tianhuaban/1/index.html (+2ms) 
+19:31:57   ├─ /articles/tianhuaban/2/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/3/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/4/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/5/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/6/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/7/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/8/index.html (+3ms) 
+19:31:57   ├─ /articles/tianhuaban/9/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/10/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/11/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/12/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/13/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/14/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/15/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/16/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/17/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/18/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/19/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/20/index.html (+1ms) 
+19:31:57   ├─ /articles/preface2/index.html (+3ms) 
+19:31:57   ├─ /articles/a01/index.html (+1ms) 
+19:31:57   ├─ /articles/a02/index.html (+1ms) 
+19:31:57   ├─ /articles/a03/index.html (+1ms) 
+19:31:57   ├─ /articles/a04/index.html (+1ms) 
+19:31:57   ├─ /articles/a06/index.html (+1ms) 
+19:31:57   ├─ /articles/a07/index.html (+1ms) 
+19:31:57   ├─ /articles/a08/index.html (+1ms) 
+19:31:57   ├─ /articles/a09/index.html (+1ms) 
+19:31:57   ├─ /articles/x_gangchengdong/index.html (+1ms) 
+19:31:57   ├─ /articles/x_wanfangjie/index.html (+1ms) 
+19:31:57   ├─ /articles/a05/index.html (+1ms) 
+19:31:57   ├─ /articles/a22/index.html (+1ms) 
+19:31:57   ├─ /articles/a23/index.html (+1ms) 
+19:31:57   ├─ /articles/x_shenle/index.html (+1ms) 
+19:31:57   ├─ /articles/x_jiayou/index.html (+1ms) 
+19:31:57   ├─ /articles/x_pusa/index.html (+1ms) 
+19:31:57   ├─ /articles/x_wogui/index.html (+1ms) 
+19:31:57   ├─ /articles/x_zhaji/index.html (+1ms) 
+19:31:57   ├─ /articles/x_gouyade/index.html (+1ms) 
+19:31:57   ├─ /articles/a10/index.html (+1ms) 
+19:31:57   ├─ /articles/a11/index.html (+1ms) 
+19:31:57   ├─ /articles/a12/index.html (+1ms) 
+19:31:57   ├─ /articles/a13/index.html (+1ms) 
+19:31:57   ├─ /articles/a14/index.html (+1ms) 
+19:31:57   ├─ /articles/a15/index.html (+1ms) 
+19:31:57   ├─ /articles/a16/index.html (+1ms) 
+19:31:57   ├─ /articles/a17/index.html (+1ms) 
+19:31:57   ├─ /articles/a18/index.html (+1ms) 
+19:31:57   ├─ /articles/a19/index.html (+1ms) 
+19:31:57   ├─ /articles/a20/index.html (+1ms) 
+19:31:57   ├─ /articles/a21/index.html (+1ms) 
+19:31:57   ├─ /articles/x_shenquan/index.html (+1ms) 
+19:31:57   ├─ /articles/x_jia/index.html (+1ms) 
+19:31:57   ├─ /articles/x_zhouyu/index.html (+1ms) 
+19:31:57   ├─ /articles/a24/index.html (+1ms) 
+19:31:57   ├─ /articles/a25/index.html (+1ms) 
+19:31:57   ├─ /articles/a26/index.html (+1ms) 
+19:31:57   ├─ /articles/a27/index.html (+1ms) 
+19:31:57   ├─ /articles/a28/index.html (+3ms) 
+19:31:57   ├─ /articles/a29/index.html (+1ms) 
+19:31:57   ├─ /articles/a30/index.html (+1ms) 
+19:31:57   ├─ /articles/a31/index.html (+1ms) 
+19:31:57   ├─ /articles/a32/index.html (+1ms) 
+19:31:57   ├─ /articles/a33/index.html (+1ms) 
+19:31:57   ├─ /articles/a34/index.html (+1ms) 
+19:31:57   ├─ /articles/tianhuaban/index.html (+1ms) 
+19:31:57   ├─ /articles/a35/index.html (+1ms) 
+19:31:57   ├─ /articles/a36/index.html (+1ms) 
+19:31:57   ├─ /articles/a37/index.html (+1ms) 
+19:31:57   ├─ /articles/a38/index.html (+1ms) 
+19:31:57   ├─ /articles/a39/index.html (+1ms) 
+19:31:57   ├─ /articles/a40/index.html (+1ms) 
+19:31:57   ├─ /articles/postscript/index.html (+10ms) 
+19:31:57   ├─ /auth/index.html (+2ms) 
+19:31:57   ├─ /catalog/index.html (+4ms) 
+19:31:57   ├─ /community/guidelines/index.html (+2ms) 
+19:31:57   ├─ /community/index.html (+2ms) 
+19:31:57   ├─ /me/bookmarks/index.html (+2ms) 
+19:31:57   ├─ /me/history/index.html (+2ms) 
+19:31:57   ├─ /me/rewards/index.html (+2ms) 
+19:31:57   ├─ /me/settings/index.html (+2ms) 
+19:31:57   ├─ /notifications/index.html (+2ms) 
+19:31:57   ├─ /search/index.html (+2ms) 
+19:31:57   ├─ /search-index.json (+3ms) 
+19:31:57   ├─ /index.html (+2ms) 
+19:31:57 ✓ Completed in 137ms.
+
+19:31:57 [build] Rearranging server assets...
+19:31:57 [build] ✓ Completed in 462ms.
+19:31:57 [build] Server built in 548ms
+19:31:57 [build] Complete!
+
+> yibanji@0.6.0 typecheck
+> node tools/generate-content.mjs && astro check
+
+Generated typed content input from original sources.
+19:31:59 [@astrojs/node] Enabling sessions with filesystem storage
+19:31:59 [types] Generated 56ms
+19:31:59 [check] Getting diagnostics for Astro files in D:\GitHub\yibanji...
+Result (52 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
+
+> yibanji@0.6.0 lint
+> eslint . --max-warnings 0
+
+
+> yibanji@0.6.0 test
+> node --test tests/unit/*.test.mjs
+
+✔ legacy bookmarks reject malformed values without losing valid article ids (1.0777ms)
+✔ search matches all terms literally and never treats input as a regular expression (0.2351ms)
+✔ reading preferences accept valid choices and safely reject injected or corrupt values (0.2739ms)
+✔ every article and chapter has readable original content (26.667ms)
+✔ environment and secret paths cannot be accidentally staged (255.3557ms)
+✔ example environment contains placeholders and only supported public settings (1.1855ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 326.2136
+
+> yibanji@0.6.0 test:content
+> node tools/check-content.cjs && node tools/content-integrity.mjs
+
+OK: 9 categories, 54 works, 天花板 20 chapters.
+Content integrity: all 54 works match original SHA-256 baseline.
+
+> yibanji@0.6.0 test:smoke
+> playwright test
+
+[WebServer] (node:10668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 8 workers
+
+(node:34100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30940) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  3 [mobile] › tests\e2e\reader.spec.ts:3:1 › original reader opens home, article and novel without script errors (609ms)
+  ok  8 [mobile] › tests\e2e\design.spec.ts:4:1 › appearance follows system, persists choices, and supports keyboard menus (545ms)
+  ok  2 [desktop] › tests\e2e\reader.spec.ts:3:1 › original reader opens home, article and novel without script errors (638ms)
+  ok  7 [desktop] › tests\e2e\design.spec.ts:4:1 › appearance follows system, persists choices, and supports keyboard menus (625ms)
+  ok 10 [mobile] › tests\e2e\design.spec.ts:25:1 › reader has one action bar, no print UI or stamp, and accessible focus mode (413ms)
+  ok 12 [desktop] › tests\e2e\design.spec.ts:25:1 › reader has one action bar, no print UI or stamp, and accessible focus mode (383ms)
+  ok  9 [mobile] › tests\e2e\reader.spec.ts:15:1 › search, old bookmarks and reading history survive the migration (553ms)
+  ok  1 [desktop] › tests\e2e\content.spec.ts:6:1 › every generated article and chapter preserves every original paragraph (1.2s)
+  ok 11 [desktop] › tests\e2e\reader.spec.ts:15:1 › search, old bookmarks and reading history survive the migration (584ms)
+  ok  6 [mobile] › tests\e2e\content.spec.ts:6:1 › every generated article and chapter preserves every original paragraph (1.2s)
+  ok 15 [desktop] › tests\e2e\content.spec.ts:31:1 › reading works with JavaScript disabled (217ms)
+  ok 16 [mobile] › tests\e2e\content.spec.ts:31:1 › reading works with JavaScript disabled (197ms)
+  ok 14 [desktop] › tests\e2e\design.spec.ts:40:1 › key pages meet automated WCAG AA checks in both themes and do not overflow (8.1s)
+  ok 13 [mobile] › tests\e2e\design.spec.ts:40:1 › key pages meet automated WCAG AA checks in both themes and do not overflow (9.2s)
+  ok  4 [mobile] › tests\e2e\auth.spec.ts:4:1 › real login, profile edit, public profile and logout (39.9s)
+  ok  5 [desktop] › tests\e2e\auth.spec.ts:4:1 › real login, profile edit, public profile and logout (48.1s)
+
+  16 passed (51.0s)

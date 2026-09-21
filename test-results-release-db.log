@@ -1,0 +1,26 @@
+
+> yibanji@0.6.0 test:db
+> node --test --test-concurrency=1 tests/integration/*.test.mjs
+
+Verified actual Auth login, signup trigger, profile ownership, follow idempotency/counts, restricted user, table RLS.
+✔ real Supabase Auth, profiles, graph and RLS (25352.3764ms)
+Verified discussion ownership, replies, likes, duplicate rejection, transactional counts, post comments, followed feed privacy and discussion task rewards.
+✔ real comments, replies, likes, posts, followed feed, spam rules and ownership (35561.6248ms)
+Verified daily uniqueness under concurrent requests, tier 7/8, reset after gap, 30-day badge/bonus, task deduplication, ledger reconciliation and private-data RLS.
+✔ real transaction checkins, streak cycles, gaps, task caps, EXP, badges and private wallets (44259.0978ms)
+Balance 5 + concurrent spend 5/5: exactly one success, balance 0, article +5. Repeat/multi-egg/like coexistence/idempotency and reading RLS verified.
+✔ real concurrent egg spending, idempotency, repeat throws, likes, private bookmarks and qualified reading (31995.4132ms)
+Verified aggregated/private notifications, read isolation, replies/follows/badges, report dedup, hidden-parent RLS, admin denial, suspension, idempotent audited adjustments and nonnegative balance.
+✔ real aggregated notifications, reporting, admin authorization, moderation and adjustment ledger (28242.8086ms)
+Audited 36 tables, 46 functions, 69 valid indexes and required Auth/economy/notification triggers.
+✔ actual schema enforces RLS, restricted grants, safe functions, valid indexes and installed triggers (13383.6833ms)
+Verified nested reply recipient, hidden parent write denial, inactive article isolation, one active reading session, private payloads, forged writes and rate limits.
+✔ hidden content cannot be mutated, nested reply targets receive notifications, read sessions cannot multiply and spam is limited (33208.6351ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212759.3871

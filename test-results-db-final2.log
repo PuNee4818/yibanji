@@ -1,0 +1,35 @@
+
+> yibanji@0.6.0 test:db
+> node --test --test-concurrency=1 tests/integration/*.test.mjs
+
+Verified actual Auth login, signup trigger, profile ownership, follow idempotency/counts, restricted user, table RLS.
+✔ real Supabase Auth, profiles, graph and RLS (24000.4021ms)
+Verified discussion ownership, replies, likes, duplicate rejection, transactional counts, post comments, followed feed privacy and discussion task rewards.
+✔ real comments, replies, likes, posts, followed feed, spam rules and ownership (37426.3542ms)
+Verified daily uniqueness under concurrent requests, tier 7/8, reset after gap, 30-day badge/bonus, task deduplication, ledger reconciliation and private-data RLS.
+✔ real transaction checkins, streak cycles, gaps, task caps, EXP, badges and private wallets (37545.4714ms)
+Balance 5 + concurrent spend 5/5: exactly one success, balance 0, article +5. Repeat/multi-egg/like coexistence/idempotency and reading RLS verified.
+✔ real concurrent egg spending, idempotency, repeat throws, likes, private bookmarks and qualified reading (38219.5701ms)
+Verified aggregated/private notifications, read isolation, replies/follows/badges, report dedup, hidden-parent RLS, admin denial, suspension, idempotent audited adjustments and nonnegative balance.
+✔ real aggregated notifications, reporting, admin authorization, moderation and adjustment ledger (31368.5962ms)
+Audited 36 tables, 46 functions, 69 valid indexes and required Auth/economy/notification triggers.
+✔ actual schema enforces RLS, restricted grants, safe functions, valid indexes and installed triggers (19262.8207ms)
+✖ hidden content cannot be mutated, nested reply targets receive notifications, read sessions cannot multiply and spam is limited (39044.8949ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 227650.1632
+
+✖ failing tests:
+
+test at tests\integration\security.test.mjs:13:1
+✖ hidden content cannot be mutated, nested reply targets receive notifications, read sessions cannot multiply and spam is limited (39044.8949ms)
+  TypeError: Cannot read properties of null (reading 'message')
+      at TestContext.<anonymous> (file:///D:/GitHub/yibanji/tests/integration/security.test.mjs:37:102)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

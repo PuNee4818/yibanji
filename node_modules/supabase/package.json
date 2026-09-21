@@ -1,0 +1,107 @@
+{
+  "name": "supabase",
+  "version": "2.117.0",
+  "private": false,
+  "description": "Supabase CLI",
+  "homepage": "https://github.com/supabase/cli#readme",
+  "bugs": {
+    "url": "https://github.com/supabase/cli/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/supabase/cli.git",
+    "directory": "apps/cli"
+  },
+  "bin": {
+    "supabase": "dist/supabase.js"
+  },
+  "files": [
+    "dist/supabase.js"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "eciesjs": "^0.5.0",
+    "jose": "^6.2.10"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.246",
+    "@anthropic-ai/sdk": "^0.120.0",
+    "@clack/prompts": "^1.7.0",
+    "@effect/platform-bun": "4.0.0-rc.112",
+    "@effect/sql-pg": "4.0.0-rc.112",
+    "@effect/vitest": "4.0.0-rc.112",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@napi-rs/keyring": "^1.3.0",
+    "@supabase/api": "0.1.0",
+    "@supabase/config": "0.1.0",
+    "@supabase/pg-delta": "1.0.0-alpha.49",
+    "@supabase/pg-topo": "1.0.0-alpha.6",
+    "@supabase/stack": "0.1.0",
+    "@tsconfig/bun": "^1.0.11",
+    "@types/bun": "^1.4.0",
+    "@types/pg": "^8.23.1",
+    "@types/pg-copy-streams": "^1.2.5",
+    "@vercel/detect-agent": "^1.2.5",
+    "@vitest/coverage-v8": "^4.1.11",
+    "dotenv": "^17.4.2",
+    "effect": "4.0.0-rc.112",
+    "esbuild": "^0.28.2",
+    "pg": "^8.23.0",
+    "pg-copy-streams": "^7.0.0",
+    "posthog-node": "^5.51.2",
+    "prettier": "3.9.6",
+    "semantic-release": "^25.0.9",
+    "smol-toml": "^1.8.0",
+    "tldts": "^7.4.11",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11",
+    "yaml": "^2.9.0"
+  },
+  "optionalDependencies": {
+    "@supabase/cli-darwin-arm64": "2.117.0",
+    "@supabase/cli-darwin-x64": "2.117.0",
+    "@supabase/cli-linux-arm64": "2.117.0",
+    "@supabase/cli-linux-arm64-musl": "2.117.0",
+    "@supabase/cli-linux-x64": "2.117.0",
+    "@supabase/cli-linux-x64-musl": "2.117.0",
+    "@supabase/cli-windows-arm64": "2.117.0",
+    "@supabase/cli-windows-x64": "2.117.0"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "develop",
+        "prerelease": "beta",
+        "channel": "beta"
+      }
+    ],
+    "plugins": [
+      "./scripts/analyze-commits-title.js",
+      "@semantic-release/release-notes-generator"
+    ]
+  },
+  "scripts": {
+    "build": "pnpm build:go-sidecar && pnpm build:legacy && pnpm build:shim",
+    "build:go-sidecar": "mkdir -p dist && cp ../cli-go/supabase-go dist/supabase-go",
+    "build:legacy": "bun scripts/build-binary.ts",
+    "build:shim": "bun build src/shared/cli/bin.ts --outfile dist/supabase.js --target node",
+    "docs:spec": "bun scripts/generate-docs-spec.ts",
+    "dev:legacy": "pnpm exec bun src/main.ts",
+    "test": "pnpm run test:unit --coverage.enabled && pnpm run test:integration --coverage.enabled && pnpm run test:e2e",
+    "test:unit": "pnpm exec turbo run supabase#test:unit:run --",
+    "test:unit:run": "bun --bun vitest run --project unit --coverage.reportsDirectory=coverage/unit",
+    "test:integration": "pnpm exec turbo run supabase#test:integration:run --",
+    "test:integration:run": "bun --bun vitest run --project integration --coverage.reportsDirectory=coverage/integration",
+    "test:e2e": "pnpm exec turbo run supabase#build && pnpm exec turbo run supabase#test:e2e:run --only --",
+    "test:e2e:run": "bun --bun vitest run --project e2e",
+    "test:live": "bun --bun vitest run --project live",
+    "test:smoke": "bun run tests/smoke-test.ts",
+    "types:check": "tsc --noEmit"
+  }
+}

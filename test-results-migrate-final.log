@@ -1,0 +1,15 @@
+
+> yibanji@0.6.0 db:migrate
+> node tools/apply-migrations.mjs
+
+Already applied: 20260921000100_profiles_social.sql
+Already applied: 20260921000200_growth_economy.sql
+Already applied: 20260921000300_article_interactions.sql
+Already applied: 20260921000310_article_catalog.sql
+Already applied: 20260921000320_reading_and_activity_guards.sql
+Already applied: 20260921000400_discussions_feeds.sql
+Already applied: 20260921000500_notifications_moderation.sql
+Already applied: 20260921000510_weekly_activity.sql
+Already applied: 20260921000600_security_guards.sql
+Applied: 20260921000610_reading_achievements.sql
+Database calendar timezone synchronized from server configuration.

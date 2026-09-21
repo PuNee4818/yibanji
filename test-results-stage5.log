@@ -1,0 +1,198 @@
+
+> yibanji@0.6.0 check
+> npm run build && npm run typecheck && npm run lint && npm test && npm run test:content && npm run test:smoke
+
+
+> yibanji@0.6.0 build
+> node tools/generate-content.mjs && astro build
+
+Generated typed content input from original sources.
+18:52:55 [@astrojs/node] Enabling sessions with filesystem storage
+18:52:56 [types] Generated 39ms
+18:52:56 [build] output: "static"
+18:52:56 [build] mode: "server"
+18:52:56 [build] directory: D:\GitHub\yibanji\dist\
+18:52:56 [build] adapter: @astrojs/node
+18:52:56 [build] Collecting build info...
+18:52:56 [build] ✓ Completed in 70ms.
+18:52:56 [build] Building server entrypoints...
+18:52:56 [vite] ✓ built in 129ms
+18:52:56 [vite] ✓ built in 66ms
+18:52:56 [vite] ✓ built in 47ms
+
+ prerendering static routes 
+18:52:56   ├─ /404.html (+8ms) 
+18:52:56   ├─ /articles/tianhuaban/1/index.html (+2ms) 
+18:52:56   ├─ /articles/tianhuaban/2/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/3/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/4/index.html (+2ms) 
+18:52:56   ├─ /articles/tianhuaban/5/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/6/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/7/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/8/index.html (+2ms) 
+18:52:56   ├─ /articles/tianhuaban/9/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/10/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/11/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/12/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/13/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/14/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/15/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/16/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/17/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/18/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/19/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/20/index.html (+13ms) 
+18:52:56   ├─ /articles/preface2/index.html (+3ms) 
+18:52:56   ├─ /articles/a01/index.html (+1ms) 
+18:52:56   ├─ /articles/a02/index.html (+1ms) 
+18:52:56   ├─ /articles/a03/index.html (+1ms) 
+18:52:56   ├─ /articles/a04/index.html (+1ms) 
+18:52:56   ├─ /articles/a06/index.html (+1ms) 
+18:52:56   ├─ /articles/a07/index.html (+1ms) 
+18:52:56   ├─ /articles/a08/index.html (+1ms) 
+18:52:56   ├─ /articles/a09/index.html (+1ms) 
+18:52:56   ├─ /articles/x_gangchengdong/index.html (+1ms) 
+18:52:56   ├─ /articles/x_wanfangjie/index.html (+1ms) 
+18:52:56   ├─ /articles/a05/index.html (+1ms) 
+18:52:56   ├─ /articles/a22/index.html (+1ms) 
+18:52:56   ├─ /articles/a23/index.html (+1ms) 
+18:52:56   ├─ /articles/x_shenle/index.html (+1ms) 
+18:52:56   ├─ /articles/x_jiayou/index.html (+1ms) 
+18:52:56   ├─ /articles/x_pusa/index.html (+1ms) 
+18:52:56   ├─ /articles/x_wogui/index.html (+1ms) 
+18:52:56   ├─ /articles/x_zhaji/index.html (+1ms) 
+18:52:56   ├─ /articles/x_gouyade/index.html (+1ms) 
+18:52:56   ├─ /articles/a10/index.html (+1ms) 
+18:52:56   ├─ /articles/a11/index.html (+1ms) 
+18:52:56   ├─ /articles/a12/index.html (+1ms) 
+18:52:56   ├─ /articles/a13/index.html (+1ms) 
+18:52:56   ├─ /articles/a14/index.html (+1ms) 
+18:52:56   ├─ /articles/a15/index.html (+1ms) 
+18:52:56   ├─ /articles/a16/index.html (+1ms) 
+18:52:56   ├─ /articles/a17/index.html (+1ms) 
+18:52:56   ├─ /articles/a18/index.html (+1ms) 
+18:52:56   ├─ /articles/a19/index.html (+1ms) 
+18:52:56   ├─ /articles/a20/index.html (+1ms) 
+18:52:56   ├─ /articles/a21/index.html (+1ms) 
+18:52:56   ├─ /articles/x_shenquan/index.html (+1ms) 
+18:52:56   ├─ /articles/x_jia/index.html (+1ms) 
+18:52:56   ├─ /articles/x_zhouyu/index.html (+1ms) 
+18:52:56   ├─ /articles/a24/index.html (+1ms) 
+18:52:56   ├─ /articles/a25/index.html (+1ms) 
+18:52:56   ├─ /articles/a26/index.html (+1ms) 
+18:52:56   ├─ /articles/a27/index.html (+1ms) 
+18:52:56   ├─ /articles/a28/index.html (+1ms) 
+18:52:56   ├─ /articles/a29/index.html (+1ms) 
+18:52:56   ├─ /articles/a30/index.html (+1ms) 
+18:52:56   ├─ /articles/a31/index.html (+1ms) 
+18:52:56   ├─ /articles/a32/index.html (+1ms) 
+18:52:56   ├─ /articles/a33/index.html (+1ms) 
+18:52:56   ├─ /articles/a34/index.html (+1ms) 
+18:52:56   ├─ /articles/tianhuaban/index.html (+1ms) 
+18:52:56   ├─ /articles/a35/index.html (+1ms) 
+18:52:56   ├─ /articles/a36/index.html (+1ms) 
+18:52:56   ├─ /articles/a37/index.html (+1ms) 
+18:52:56   ├─ /articles/a38/index.html (+1ms) 
+18:52:56   ├─ /articles/a39/index.html (+1ms) 
+18:52:56   ├─ /articles/a40/index.html (+1ms) 
+18:52:56   ├─ /articles/postscript/index.html (+1ms) 
+18:52:56   ├─ /auth/index.html (+1ms) 
+18:52:56   ├─ /catalog/index.html (+3ms) 
+18:52:56   ├─ /community/guidelines/index.html (+2ms) 
+18:52:56   ├─ /community/index.html (+1ms) 
+18:52:56   ├─ /me/bookmarks/index.html (+2ms) 
+18:52:56   ├─ /me/history/index.html (+2ms) 
+18:52:56   ├─ /me/settings/index.html (+2ms) 
+18:52:56   ├─ /search/index.html (+2ms) 
+18:52:56   ├─ /search-index.json (+3ms) 
+18:52:56   ├─ /index.html (+2ms) 
+18:52:56 ✓ Completed in 121ms.
+
+18:52:56 [build] Rearranging server assets...
+18:52:56 [build] ✓ Completed in 393ms.
+18:52:56 [build] Server built in 474ms
+18:52:56 [build] Complete!
+
+> yibanji@0.6.0 typecheck
+> node tools/generate-content.mjs && astro check
+
+Generated typed content input from original sources.
+18:52:57 [@astrojs/node] Enabling sessions with filesystem storage
+18:52:58 [types] Generated 48ms
+18:52:58 [check] Getting diagnostics for Astro files in D:\GitHub\yibanji...
+Result (35 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
+
+> yibanji@0.6.0 lint
+> eslint . --max-warnings 0
+
+
+> yibanji@0.6.0 test
+> node --test tests/unit/*.test.mjs
+
+✔ legacy bookmarks reject malformed values without losing valid article ids (0.9173ms)
+✔ search matches all terms literally and never treats input as a regular expression (0.2136ms)
+✔ reading preferences accept valid choices and safely reject injected or corrupt values (0.1429ms)
+✔ every article and chapter has readable original content (23.7003ms)
+✔ environment and secret paths cannot be accidentally staged (236.0072ms)
+✔ example environment contains placeholders and only supported public settings (1.1474ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.8757
+
+> yibanji@0.6.0 test:content
+> node tools/check-content.cjs && node tools/content-integrity.mjs
+
+OK: 9 categories, 54 works, 天花板 20 chapters.
+Content integrity: all 54 works match original SHA-256 baseline.
+
+> yibanji@0.6.0 test:smoke
+> playwright test
+
+[WebServer] (node:29952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 8 workers
+
+(node:36672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34932) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  5 [mobile] › tests\e2e\reader.spec.ts:3:1 › original reader opens home, article and novel without script errors (611ms)
+  ok  1 [desktop] › tests\e2e\reader.spec.ts:3:1 › original reader opens home, article and novel without script errors (645ms)
+  ok  8 [mobile] › tests\e2e\design.spec.ts:4:1 › appearance follows system, persists choices, and supports keyboard menus (584ms)
+  ok  6 [desktop] › tests\e2e\design.spec.ts:4:1 › appearance follows system, persists choices, and supports keyboard menus (616ms)
+  ok 11 [mobile] › tests\e2e\design.spec.ts:25:1 › reader has one action bar, no print UI or stamp, and accessible focus mode (356ms)
+  ok 12 [desktop] › tests\e2e\design.spec.ts:25:1 › reader has one action bar, no print UI or stamp, and accessible focus mode (350ms)
+  ok  9 [mobile] › tests\e2e\reader.spec.ts:15:1 › search, old bookmarks and reading history survive the migration (499ms)
+  ok  2 [mobile] › tests\e2e\content.spec.ts:6:1 › every generated article and chapter preserves every original paragraph (1.2s)
+  ok 10 [desktop] › tests\e2e\reader.spec.ts:15:1 › search, old bookmarks and reading history survive the migration (522ms)
+  ok  3 [desktop] › tests\e2e\content.spec.ts:6:1 › every generated article and chapter preserves every original paragraph (1.2s)
+  ok 15 [mobile] › tests\e2e\content.spec.ts:31:1 › reading works with JavaScript disabled (209ms)
+  ok 16 [desktop] › tests\e2e\content.spec.ts:31:1 › reading works with JavaScript disabled (186ms)
+  ok 14 [desktop] › tests\e2e\design.spec.ts:40:1 › key pages meet automated WCAG AA checks in both themes and do not overflow (5.7s)
+  ok 13 [mobile] › tests\e2e\design.spec.ts:40:1 › key pages meet automated WCAG AA checks in both themes and do not overflow (6.5s)
+  ok  7 [mobile] › tests\e2e\auth.spec.ts:4:1 › real login, profile edit, public profile and logout (13.8s)
+  ok  4 [desktop] › tests\e2e\auth.spec.ts:4:1 › real login, profile edit, public profile and logout (34.2s)
+
+  16 passed (37.2s)

@@ -1,0 +1,20 @@
+
+> yibanji@0.6.0 test:db
+> node --test --test-concurrency=1 tests/integration/*.test.mjs
+
+Verified actual Auth login, signup trigger, profile ownership, follow idempotency/counts, restricted user, table RLS.
+✔ real Supabase Auth, profiles, graph and RLS (43242.0569ms)
+Verified discussion ownership, replies, likes, duplicate rejection, transactional counts, post comments, followed feed privacy and discussion task rewards.
+✔ real comments, replies, likes, posts, followed feed, spam rules and ownership (47219.5469ms)
+Verified daily uniqueness under concurrent requests, tier 7/8, reset after gap, 30-day badge/bonus, task deduplication, ledger reconciliation and private-data RLS.
+✔ real transaction checkins, streak cycles, gaps, task caps, EXP, badges and private wallets (32971.8556ms)
+Balance 5 + concurrent spend 5/5: exactly one success, balance 0, article +5. Repeat/multi-egg/like coexistence/idempotency and reading RLS verified.
+✔ real concurrent egg spending, idempotency, repeat throws, likes, private bookmarks and qualified reading (27953.3148ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 151702.5378

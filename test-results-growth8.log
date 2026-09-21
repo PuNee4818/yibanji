@@ -1,0 +1,44 @@
+✖ real transaction checkins, streak cycles, gaps, task caps, EXP, badges and private wallets (21819.2168ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21905.205
+
+✖ failing tests:
+
+test at tests\integration\growth.test.mjs:6:1
+✖ real transaction checkins, streak cycles, gaps, task caps, EXP, badges and private wallets (21819.2168ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   code: '',
+  +   details: 'Error: Transport UND_ERR_CONNECT_TIMEOUT: Connect Timeout Error (attempted address: ytunoluschycqiscufea.supabase.co:443, timeout: 10000ms)\n' +
+  +     '    at fetch (file:///D:/GitHub/yibanji/tests/integration/fixtures.mjs:8:62)\n' +
+  +     '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+  +     '    at async fetchWithRetry (file:///D:/GitHub/yibanji/node_modules/@supabase/postgrest-js/dist/index.mjs:203:10)\n' +
+  +     '    at async executeWithRetry (file:///D:/GitHub/yibanji/node_modules/@supabase/postgrest-js/dist/index.mjs:407:18)\n' +
+  +     '    at async Promise.all (index 2)\n' +
+  +     '    at async TestContext.<anonymous> (file:///D:/GitHub/yibanji/tests/integration/growth.test.mjs:10:20)\n' +
+  +     '    at async Test.run (node:internal/test_runner/test:1208:7)\n' +
+  +     '    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)',
+  +   hint: '',
+  +   message: 'Error: Transport UND_ERR_CONNECT_TIMEOUT: Connect Timeout Error (attempted address: ytunoluschycqiscufea.supabase.co:443, timeout: 10000ms)'
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///D:/GitHub/yibanji/tests/integration/growth.test.mjs:11:37)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { message: 'Error: Transport UND_ERR_CONNECT_TIMEOUT: Connect Timeout Error (attempted address: ytunoluschycqiscufea.supabase.co:443, timeout: 10000ms)', details: 'Error: Transport UND_ERR_CONNECT_TIMEOUT: Connect Timeout Error (attempted address: ytunoluschycqiscufea.supabase.co:443, timeout: 10000ms)\n    at fetch (file:///D:/GitHub/yibanji/tests/integration/fixtures.mjs:8:62)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async fetchWithRetry (file:///D:/GitHub/yibanji/node_modules/@supabase/postgrest-js/dist/index.mjs:203:10)\n    at async executeWithRetry (file:///D:/GitHub/yibanji/node_modules/@supabase/postgrest-js/dist/index.mjs:407:18)\n    at async Promise.all (index 2)\n    at async TestContext.<anonymous> (file:///D:/GitHub/yibanji/tests/integration/growth.test.mjs:10:20)\n    at async Test.run (node:internal/test_runner/test:1208:7)\n    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)', hint: '', code: '' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
