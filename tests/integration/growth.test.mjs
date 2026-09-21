@@ -24,6 +24,9 @@ test('real transaction checkins, streak cycles, gaps, task caps, EXP, badges and
   assert.equal((await b.from('economy_transactions').select('*').eq('reason','achievement').eq('reference_id','streak30')).data.length,1);
   const weekly=(await b.from('economy_transactions').select('*').eq('reason','weekly_task').eq('reference_id','weekly_checkin').eq('asset_type','egg')).data;
   assert.ok(weekly.length>0);assert.ok(weekly.every(t=>t.delta===5));assert.equal(new Set(weekly.map(t=>t.idempotency_key)).size,weekly.length);
+  sql(`do $$ declare d date:=date_trunc('week',app_private.today()::timestamp)::date-7;begin for i in 1..20 loop perform app_private.record_event(${quote(ub.id)},'read','weekly-read-'||i,d);end loop;for i in 1..3 loop perform app_private.record_event(${quote(ub.id)},'discussion','weekly-comment-'||i,d);end loop;for i in 1..10 loop perform app_private.record_event(${quote(ub.id)},'like','weekly-like-'||i,d);end loop;end $$;`);
+  const milestone=sql(`select progress,rewarded_at from public.weekly_task_progress where user_id=${quote(ub.id)} and task_id='weekly_active100' and period_start=date_trunc('week',app_private.today()::timestamp)::date-7`)[0];
+  assert.equal(milestone.progress,100);assert.ok(milestone.rewarded_at);
   sql(`select app_private.record_event(${quote(ua.id)},'read','r1');select app_private.record_event(${quote(ua.id)},'read','r2');select app_private.record_event(${quote(ua.id)},'read','r2');`);
   g=(await a.rpc('growth_summary')).data;assert.equal(g.tasks.find(t=>t.id==='daily_read').progress,2);
   const ledger=await a.from('economy_transactions').select('*');

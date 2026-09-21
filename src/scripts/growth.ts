@@ -2,6 +2,8 @@ import {supabase,rpc} from '../lib/supabase';
 import type {Growth,Checkin} from '../lib/growth';
 const dialog=document.querySelector<HTMLDialogElement>('#checkin-dialog');
 const button=document.querySelector<HTMLButtonElement>('#checkin-submit');
+async function menuStatus(){const{data:{user}}=await supabase.auth.getUser();if(!user)return;try{const g=await rpc<Growth>('growth_summary');document.querySelectorAll<HTMLElement>('[data-open-checkin]').forEach(el=>{el.textContent=g.today_checkin?'每日签到 · 已签到':'每日签到 · 今日未签到';el.dataset.unchecked=String(!g.today_checkin);});}catch{/* The dialog offers a retry when opened. */}}
+void menuStatus();
 async function renderCheckin(){
  if(!dialog||!button)return;
  const summary=await rpc<Growth>('growth_summary');
@@ -11,7 +13,7 @@ async function renderCheckin(){
  const {data:rules}=await supabase.from('economy_rules').select('*').single();
  const list=document.querySelector('#checkin-tiers')!;list.replaceChildren();
  if(rules) for(let i=0;i<7;i++){const li=document.createElement('li');li.textContent=`第 ${i+1} 档：${rules.checkin_eggs[i]} 枚 · ${rules.checkin_exp[i]} EXP`;list.append(li);}
- const indicator=document.querySelector('[data-open-checkin]');if(indicator)indicator.textContent=summary.today_checkin?'每日签到 · 已签到':'每日签到 · 今日未签到';
+ document.querySelectorAll<HTMLElement>('[data-open-checkin]').forEach(el=>{el.textContent=summary.today_checkin?'每日签到 · 已签到':'每日签到 · 今日未签到';el.dataset.unchecked=String(!summary.today_checkin);});
  document.dispatchEvent(new CustomEvent('growth-updated',{detail:summary}));
 }
 document.querySelectorAll('[data-open-checkin]').forEach(el=>el.addEventListener('click',async()=>{

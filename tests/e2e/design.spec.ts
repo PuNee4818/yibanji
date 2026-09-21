@@ -40,7 +40,7 @@ test('reader has one action bar, no print UI or stamp, and accessible focus mode
 test('key pages meet automated WCAG AA checks in both themes and do not overflow', async ({ page }, testInfo) => {
   for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
-    for (const path of ['/', '/catalog/', '/articles/a01/', '/articles/tianhuaban/1/', '/search/', '/me/settings/', '/community/']) {
+    for (const path of ['/', '/catalog/', '/articles/a01/', '/articles/tianhuaban/1/', '/search/', '/me/settings/', '/community/', '/me/rewards/', '/notifications/', '/admin/moderation/']) {
       await page.goto(path);
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
       expect(results.violations, `${theme} ${path}`).toEqual([]);

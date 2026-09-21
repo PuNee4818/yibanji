@@ -6,6 +6,7 @@ export async function refreshUser() {
   document.querySelectorAll<HTMLElement>('[data-auth-only]').forEach(el=>{if(el.id!=='profile-form'||!user)el.hidden=!user;});
   document.querySelectorAll<HTMLElement>('[data-guest-only]').forEach(el=>el.hidden=!!user);
   if(user) {
+    void rpc<{is_admin:boolean}>('account_capabilities').then(c=>document.querySelectorAll<HTMLElement>('[data-admin-only]').forEach(el=>el.hidden=!c?.is_admin)).catch(()=>{});
     const {data:profile}=await supabase.from('profiles').select('*').eq('id',user.id).single();
     if(profile) {
       document.querySelectorAll<HTMLAnchorElement>('[data-my-profile]').forEach(link=>link.href=`/u/${profile.username}/`);
@@ -20,7 +21,7 @@ export async function refreshUser() {
   return user;
 }
 void refreshUser();
-supabase.auth.onAuthStateChange(()=>{ setTimeout(()=>void refreshUser(),0); });
+supabase.auth.onAuthStateChange(event=>{ if(event!=='INITIAL_SESSION')setTimeout(()=>void refreshUser(),0); });
 document.querySelector('[data-signout]')?.addEventListener('click',async()=>{
   const {error}=await supabase.auth.signOut(); if(error) announce(friendlyError(error)); else location.href='/';
 });
