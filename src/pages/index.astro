@@ -17,4 +17,5 @@ const volumeDescriptions: Record<string, string> = { '故园':'旧日校园，�
   </section>
   <section class="volume-section"><div class="section-heading"><div><p class="eyebrow">各有天地</p><h2>循卷而读</h2></div><span class="muted">从故园，走向天外</span></div><div class="volume-grid">{book.categories.filter(c => volumeDescriptions[c.name]).map((c, i) => <a class="volume-card" href={`/catalog/#${c.id}`}><span class="volume-number">0{i + 1}</span><h3>{c.name}</h3><p>{volumeDescriptions[c.name]}</p><span class="volume-meta">{c.articles.length} 篇 <span aria-hidden="true">↗</span></span></a>)}</div></section>
   <section class="community-invitation"><div><p class="eyebrow">文字之外，还有回声</p><h2>读完了，也聊两句。</h2><p>在书友之间，交换一段感想，或者一个新的故事。</p></div><a class="button" href="/community/">去社区看看 →</a></section>
+  <section class="related"><h2>最近讨论</h2><div data-recent-discussions>正在翻开讨论…</div></section><script>import '../scripts/community';</script>
 </Layout>

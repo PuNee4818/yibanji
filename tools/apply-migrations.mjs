@@ -21,7 +21,7 @@ for (const file of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql
   }
   sql(`begin; select pg_advisory_xact_lock(8192345); ${migration}
 insert into supabase_migrations.schema_migrations(version,name,statements) values(${quote(version)},${quote(file.slice(version.length+1,-4))},array[${quote(migration)}]);
-insert into app_migrations.checksums values(${quote(version)},${quote(hash)}); commit;`);
+insert into app_migrations.checksums values(${quote(version)},${quote(hash)}); commit;`,true);
   console.log(`Applied: ${file}`);
 }
 const config=parseEnv(readFileSync('.env.local','utf8').replace(/^\uFEFF/,''));

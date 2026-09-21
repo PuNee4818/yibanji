@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync, unlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-export function sql(query) {
+export function sql(query, diagnostics = false) {
   mkdirSync('supabase/.temp', { recursive: true });
   const file = resolve('supabase/.temp', `query-${randomUUID()}.sql`);
   writeFileSync(file, query);
@@ -15,6 +15,7 @@ export function sql(query) {
     if (result.error) throw new Error(result.error.message);
     return result.rows ?? result;
   } catch (error) {
+    if(diagnostics && error.stdout) console.error(String(error.stdout));
     // Query files can contain generated test-account passwords. Never echo SQL or CLI buffers.
     throw new Error(`Database query failed (${error.status ?? 'transport'}). Inspect the named test/migration; credentials and SQL output suppressed.`);
   } finally { unlinkSync(file); }

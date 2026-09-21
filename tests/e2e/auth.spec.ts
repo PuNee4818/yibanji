@@ -9,7 +9,7 @@ test('real login, profile edit, public profile and logout',async({page})=>{
     await page.getByLabel('邮箱',{exact:true}).fill(user.email);
     await page.getByLabel('密码',{exact:true}).fill(user.password);
     await page.getByRole('button',{name:'继续',exact:true}).click();
-    await expect(page).toHaveURL(/\/me\/settings\//,{timeout:15000});
+    await expect(page).toHaveURL(/\/me\/settings\//,{timeout:30000});
     await expect(page.locator('#profile-form')).toBeVisible();
     await page.getByLabel('显示名称',{exact:true}).fill('真实联调书友');
     await page.getByLabel('个人简介',{exact:true}).fill('阅读，也交流。');

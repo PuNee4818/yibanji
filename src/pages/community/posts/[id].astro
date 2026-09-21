@@ -1,0 +1,9 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Discussion from '../../../components/Discussion.astro';
+import{ supabase }from '../../../lib/supabase';
+export const prerender=false;
+const{data:post}=await supabase.from('community_posts').select('*').eq('id',Astro.params.id??'').eq('status','visible').maybeSingle();
+if(!post)Astro.response.status=404;
+---
+<Layout title="书友动态">{post?<section class="narrow-page" data-post-id={post.id}><p><a href="/community/">← 回到社区</a></p><h1>书友动态</h1><div data-post-body><p>{post.content}</p></div>{post.article_id&&<p><a href={`/articles/${post.article_id}/`}>阅读引用的文章 →</a></p>}<Discussion kind="post_comment" target={post.id}/></section>:<section class="empty-state"><h1>这条动态暂时无法查看</h1><a href="/community/">回到社区</a></section>}<script>import '../../../scripts/community';</script></Layout>

@@ -97,6 +97,26 @@ dialog::backdrop { background:#0007; }
 .article-actions > .button { padding:10px 14px; font-size:16px; color:var(--ink); border-color:var(--line); }
 .more-actions summary { cursor:pointer; min-height:44px; padding:10px; }
 .more-actions button { display:block; }
+.community-layout {display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:48px;}
+.community-layout > aside {border-left:1px solid var(--line);padding-left:28px;}
+.community-layout > aside h2 {font-size:22px;}
+.discussion-section {border-top:1px solid var(--line);margin-top:28px;padding-top:28px;}
+.discussion-section .section-heading {align-items:center;}
+.discussion-section .section-heading label {font-size:12px;}
+.discussion-card {padding:24px 0;border-bottom:1px solid var(--line);}
+.discussion-meta {display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:14px;}
+.discussion-meta time {font-size:12px;color:var(--muted);}
+.discussion-meta a {text-decoration:none;color:var(--accent);}
+.discussion-content {white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9;}
+.discussion-actions {display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12px;}
+.discussion-actions button {padding:8px 10px;min-height:36px;background:transparent;}
+.discussion-actions a {margin-left:auto;}
+.discussion-card details {padding:14px 0 0 20px;}
+.discussion-card details summary {cursor:pointer;color:var(--muted);font-size:13px;}
+.post-composer {max-width:none;padding:24px;background:var(--panel);margin-bottom:24px;}
+.post-composer textarea {min-height:100px;}
+.tabs [aria-current] {color:var(--accent);text-decoration:underline;}
+@media(max-width:760px){.community-layout{grid-template-columns:1fr;gap:24px}.community-layout>aside{border-left:0;padding-left:0;border-top:1px solid var(--line)}.discussion-section .section-heading{align-items:start;flex-direction:column}.discussion-card details{padding-left:12px}.discussion-actions a{margin-left:0}}
 @media(max-width:480px){.article-actions {gap:6px;} .article-actions > button,.article-actions > .button {font-size:13px;padding:10px;}.more-actions {flex-basis:100%;font-size:13px;} }
 .user-menu button { width:100%; text-align:left; border:0; }
 .empty-state { text-align:center; padding:60px 24px; border:1px solid var(--line); }
