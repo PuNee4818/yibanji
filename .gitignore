@@ -31,3 +31,4 @@ secrets.*
 *credentials*.json
 .workbuddy/screenshots/
 src/generated/
+.astro-sessions/

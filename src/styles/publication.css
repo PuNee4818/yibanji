@@ -83,6 +83,11 @@
 .settings-fields label { display:flex; flex-direction:column; gap:8px; font-size:14px; }
 .settings-fields select { width:100%; }
 .settings-fields > button { align-self:end; }
+.form-stack { display:grid; gap:20px; max-width:560px; }
+.form-stack label { display:grid; gap:8px; }
+.form-stack input,.form-stack textarea { width:100%; }
+.form-stack textarea { min-height:120px; resize:vertical; }
+.user-menu button { width:100%; text-align:left; border:0; }
 .empty-state { text-align:center; padding:60px 24px; border:1px solid var(--line); }
 .empty-state h2 { font-size:24px; }
 .empty-state p { color:var(--muted); max-width:480px; margin:16px auto 28px; }

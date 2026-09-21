@@ -14,7 +14,9 @@
     "test:smoke": "playwright test",
     "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run test:content && npm run test:smoke",
     "preview": "astro preview --host 127.0.0.1 --port 4321 --ignore-lock",
-    "dev": "node tools/generate-content.mjs && astro dev --host 127.0.0.1 --ignore-lock"
+    "dev": "node tools/generate-content.mjs && astro dev --host 127.0.0.1 --ignore-lock",
+    "db:migrate": "node tools/apply-migrations.mjs",
+    "test:db": "node --test --test-concurrency=1 tests/integration/*.test.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -25,10 +27,13 @@
     "eslint": "^9.39.5",
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.12.0",
+    "supabase": "^2.117.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0"
   },
   "dependencies": {
+    "@astrojs/node": "^11.1.6",
+    "@supabase/supabase-js": "^2.116.0",
     "astro": "^7.3.3"
   },
   "type": "module"
