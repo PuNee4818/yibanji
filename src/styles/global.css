@@ -13,6 +13,11 @@
 @import './submissions.css' layer(pages);
 @import './motion.css' layer(motion);
 @layer accessibility {
+  html:not([data-auth-state='guest']) [data-guest-only],
+  html:not([data-auth-state='authenticated']) [data-auth-only],
+  html:not([data-auth-state='pending']) [data-auth-pending] {
+    display: none !important;
+  }
   [hidden] {
     display: none !important;
   }

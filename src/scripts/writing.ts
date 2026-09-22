@@ -117,8 +117,7 @@ function populate() {
   refresh();
 }
 function preview() {
-  document.querySelector('[data-writing-preview-title]')!.textContent =
-    title.value || '未命名的文字';
+  document.querySelector('[data-writing-preview-title]')!.textContent = title.value || '未命名草稿';
   document.querySelector('[data-writing-preview-meta]')!.textContent =
     submissionGenres[genre.value] + ' · ' + countWords(body.value).toLocaleString() + ' 字';
   renderWriting(
@@ -211,7 +210,13 @@ async function save(): Promise<boolean> {
       if (/DRAFT_CONFLICT|NOT_OWNER/.test(error.message)) setConflict();
       else {
         state.textContent = localOK ? '已保存到本机 · 云端未同步' : '尚未保存 · 请导出备份';
-        notice('云端保存未完成。' + friendlyError(error) + ' 你可以继续写作，或点击保存重试。');
+        notice(
+          '云端保存未完成。' +
+            friendlyError(error) +
+            (localOK
+              ? ' 本机草稿已保留，可点击保存重试同步。'
+              : ' 本机也未能保存，请先导出备份，再重试。'),
+        );
       }
       return false;
     }
@@ -238,7 +243,9 @@ async function save(): Promise<boolean> {
     locally();
     notice('');
     state.textContent = dirty
-      ? '新修改已保存到本机'
+      ? localOK
+        ? '新修改已保存到本机 · 等待同步'
+        : '新修改尚未保存 · 请导出备份'
       : '已保存到云端 · ' +
         new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
     return true;
@@ -320,7 +327,7 @@ async function initialize() {
         : '已恢复上次的草稿'
       : draft.revision
         ? '云端草稿已打开'
-        : '落笔后自动保存';
+        : '输入后自动保存草稿';
   if (guest) {
     locally();
     if (await save()) removeLocalWriting('guest', id);

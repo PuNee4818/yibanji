@@ -8,13 +8,16 @@ interface Props {
   title?: string;
   description?: string;
 }
-const { title = '一班集', description = '一班集，一间安静、克制、适合阅读的中文数字刊物。' } =
-  Astro.props;
+const {
+  title = '一班集',
+  description = '从课桌边的一本文集，到今天仍在续写的散文、诗歌与故事。翻开一班集，也写下你的新作。',
+} = Astro.props;
 const path = Astro.url.pathname;
+const backendOrigin = new URL(import.meta.env.PUBLIC_SUPABASE_URL).origin;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-auth-state="guest">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,10 +28,13 @@ const path = Astro.url.pathname;
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preconnect" href={backendOrigin} crossorigin />
     <link rel="preload" href="/fonts/ReadingSerif.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title === '一班集' ? title : `${title} · 一班集`}</title>
     <script is:inline>
       (() => {
+        // Resolve identity before showing guest prompts; without JS, public navigation stays usable.
+        document.documentElement.dataset.authState = 'pending';
         let theme = 'system';
         try {
           theme = localStorage.getItem('yb_theme') || 'system';
@@ -50,7 +56,7 @@ const path = Astro.url.pathname;
     <header class="site-header">
       <a class="brand" href="/" aria-label="一班集首页">
         <img class="brand-mark" src="/favicon.svg" width="30" height="30" alt="" />
-        一班集<span>文字留住时光</span>
+        一班集<span>一本书，许多后来</span>
       </a>
       <nav aria-label="主导航">
         <a href="/" aria-current={path === '/' ? 'page' : undefined}>
@@ -121,6 +127,12 @@ const path = Astro.url.pathname;
           </summary>
           <nav aria-label="个人菜单">
             <p class="menu-caption">我的书房</p>
+            <p class="muted small" data-auth-pending>
+              正在确认登录状态…
+            </p>
+            <button type="button" data-auth-retry hidden>
+              重新确认登录状态
+            </button>
             <a href="/auth/" data-guest-only>
               登录 / 注册
             </a>
@@ -158,7 +170,7 @@ const path = Astro.url.pathname;
         <a class="footer-brand" href="/">
           一班集
         </a>
-        <p>有些时光，值得写下来。</p>
+        <p>书有末页，故事没有。</p>
       </div>
       <div class="footer-links">
         <a href="/catalog/">文集目录</a>

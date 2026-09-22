@@ -39,14 +39,14 @@ async function load(append = false) {
     page = next;
     more.hidden = !hasMore;
     state.textContent = list.childElementCount
-      ? '你的来稿' + (kind === 'history' ? '阅读记录' : '收藏')
-      : '这里还没有记录，去自由来稿读一篇吧。';
+      ? '投稿作品 · ' + (kind === 'history' ? '阅读记录' : '收藏')
+      : '还没有记录，去投稿页读读新作吧。';
     if (!user)
       state.append(
         link(' 登录后跨设备同步 →', '/auth/?next=' + encodeURIComponent(location.pathname)),
       );
   } catch {
-    state.textContent = '来稿记录暂时无法读取。';
+    state.textContent = '投稿作品记录暂时无法读取，请重试。';
     const retry = el('button', '重试');
     retry.addEventListener('click', () => void load(append));
     state.append(retry);

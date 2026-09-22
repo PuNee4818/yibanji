@@ -29,12 +29,12 @@ export const levelNames = ['初识', '留笺', '知章', '执笔', '藏卷', '�
 
 export const levelThresholds = [0, 50, 150, 400, 900, 1800] as const;
 export const levelDescriptions = [
-  '刚刚翻开这本文集。',
-  '读到喜欢的字句，留下一枚书签。',
-  '在阅读与交流中，渐渐熟悉。',
-  '写下自己的话，也认真倾听。',
-  '读过的篇章，已成一座小小书房。',
-  '纸上有旧友，书中有长伴。',
+  '初次翻开，不妨多坐一会儿。',
+  '在喜欢的一页，留个记号。',
+  '有些句子，隔几天又想起。',
+  '读到兴起，也写几行。',
+  '心里有几篇，随时想重读。',
+  '书放在手边，你也常来。',
 ];
 export function normalizedLevel(value: number) {
   return Number.isInteger(value) ? Math.max(1, Math.min(6, value)) : 1;

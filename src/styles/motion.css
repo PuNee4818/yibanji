@@ -173,7 +173,7 @@ dialog[open],
   animation: settle 0.3s var(--ease);
 }
 .reveal-in {
-  animation: settle 0.7s var(--ease) both;
+  animation: settle 0.22s var(--ease) both;
 }
 .skeleton {
   min-height: 90px;
@@ -193,11 +193,9 @@ html[data-turn='prev'] .reader {
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(7px);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 @keyframes page-out {
@@ -216,14 +214,14 @@ html[data-turn='prev'] .reader {
     view-transition-name: page-content;
   }
   ::view-transition-group(*) {
-    animation-duration: 0.24s;
+    animation-duration: 0.12s;
     animation-timing-function: var(--ease);
   }
   ::view-transition-old(page-content) {
     animation: page-out 0.12s ease both;
   }
   ::view-transition-new(page-content) {
-    animation: page-in 0.28s var(--ease) both;
+    animation: page-in 0.12s ease both;
   }
   ::view-transition-old(root),
   ::view-transition-new(root) {

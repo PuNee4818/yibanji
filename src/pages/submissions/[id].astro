@@ -6,7 +6,6 @@ import ReaderFrame from '../../components/ReaderFrame.astro';
 import Discussion from '../../components/Discussion.astro';
 import ReadingSettings from '../../components/ReadingSettings.astro';
 import WritingBody from '../../components/WritingBody.astro';
-import SubmissionCard from '../../components/SubmissionCard.astro';
 import { supabase } from '../../lib/supabase';
 import { submissionGenres, formattedWriting, type Submission } from '../../lib/submissions';
 export const prerender = false;
@@ -23,19 +22,15 @@ const headings = item
       .map((block, index) => ({ ...block, index }))
       .filter((block) => block.kind === 'heading')
   : [];
-let related: Submission[] = [];
-if (item) {
-  const { data: rows } = await supabase.rpc('submission_feed', { p_genre: item.genre });
-  related = (rows || []).filter((row: Submission) => row.id !== id).slice(0, 2);
-}
 ---
 
-<Layout title={item?.title || '来稿阅读'} description={item?.summary || '阅读一班集的自由来稿。'}>
+<Layout title={item?.title || '作品阅读'} description={item?.summary || '阅读一班集的投稿作品。'}>
   {item ? (
     <div
       class="submission-reading"
       data-submission-reader={item.id}
       data-submission-author={item.user_id}
+      data-submission-genre={item.genre}
     >
       <ReaderFrame id={item.id} title={item.title} genre={item.genre} source="submission">
         <Fragment slot="toc">
@@ -45,7 +40,7 @@ if (item) {
             </summary>
             <nav aria-label="文章目录">
               <a class="toc-back" href="/submissions/">
-                ← 返回自由来稿
+                ← 返回投稿
               </a>
               <div class="toc-work">
                 <a href="#submission-title">{item.title}</a>
@@ -64,12 +59,12 @@ if (item) {
           </details>
         </Fragment>
         <nav class="reader-breadcrumb" aria-label="阅读位置">
-          <a href="/submissions/">自由来稿</a>
+          <a href="/submissions/">投稿</a>
           <span>／</span>
           <a href={'/submissions/?genre=' + item.genre}>{submissionGenres[item.genre]}</a>
         </nav>
         <header class="article-head">
-          <p class="eyebrow">{submissionGenres[item.genre]} · 自由来稿</p>
+          <p class="eyebrow">{submissionGenres[item.genre]} · 自由投稿</p>
           <h1 id="submission-title">{item.title}</h1>
           <div class="submission-card-foot">
             <div class="author-identity">
@@ -125,13 +120,14 @@ if (item) {
               这位作者的其他作品 ↗
             </a>
           </div>
-          <div class="submission-grid">
-            {related.map((row) => (
-              <SubmissionCard item={row} />
-            ))}
+          <div class="submission-grid" data-related-works aria-live="polite">
+            <p class="muted">正在加载推荐…</p>
           </div>
+          <noscript>
+            <p>可通过下方链接继续浏览作品。</p>
+          </noscript>
           <div class="submission-actions">
-            <a href="/submissions/">回到自由来稿 →</a>
+            <a href="/submissions/">浏览更多作品 →</a>
             <a href="/write/">也写下一篇 ↗</a>
           </div>
         </section>
@@ -140,9 +136,9 @@ if (item) {
   ) : (
     <section class="submission-empty">
       <h1>{error ? '这一页暂时没有打开' : '这篇文字暂时不可阅读'}</h1>
-      <p>{error ? '请稍后重试，或先看看其他来稿。' : '作品可能尚未发布、已撤回或已删除。'}</p>
+      <p>{error ? '请稍后重试，或先看看其他作品。' : '作品可能尚未发布、已撤回或已删除。'}</p>
       <a class="button" href="/submissions/">
-        去阅读其他来稿 →
+        阅读其他作品 →
       </a>
     </section>
   )}

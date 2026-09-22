@@ -1,6 +1,8 @@
 import { prefetch } from 'astro:prefetch';
 // Warm only public, static HTML. Never prerender scripts or send interaction requests.
 function destination(target: EventTarget | null) {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (connection?.saveData) return;
   const anchor = target instanceof Element ? target.closest('a') : null;
   if (
     !anchor ||
@@ -16,11 +18,12 @@ function destination(target: EventTarget | null) {
   )
     return;
   if (
-    !/^\/(?:$|catalog\/|articles\/|search\/|community\/(?:$|comments\/|guidelines\/))/.test(
+    !/^\/(?:$|catalog\/$|articles\/|search\/$|submissions\/$|write\/$|me\/(?:writing|rewards|bookmarks|history|settings)\/$|community\/(?:$|comments\/$|guidelines\/$))/.test(
       url.pathname,
     )
   )
     return;
+  if (url.pathname === '/write/' && url.search) return;
   return url.href;
 }
 let timer: ReturnType<typeof setTimeout>;

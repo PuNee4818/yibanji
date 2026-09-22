@@ -87,7 +87,7 @@ test('submission shares focus, typography, guest library and discovery with cata
     await expect(page.locator('[data-submission-list]')).toContainText('雨停之后的来信', {
       timeout: 30000,
     });
-    await expect(page.locator('[data-submission-highlights]')).not.toContainText('正在翻开推荐', {
+    await expect(page.locator('[data-submission-highlights]')).not.toContainText('正在加载推荐', {
       timeout: 30000,
     });
     await page.locator('[data-feed-tab="popular"]').click();

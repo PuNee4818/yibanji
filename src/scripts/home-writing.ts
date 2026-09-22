@@ -8,7 +8,7 @@ void rpc<Submission[]>('submission_feed')
     for (const row of rows.slice(0, 3))
       latest.append(link(row.title + ' · ' + row.display_name, submissionUrl(row.id)));
     if (rows.length) {
-      latest.prepend(el('span', '新近来稿', 'eyebrow'));
+      latest.prepend(el('span', '最近发表', 'eyebrow'));
       latest.hidden = false;
     }
   })

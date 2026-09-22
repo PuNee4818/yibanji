@@ -55,8 +55,8 @@ if (center) {
       list.append(box);
     }
   }
-  async function summary() {
-    const g = await rpc<Growth>('growth_summary');
+  async function summary(updated?: Growth) {
+    const g = updated ?? (await rpc<Growth>('growth_summary'));
     const box = document.querySelector('#reward-summary')!;
     box.replaceChildren(growthCard(g.progress));
     const p = document.createElement('p');
@@ -122,7 +122,7 @@ if (center) {
   }
   const reasons: Record<string, string> = {
     submission_publish: '发表作品',
-    submission_debut: '首次创作',
+    submission_debut: '首次发表奖励',
     submission_like: '作品获得点赞',
     submission_bookmark: '作品被收藏',
     daily_checkin: '每日签到',
@@ -160,7 +160,7 @@ if (center) {
     }
     if (!data?.length && !append) {
       const li = document.createElement('li');
-      li.textContent = '还没有流水，签到后就会留下第一笔记录。';
+      li.textContent = '还没有收支记录。完成签到或任务后，可以在这里查看奖励。';
       list.append(li);
     }
     more.hidden = (data?.length ?? 0) < 20;
@@ -175,12 +175,10 @@ if (center) {
     page = 0;
     safe(() => ledger());
   });
-  document.addEventListener('growth-updated', () =>
+  document.addEventListener('growth-updated', (event) =>
     safe(async () => {
-      await summary();
-      await badges();
       page = 0;
-      await ledger();
+      await Promise.all([summary((event as CustomEvent<Growth>).detail), badges(), ledger()]);
     }),
   );
   if (user)

@@ -94,7 +94,7 @@ test('community visitors have a clear action and feed navigation works with hist
   await expect(page).toHaveURL(/tab=latest/);
   await expect(page.locator('[data-feed-tab="latest"]')).toHaveAttribute('aria-current', 'page');
   await page.locator('[data-feed-tab="following"]').click();
-  await expect(page.locator('[data-feed]')).toContainText('登录并发现书友');
+  await expect(page.locator('[data-feed]').getByRole('link', { name: '登录查看 →' })).toBeVisible();
   await page.goBack();
   await expect(page.locator('[data-feed-tab="latest"]')).toHaveAttribute('aria-current', 'page');
 });

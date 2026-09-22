@@ -8,7 +8,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
     <div class="writing-topbar">
       <a href="/me/writing/">← 我的创作</a>
       <span class="writing-save-state" role="status" data-writing-state>
-        准备稿纸…
+        正在打开草稿…
       </span>
       <div class="writing-top-actions">
         <button type="button" data-writing-save>
@@ -26,7 +26,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
       </div>
     </div>
     <p class="writing-guest-note" data-writing-guest hidden>
-      先安心写，草稿会保存在这台设备。
+      未登录时，草稿保存在这台设备。
       <a data-writing-login href="/auth/?next=/write/">
         登录后同步云端并发布 →
       </a>
@@ -42,7 +42,6 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
     <form id="writing-form" class="writing-layout">
       <fieldset class="writing-paper" data-writing-fields disabled>
         <legend class="sr-only">文章内容</legend>
-        <p class="eyebrow">一页新的开始</p>
         <label for="writing-title" class="sr-only">
           文章标题
         </label>
@@ -51,7 +50,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
           name="title"
           class="writing-title"
           maxlength="100"
-          placeholder="给这一页起个名字"
+          placeholder="文章标题"
           autocomplete="off"
         />
         <div class="writing-toolbar" aria-label="正文排版工具">
@@ -84,7 +83,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
           class="writing-body"
           maxlength="100000"
           rows="18"
-          placeholder="从此刻想起的那一句开始……"
+          placeholder="先写下此刻想到的那一句。"
         ></textarea>
         <div class="writing-paper-foot">
           <span data-writing-count>0 字</span>
@@ -93,7 +92,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
       </fieldset>
       <aside class="writing-sidebar">
         <details open>
-          <summary>这篇文字的模样</summary>
+          <summary>文体与排版</summary>
           <div class="writing-metadata">
             <label>
               文体
@@ -127,7 +126,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
               ></textarea>
             </label>
             <p class="muted small">
-              诗歌保留分行和空行；散文与小说自动适配段距。预览就是读者看到的模样。
+              诗歌保留分行和空行；散文与小说自动适配段距。可在预览中查看阅读效果。
             </p>
             <button type="button" data-writing-export>
               导出文字备份 ↓
@@ -152,16 +151,15 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
           关闭 ×
         </button>
       </form>
-      <p class="eyebrow">把这一页，交给读者</p>
-      <h2 id="writing-publish-heading">准备好与大家见面了吗？</h2>
+      <h2 id="writing-publish-heading">发布这篇文章？</h2>
       <p data-writing-publish-summary></p>
-      <p class="muted">发布后立即公开。之后仍可编辑，修改稿会单独保存，直到你再次发布。</p>
+      <p class="muted">发布后，所有人都可以阅读。之后的修改先存为草稿，再次发布才会更新正文。</p>
       <div class="submission-actions">
         <button type="button" class="button primary" data-writing-confirm>
           确认发布
         </button>
         <button type="button" data-writing-back>
-          再读一遍
+          返回编辑
         </button>
       </div>
       <p role="status" data-writing-publish-state></p>

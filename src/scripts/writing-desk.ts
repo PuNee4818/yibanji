@@ -10,7 +10,7 @@ type Row = WritingDraft & { excerpt?: string; localOnly?: boolean; localDirty?: 
 let rows: Row[] = [],
   tab = 'draft';
 async function load() {
-  state.textContent = '正在整理书桌…';
+  state.textContent = '正在加载草稿与作品…';
   const local = listLocalWriting(owner);
   let remote: Row[] = [];
   try {
@@ -76,11 +76,11 @@ function render() {
       ),
     );
     const h = el('h2');
-    h.append(link(row.title || '未命名的文字', '/write/?draft=' + row.id));
+    h.append(link(row.title || '未命名草稿', '/write/?draft=' + row.id));
     copy.append(
       h,
-      el('p', row.excerpt || row.summary || '第一行，还在等你。'),
-      el('small', '上次落笔 · ' + new Date(row.updated_at!).toLocaleString('zh-CN'), 'muted'),
+      el('p', row.excerpt || row.summary || '还没有正文'),
+      el('small', '上次编辑 · ' + new Date(row.updated_at!).toLocaleString('zh-CN'), 'muted'),
     );
     actions.append(
       link(tab === 'draft' ? '继续写作 →' : '编辑', '/write/?draft=' + row.id, 'button'),
@@ -91,7 +91,7 @@ function render() {
       withdraw.addEventListener('click', async () => {
         if (
           !window.confirm(
-            '撤回后，作品将从广场、搜索和公开主页中隐藏。文字仍保留在你的书桌上，确定撤回？',
+            '撤回后，作品将从广场、搜索和公开主页中隐藏。作品仍保留在“我的创作”中，确定撤回？',
           )
         )
           return;
@@ -111,7 +111,7 @@ function render() {
     remove.addEventListener('click', async () => {
       if (
         !window.confirm(
-          '永久删除《' + (row.title || '未命名的文字') + '》及其互动记录？此操作无法撤销。',
+          '永久删除《' + (row.title || '未命名草稿') + '》及其互动记录？此操作无法撤销。',
         )
       )
         return;
@@ -134,11 +134,11 @@ function render() {
   if (!visible.length) {
     const empty = emptySubmissions(
       tab === 'draft'
-        ? '一张空白的稿纸，也是一种开始。'
+        ? '还没有草稿'
         : tab === 'published'
-          ? '写下第一篇，与读者相见。'
+          ? '还没有已发布的作品'
           : '这里还没有撤回的作品。',
-      '每一篇文字，都从第一行开始。',
+      '想好了可以发表，没写完就先存着。',
     );
     empty.append(link('开始写作 ↗', '/write/', 'button'));
     list.append(empty);

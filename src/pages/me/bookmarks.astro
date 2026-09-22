@@ -8,9 +8,10 @@ import { book } from '../../lib/book';
 <Layout title="我的收藏">
   <header class="page-head">
     <h1>我的收藏</h1>
-    <p>那些想再读一次的文字。</p>
+    <p>读到喜欢的地方，折个角。</p>
   </header>
-  <p id="bookmark-empty">还没有收藏。读到喜欢的篇章，可以为它留一枚书签。</p>
+  <p data-library-loading role="status">正在读取收藏…</p>
+  <p id="bookmark-empty" hidden>还没有收藏。点击文章中的“收藏”，下次就能在这里找到。</p>
   <ArticleList articles={book.articles} bookmarkList />
   <noscript>启用 JavaScript 后，可查看此设备保存的收藏。</noscript>
   <script>

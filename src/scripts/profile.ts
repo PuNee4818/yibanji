@@ -20,12 +20,16 @@ if (profile) {
   const ownerActions = profile.querySelector<HTMLElement>('[data-profile-owner]')!;
   const previewButton = profile.querySelector<HTMLButtonElement>('[data-profile-preview]')!;
   let growthLoaded = false;
+  const growthPanel = profile.querySelector<HTMLDetailsElement>('.profile-growth-panel')!;
+  growthPanel.addEventListener('toggle', () => {
+    if (growthPanel.open) void loadGrowth();
+  });
   document.addEventListener('growth-updated', (event) => {
     if (!owner) return;
     const progress = (event as CustomEvent<Growth>).detail.progress;
     profile!.querySelector('[data-profile-level]')!.replaceChildren(levelBadge(progress.level));
     growthLoaded = false;
-    if (!preview) void loadGrowth();
+    if (!preview && growthPanel.open) void loadGrowth();
   });
   function displayMode() {
     ownerActions.hidden = !owner || preview;
@@ -42,7 +46,7 @@ if (profile) {
       follow.disabled = true;
       follow.textContent = preview ? '关注（预览）' : '关注';
     }
-    if (owner && !preview) void loadGrowth();
+    if (owner && !preview && growthPanel.open) void loadGrowth();
   }
   function address() {
     const params = new URLSearchParams({ stream });
@@ -122,7 +126,7 @@ if (profile) {
         if (!append) activity.replaceChildren();
         page = nextPage;
         for (const work of works) activity.append(submissionCard(work));
-        if (!works.length && !append) activity.textContent = '还没有公开作品，文字正在酝酿中。';
+        if (!works.length && !append) activity.textContent = '还没有公开作品。';
         more.hidden = works.length < 20;
         return;
       }

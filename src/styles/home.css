@@ -18,12 +18,17 @@
 }
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 22px;
   align-items: center;
   margin-top: 28px;
 }
+.hero-actions > a {
+  white-space: nowrap;
+}
 .hero-actions > span {
   font-size: 12px;
+  white-space: nowrap;
 }
 .red-dot {
   display: inline-block;

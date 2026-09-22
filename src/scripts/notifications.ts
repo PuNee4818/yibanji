@@ -30,7 +30,11 @@ if (list && user) {
       return;
     }
     if (!append) list!.replaceChildren();
-    if (!data.length && !append) list!.textContent = '还没有消息。写下感想，静候回声。';
+    if (!data.length && !append)
+      list!.textContent =
+        filter.value === 'all'
+          ? '还没有消息。有新的回复、点赞或关注，会在这里通知你。'
+          : '这一类消息暂时为空。';
     for (const n of data) {
       const card = document.createElement('article');
       card.className = 'notification-card';
@@ -98,17 +102,15 @@ document.addEventListener('report-content', (event) => {
   document.querySelector('[data-report-result]')!.textContent = '';
   dialog?.showModal();
 });
-document
-  .querySelectorAll<HTMLElement>('[data-report-profile]')
-  .forEach((b) =>
-    b.addEventListener('click', () =>
-      document.dispatchEvent(
-        new CustomEvent('report-content', {
-          detail: { kind: 'profile', id: b.dataset.reportProfile },
-        }),
-      ),
+document.querySelectorAll<HTMLElement>('[data-report-profile]').forEach((b) =>
+  b.addEventListener('click', () =>
+    document.dispatchEvent(
+      new CustomEvent('report-content', {
+        detail: { kind: 'profile', id: b.dataset.reportProfile },
+      }),
     ),
-  );
+  ),
+);
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!target) return;

@@ -34,12 +34,12 @@ export function setupProfileEditor(root: HTMLElement) {
       root.dataset.profileName = name;
       root.dataset.profileBio = bio;
       root.querySelector('[data-profile-display-name]')!.textContent = name;
-      root.querySelector('[data-profile-bio-text]')!.textContent = bio || '在字里行间，慢慢相识。';
+      root.querySelector('[data-profile-bio-text]')!.textContent = bio || '还没有填写简介。';
       root.querySelector('.profile-avatar')!.textContent = Array.from(name)[0] || '读';
       document.title = name + ' · 一班集';
       dialog.close();
       announce('个人资料已更新。');
-      await refreshUser();
+      await refreshUser(true);
     } catch (error) {
       status.textContent = (error as Error).message;
     } finally {

@@ -20,11 +20,20 @@ export const supabase = createClient(url, key, {
   },
 });
 // Local session data controls presentation only. Every read/write is authorized again by Supabase JWT + RLS/RPC.
+let sessionRequest: ReturnType<typeof supabase.auth.getSession> | undefined;
 export async function getCurrentUser() {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return session?.user ?? null;
+  // Deduplicate concurrent boot reads, but never retain an identity across auth changes.
+  const request = (sessionRequest ??= supabase.auth.getSession());
+  try {
+    const {
+      data: { session },
+      error,
+    } = await request;
+    if (error) throw error;
+    return session?.user ?? null;
+  } finally {
+    if (sessionRequest === request) sessionRequest = undefined;
+  }
 }
 export function friendlyError(error: { message?: string; code?: string } | null): string {
   const message = error?.message ?? '';

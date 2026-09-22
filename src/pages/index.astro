@@ -12,8 +12,8 @@ const descriptions: Record<string, string> = {
   诗笺: '有些心事，只写成诗。',
   志异: '寻常之外，另有天地。',
   迷梦: '梦醒了，故事还在。',
-  天外: '把想象交给远方。',
-  剪刀: '一个世界的几种回声。',
+  天外: '地球以外，故事照常。',
+  剪刀: '同一个世界，各有各的讲法。',
 };
 ---
 
@@ -24,9 +24,9 @@ const descriptions: Record<string, string> = {
         <span class="red-dot"></span> 一班集
       </p>
       <h1>
-        那时的风，
+        各有笔墨，
         <br />
-        还在纸上。
+        共跃纸上。
       </h1>
       <p class="hero-description">
         课桌边的诗，晚自习的故事。
@@ -65,13 +65,13 @@ const descriptions: Record<string, string> = {
   <section class="home-reading">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">有人在读，也有人回望</p>
-        <h2>此刻翻开的几页</h2>
+        <p class="eyebrow">本周阅读</p>
+        <h2>这几篇，不妨读读</h2>
       </div>
       <a href="/catalog/">全部作品 ↗</a>
     </div>
     <p class="muted small" data-hot-caption>
-      先从这些作品读起，热文正在更新。
+      先读这几篇，看看哪篇合你心意。
     </p>
     <div class="hot-works" data-hot-works>
       {['a03', 'a10', 'tianhuaban'].map((id, i) => {
@@ -119,7 +119,7 @@ const descriptions: Record<string, string> = {
   </section>
   <section data-home-bookmarks hidden>
     <div class="section-heading">
-      <h2>夹在书里的几页</h2>
+      <h2>留着，下次再读</h2>
       <a href="/me/bookmarks/">
         我的收藏 <span data-home-bookmark-count></span> →
       </a>
@@ -128,21 +128,21 @@ const descriptions: Record<string, string> = {
   </section>
   <section class="community-invitation">
     <div>
-      <p class="eyebrow">读到这里，不妨坐一会儿</p>
-      <h2>有句话，想和你说。</h2>
-      <p>聊聊刚读到的故事，也聊聊你自己的。</p>
+      <p class="eyebrow">书友之间</p>
+      <h2>读完了，聊几句。</h2>
+      <p>哪一句让你停了停？也可以聊聊近况。</p>
     </div>
     <a class="button" href="/community/">
-      去书友之间 <Icon name="arrow" size={18} />
+      去社区聊聊 <Icon name="arrow" size={18} />
     </a>
   </section>
   <section class="recent-section">
     <div class="section-heading">
-      <h2>纸上的回声</h2>
+      <h2>最近的讨论</h2>
       <a href="/community/?tab=latest">最近讨论 →</a>
     </div>
     <div data-recent-discussions class="recent-grid">
-      正在翻开讨论…
+      正在加载讨论…
     </div>
   </section>
   <script>

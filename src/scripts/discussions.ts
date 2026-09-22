@@ -50,7 +50,7 @@ if (section) {
       if (!rows.length) {
         const p = document.createElement('p');
         p.className = 'muted';
-        p.textContent = '还没有讨论。第一段感想，或许就从你开始。';
+        p.textContent = '还没有评论。读到这里，你有什么想说的？';
         list.append(p);
       }
       const reply = (item: Discussion) => {
@@ -139,7 +139,7 @@ if (section) {
       page = 0;
       await refresh();
       document.dispatchEvent(new Event('discussion-mutated'));
-      announce('这段话已经留在这里了。');
+      announce('评论已发布。');
     } catch (error) {
       announce((error as Error).message);
     } finally {

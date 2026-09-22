@@ -16,13 +16,13 @@ const { data: profile, error } = await supabase
   .eq('username', Astro.params.username ?? '')
   .maybeSingle();
 if (!profile) Astro.response.status = error ? 503 : 404;
-const { data: progress } = profile
-  ? await supabase.from('user_progress').select('level').eq('user_id', profile.id).maybeSingle()
-  : { data: null };
+const [{ data: progress }, { data: authored }] = profile
+  ? await Promise.all([
+      supabase.from('user_progress').select('level').eq('user_id', profile.id).maybeSingle(),
+      supabase.from('articles').select('id').eq('source', 'catalog').eq('author_id', profile.id),
+    ])
+  : [{ data: null }, { data: [] }];
 const level = progress ? normalizedLevel(progress.level) : null;
-const { data: authored } = profile
-  ? await supabase.from('articles').select('id').eq('source', 'catalog').eq('author_id', profile.id)
-  : { data: [] };
 const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id === a.id));
 ---
 
@@ -67,7 +67,7 @@ const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id 
             {profile.author_verified && <AuthorBadge />}
           </div>
           <p class="profile-bio" data-profile-bio-text>
-            {profile.bio || '在字里行间，慢慢相识。'}
+            {profile.bio || '还没有填写简介。'}
           </p>
           <p class="profile-joined">
             加入于{' '}
@@ -85,7 +85,7 @@ const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id 
             预览他人视角
           </button>
         </div>
-        <div class="profile-public-actions" data-profile-public-actions>
+        <div class="profile-public-actions" data-profile-public-actions hidden>
           <button
             class="button primary"
             data-follow-user={profile.id}
@@ -110,7 +110,6 @@ const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id 
           <span>粉丝</span>
           <Icon name="arrow" size={14} />
         </button>
-        <span class="profile-social-note">文字之外，还有同路人。</span>
       </nav>
       <section class="profile-private" data-profile-private hidden aria-label="我的成长">
         <details class="profile-growth-panel">
@@ -119,7 +118,7 @@ const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id 
             <small>查看等级与成长记录 · 仅自己可见</small>
           </summary>
           <div id="profile-growth" aria-live="polite">
-            正在翻开成长记录…
+            正在加载墨迹记录…
           </div>
           <LevelGallery />
           <a href="/me/rewards/">查看奖励与任务 →</a>
@@ -152,7 +151,7 @@ const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id 
             评论
           </a>
         </nav>
-        <div data-profile-activity>正在翻开公开讨论…</div>
+        <div data-profile-activity>正在加载公开活动…</div>
         <button data-profile-more hidden>
           查看更多活动
         </button>

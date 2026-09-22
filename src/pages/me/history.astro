@@ -9,7 +9,8 @@ import { book } from '../../lib/book';
     <h1>读到这里</h1>
     <p>从上次停下的地方继续。</p>
   </header>
-  <p id="history-empty">还没有阅读记录，去目录挑一篇吧。</p>
+  <p data-library-loading role="status">正在读取阅读记录…</p>
+  <p id="history-empty" hidden>还没有阅读记录，去目录挑一篇吧。</p>
   <ul class="article-list">
     {book.articles.map((a) => (
       <li data-history-item={a.id} hidden>

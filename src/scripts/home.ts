@@ -30,7 +30,7 @@ if (response?.ok) {
           id: data.id,
           title: data.title,
           author: data.display_name,
-          category: '自由来稿',
+          category: '自由投稿',
           genre: data.genre,
           excerpt: data.summary,
           chapters: 0,
@@ -73,7 +73,7 @@ if (response?.ok) {
             id: item.id,
             title: item.title,
             author: item.display_name,
-            category: '自由来稿',
+            category: '自由投稿',
             genre: item.genre,
             excerpt: item.summary,
             chapters: 0,
@@ -141,7 +141,7 @@ if (response?.ok) {
         caption.textContent = '本周还没有热文，先从这几篇读起。';
         return;
       }
-      caption.textContent = '本周热文 · 根据真实阅读与讨论更新';
+      caption.textContent = '本周热文 · 根据阅读与讨论更新';
       const list = document.querySelector('[data-hot-works]')!;
       list.replaceChildren();
       const genres: Record<string, string> = {

@@ -91,13 +91,13 @@ export function writingStyle(genre: string, indent = true) {
   };
 }
 export const writingHints: Record<string, string> = {
-  essay: '自动分段、首行缩进与首字下沉；空行会整理为舒适段距。',
-  fiction: '紧凑段距、首行缩进；“第…章 / 节 / 回”独立成行时自动生成章节目录。',
-  poetry: '保留每一次断行、空行与行首留白，左对齐，不使用首字下沉。',
-  classical: '诗句居中，保留原有断行，留出更从容的诗行间距。',
-  ci: '保留上下阕与断行，采用居中版心、左对齐诗行。',
+  essay: '自动分段与首字下沉；首行缩进可自行设置。',
+  fiction: '段距较紧凑，首行缩进可选；“第…章 / 节 / 回”独立成行时生成章节目录。',
+  poetry: '保留换行、空行与行首空格；诗行左对齐，不使用首字下沉。',
+  classical: '诗句居中，保留原有换行与空行。',
+  ci: '保留分阕与换行；整阕居中，阕内左对齐。',
   letter: '保留称谓与落款分行，正文采用宽松段距，不使用首字下沉。',
-  diary: '自然分段、首行缩进，保留日记的轻松节奏。',
+  diary: '自动分段，首行缩进可选，不使用首字下沉。',
   script: '角色与对白逐行排版，不缩进，不使用首字下沉。',
 };
 export function formattedWriting(body: string, genre: string) {

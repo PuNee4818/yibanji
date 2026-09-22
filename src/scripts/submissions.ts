@@ -54,11 +54,11 @@ async function load(append = false) {
     );
   document.querySelector('#submission-feed-title')!.textContent =
     sort.value === 'popular'
-      ? '被读者珍藏的文字'
+      ? '近期热门'
       : sort.value === 'following'
-        ? '关注作者的新篇章'
-        : '新落在纸上的文字';
-  state.textContent = '正在寻找文字…';
+        ? '关注作者的新作'
+        : '刚落在纸上的文字';
+  state.textContent = '正在加载作品…';
   if (!append) list.replaceChildren();
   try {
     if (sort.value === 'following' && !(await getCurrentUser())) {
@@ -93,17 +93,24 @@ async function load(append = false) {
     more.hidden = rows.length < 20;
     if (!list.childElementCount) {
       const filtered = Boolean(query.value || genre.value || tag.value || short.checked);
+      const following = sort.value === 'following';
       const empty = emptySubmissions(
-        filtered ? '换个角度，也许就遇见了。' : '第一篇文字，等你落笔。',
+        filtered ? '没有找到相关作品' : following ? '关注的作者还没有新作' : '还没有公开作品',
         filtered
-          ? '试试其他文体或关键词，也可以清除筛选，随意翻一翻。'
-          : '把一首诗、一段往事，或一个故事留在这里。',
+          ? '换个关键词，或清除筛选再看看。'
+          : following
+            ? '可以先去最新作品里逛逛，遇到喜欢的作者就关注。'
+            : '想写的那件小事，可以成为这里的第一篇。',
       );
-      empty.append(link('写一篇文章 ↗', '/write/', 'button'));
+      empty.append(
+        following || filtered
+          ? link('浏览全部作品 →', '/submissions/', 'button')
+          : link('写一篇文章 ↗', '/write/', 'button'),
+      );
       list.append(empty);
     }
     state.textContent = rows.length
-      ? `已展开 ${list.querySelectorAll('.submission-card').length} 篇作品`
+      ? `已显示 ${list.querySelectorAll('.submission-card').length} 篇作品`
       : '暂时没有更多作品';
   } catch (error) {
     if (request !== version) return;
@@ -150,7 +157,7 @@ random.addEventListener('click', async () => {
       p_short: short.checked,
     });
     if (rows[0]) location.href = submissionUrl(rows[0].id);
-    else state.textContent = '这个范围还没有来稿，试试其他筛选。';
+    else state.textContent = '当前筛选下没有作品，换个条件再试试。';
   } catch (error) {
     state.textContent = (error as Error).message;
   } finally {
@@ -203,8 +210,8 @@ async function highlights() {
     if (!data.popular.length)
       target.append(
         emptySubmissions(
-          '好文字的下一站，是这里。',
-          '还没有公开作品。写下第一篇，让故事开始流动。',
+          '这里还空着，留给新作。',
+          '还没有公开作品。发表后，你的文章会出现在下方列表中。',
         ),
       );
     const topics = document.querySelector<HTMLElement>('[data-submission-topics]')!;

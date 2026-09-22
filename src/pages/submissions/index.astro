@@ -6,23 +6,23 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
 ---
 
 <Layout
-  title="自由来稿"
-  description="把想说的话，写成可以重逢的一页。在一班集阅读与发表散文、诗歌、小说和更多文字。"
+  title="自由投稿"
+  description="在一班集发表散文、诗歌、小说，阅读新作、关注作者。草稿随时保存，作品发布后即可阅读。"
 >
   <section class="submission-masthead">
     <div>
       <p class="eyebrow">
-        <span class="red-dot"></span> 一班集 · 自由来稿
+        <span class="red-dot"></span> 一班集 · 自由投稿
       </p>
       <h1>
-        让文字，
+        还有些话，
         <br />
-        在这里相遇。
+        想写下来。
       </h1>
       <p class="submission-intro">
-        生活里未说完的话，想象中未走完的路。
+        一件小事，也可以写得很长。
         <br />
-        写下来，总有人会读到。
+        散文、诗歌、小说，都欢迎。没写完的，先存为草稿。
       </p>
       <div class="submission-actions">
         <a class="button primary" href="/write/">
@@ -37,11 +37,11 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
   <section class="submission-discovery" aria-labelledby="submission-feed-title">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">从一页文字，认识一个人</p>
-        <h2 id="submission-feed-title">新落在纸上的文字</h2>
+        <p class="eyebrow">读点新的</p>
+        <h2 id="submission-feed-title">刚落在纸上的文字</h2>
       </div>
       <button type="button" data-submission-random class="quiet-button">
-        随缘读一篇 ↗
+        偶遇一篇 ↗
       </button>
     </div>
     <nav class="submission-feed-tabs" aria-label="作品动态">
@@ -58,7 +58,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
     <form class="submission-filters" id="submission-filters" role="search">
       <div class="submission-search">
         <label class="sr-only" for="submission-query">
-          搜索来稿
+          搜索投稿作品
         </label>
         <input
           id="submission-query"
@@ -67,7 +67,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
           maxlength="100"
           placeholder="篇名、作者，或记得的一句话"
         />
-        <button type="submit">寻找文字 →</button>
+        <button type="submit">搜索 →</button>
       </div>
       <div class="submission-filter-row">
         <label>
@@ -103,7 +103,7 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
     </form>
     <div class="submission-feed-status">
       <p role="status" data-submission-status>
-        正在翻开来稿…
+        正在加载作品…
       </p>
       <button type="button" data-submission-reset class="quiet-button" hidden>
         清除筛选
@@ -111,10 +111,10 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
     </div>
     <div class="submission-grid" data-submission-list aria-busy="true"></div>
     <button class="submission-more" data-submission-more hidden>
-      再读一些
+      查看更多作品
     </button>
     <noscript>
-      <p>请启用 JavaScript 浏览与搜索最新来稿。通过作品链接可以直接阅读全文。</p>
+      <p>请启用 JavaScript 浏览与搜索投稿作品。通过作品链接可以直接阅读全文。</p>
     </noscript>
   </section>
   <script>

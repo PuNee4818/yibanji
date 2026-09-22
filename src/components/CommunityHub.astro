@@ -11,9 +11,9 @@ const posts = stream === 'posts';
 <Layout title={posts ? '社区 · 帖子' : '社区 · 文章评论'}>
   <header class="page-head community-head">
     <div>
-      <p class="eyebrow">文字之外，还有回声</p>
+      <p class="eyebrow">一班集 · 社区</p>
       <h1>书友之间</h1>
-      <p>{posts ? '开一个话题，把想说的话慢慢写完。' : '读后的一句话，留在原文旁边。'}</p>
+      <p>{posts ? '书可以合上，话还可以接着聊。' : '读后的一句话，留在原文旁边。'}</p>
     </div>
     <a class="button primary" href="/community/new/">
       <Icon name="note" size={18} />
@@ -25,7 +25,7 @@ const posts = stream === 'posts';
       帖子广场 <small>独立话题与交流</small>
     </a>
     <a href="/community/comments/" aria-current={!posts ? 'page' : undefined}>
-      文章评论 <small>从作品继续读起</small>
+      文章评论 <small>查看作品下的讨论</small>
     </a>
   </nav>
   <div class="community-layout">
@@ -36,7 +36,7 @@ const posts = stream === 'posts';
             <Icon name="note" size={36} />
           </span>
           <div>
-            <h2>你的这一页，写些什么？</h2>
+            <h2>最近读到了什么？</h2>
             <p>开一个新话题，或去文章下留一段读后感。</p>
             <a href={'/auth/?next=' + encodeURIComponent('/community/new/')} class="text-link">
               登录参与 →
@@ -74,7 +74,7 @@ const posts = stream === 'posts';
         )}
       </div>
       <p class="muted small" data-feed-description>
-        正在翻开{posts ? '帖子' : '文章评论'}…
+        正在加载{posts ? '帖子' : '文章评论'}…
       </p>
       <div data-feed aria-live="polite">
         <div class="skeleton" role="status" aria-label="正在加载讨论"></div>
@@ -85,9 +85,9 @@ const posts = stream === 'posts';
     </section>
     <aside>
       <section class="community-guide">
-        <span class="eyebrow">初次见面</span>
-        <h2>{posts ? '让一个话题展开' : '从一篇文章开始'}</h2>
-        <p>帖子有自己的标题和讨论页；文章评论会带你回到对应的原文。</p>
+        <span class="eyebrow">逛逛社区</span>
+        <h2>{posts ? '总有一句，想接着说' : '从一篇文章开始'}</h2>
+        <p>想起一个问题，可以单独发帖；读到一处有感触，就在原文下聊聊。</p>
         <a href="/catalog/">挑一篇来读 →</a>
         <a href="/me/rewards/">看看墨迹与等级 →</a>
       </section>
