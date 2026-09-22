@@ -58,8 +58,8 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
     await page.goto('/me/history/');
     await live(page.locator('[data-history-item="a03"]')).toBeVisible();
     await page.goto(`/u/reader_${v!.id.replaceAll('-', '')}/`);
-    await page.locator('[data-level-preview="5"]').click();
-    await expect(page.locator('[data-level-example]')).toContainText('藏卷');
+    await expect(page.locator('[data-profile-private]')).toBeHidden();
+    await expect(page.locator('[data-profile-edit]')).toBeHidden();
     await page.locator('[data-follow-user]').click();
     await live(page.locator('[data-follow-user]')).toHaveAttribute('aria-pressed', 'true');
     await page.goto('/community/?tab=latest');

@@ -11,7 +11,8 @@ test('real login, profile edit, public profile and logout', async ({ page }) => 
     await page.getByLabel('邮箱', { exact: true }).fill(user.email);
     await page.getByLabel('密码', { exact: true }).fill(user.password);
     await page.getByRole('button', { name: '继续', exact: true }).click();
-    await expectLive(page).toHaveURL(/\/me\/settings\//, { timeout: 30000 });
+    await expectLive(page).toHaveURL(/\/u\/reader_[a-f0-9]+\//, { timeout: 30000 });
+    await page.locator('[data-profile-edit]').click();
     await expectLive(page.locator('#profile-form')).toBeVisible();
     await page.getByLabel('显示名称', { exact: true }).fill('真实联调书友');
     await page.getByLabel('个人简介', { exact: true }).fill('阅读，也交流。');
@@ -41,6 +42,7 @@ test('real login, profile edit, public profile and logout', async ({ page }) => 
       page.getByRole('heading', { name: '真实联调书友', exact: true }),
     ).toBeVisible();
     await expectLive(page.locator('#main')).not.toContainText(user.email);
+    await page.locator('.profile-growth-panel summary').click();
     await expectLive(page.locator('.badge-wall')).toContainText('★ 初次赴约');
     await page.locator('.user-menu summary').click();
     await page.getByRole('button', { name: '退出登录' }).click();

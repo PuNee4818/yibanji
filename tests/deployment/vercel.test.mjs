@@ -11,6 +11,7 @@ test('Vercel serves the rebuilt homepage and community static routes', () => {
     'community/index.html',
     'auth/index.html',
     'me/rewards/index.html',
+    'me/index.html',
     'articles/a01/index.html',
     'articles/tianhuaban/20/index.html',
   ]) {
@@ -18,6 +19,16 @@ test('Vercel serves the rebuilt homepage and community static routes', () => {
   }
   const home = readFileSync(join(root, 'index.html'), 'utf8');
   assert.ok(home.includes('href="/community/'));
+  assert.ok(!home.includes('第二版'));
+  for (const asset of [
+    'favicon.svg',
+    'favicon.ico',
+    'apple-touch-icon.png',
+    'site.webmanifest',
+    'icon-192.png',
+    'icon-512.png',
+  ])
+    assert.ok(existsSync(join(root, asset)), asset);
   assert.ok(home.includes('href="/auth/'));
   assert.doesNotMatch(home, /(?:src|href)="(?:\.\/)?assets\//);
   assert.ok(!existsSync(join(root, 'assets')), 'Legacy SPA assets must not be deployed');

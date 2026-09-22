@@ -7,6 +7,7 @@
 @import './home.css' layer(pages);
 @import './reader.css' layer(pages);
 @import './community.css' layer(pages);
+@import './profile.css' layer(pages);
 @import './search.css' layer(pages);
 @import './pdf.css' layer(pages);
 @import './motion.css' layer(motion);

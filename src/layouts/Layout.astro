@@ -20,7 +20,11 @@ const path = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f8f4eb" />
+    <meta name="theme-color" content="#f8f5ee" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href="/fonts/ReadingSerif.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title === '一班集' ? title : `${title} · 一班集`}</title>
     <script is:inline>
@@ -45,6 +49,7 @@ const path = Astro.url.pathname;
     </a>
     <header class="site-header">
       <a class="brand" href="/" aria-label="一班集首页">
+        <img class="brand-mark" src="/favicon.svg" width="30" height="30" alt="" />
         一班集<span>文字留住时光</span>
       </a>
       <nav aria-label="主导航">
@@ -111,7 +116,7 @@ const path = Astro.url.pathname;
             <a href="/auth/" data-guest-only>
               登录 / 注册
             </a>
-            <a href="/me/settings/" data-my-profile data-auth-only hidden>
+            <a href="/me/" data-my-profile data-auth-only hidden>
               我的主页
             </a>
             <a href="/me/bookmarks/">我的收藏</a>
@@ -148,7 +153,7 @@ const path = Astro.url.pathname;
       <div class="footer-links">
         <a href="/catalog/">文集目录</a>
         <a href="/community/guidelines/">社区规范</a>
-        <span>第二版 · 九卷五十四篇</span>
+        <span>九卷 · 五十四篇</span>
       </div>
     </footer>
     <div id="status" role="status" aria-live="polite"></div>

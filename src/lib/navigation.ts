@@ -1,7 +1,7 @@
 export function safeLocalPath(
   value: string | null,
   origin: string,
-  fallback = '/me/settings/',
+  fallback = '/me/',
 ): string {
   if (
     !value ||

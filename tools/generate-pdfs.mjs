@@ -42,7 +42,7 @@ async function create(article, chapter) {
     info: {
       Title: chapter ? article.title + ' · ' + chapter.title : article.title,
       Author: article.author,
-      Subject: '一班集 · 第二版',
+      Subject: '一班集',
       Creator: '一班集 · 阅读版',
     },
   });
@@ -139,7 +139,7 @@ async function create(article, chapter) {
   doc
     .fontSize(10)
     .fillColor(accent)
-    .text('一班集  /  第二版  /  ' + article.category, left, y, { width });
+    .text('一班集  /  ' + article.category, left, y, { width });
   y += 36;
   const title = chapter ? chapter.title : article.title;
   doc.fontSize(27).fillColor(ink).text(title, left, y, { width, lineGap: 5 });

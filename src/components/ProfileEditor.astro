@@ -1,0 +1,53 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog id="profile-edit-dialog" class="profile-edit-dialog" aria-labelledby="profile-edit-title">
+  <header class="profile-dialog-head">
+    <div>
+      <p class="eyebrow">关于你</p>
+      <h2 id="profile-edit-title">编辑个人资料</h2>
+    </div>
+    <form method="dialog">
+      <button class="icon-button" aria-label="关闭个人资料">
+        <Icon name="close" />
+      </button>
+    </form>
+  </header>
+  <form id="profile-form" class="form-stack">
+    <div class="profile-field">
+      <label for="profile-username">
+        主页用户名
+        <input
+          id="profile-username"
+          name="username"
+          pattern="[a-z][a-z0-9_]{2,39}"
+          minlength="3"
+          maxlength="40"
+          required
+          aria-describedby="profile-username-help"
+        />
+      </label>
+      <small id="profile-username-help">3–40 位小写字母、数字或下划线，以字母开头。</small>
+    </div>
+    <label for="profile-name">
+      显示名称
+      <input id="profile-name" name="display_name" maxlength="60" required />
+    </label>
+    <label for="profile-bio">
+      个人简介
+      <textarea
+        id="profile-bio"
+        name="bio"
+        maxlength="280"
+        rows="4"
+        placeholder="写写自己，也写写喜欢的事。"
+      ></textarea>
+    </label>
+    <p class="muted small">这些资料会显示在公开主页。邮箱和成长详情只对自己可见。</p>
+    <button class="button primary" type="submit">
+      保存个人资料
+    </button>
+    <p data-profile-save-status role="status"></p>
+  </form>
+</dialog>

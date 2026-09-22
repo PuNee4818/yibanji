@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="我的主页">
+  <section class="empty-state">
+    <h1>我的主页</h1>
+    <p data-profile-redirect role="status">
+      正在打开你的主页…
+    </p>
+    <button data-profile-redirect-retry hidden>
+      重新打开
+    </button>
+  </section>
+  <script>
+    import { supabase, getCurrentUser } from '../../lib/supabase';
+    const message = document.querySelector('[data-profile-redirect]')!;
+    const retry = document.querySelector<HTMLButtonElement>('[data-profile-redirect-retry]')!;
+    async function openProfile() {
+      retry.hidden = true;
+      const user = await getCurrentUser();
+      if (!user) {
+        location.replace('/auth/?next=/me/');
+        return;
+      }
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single();
+      if (error || !data) {
+        message.textContent = '暂时无法打开主页，请重试。';
+        retry.hidden = false;
+        return;
+      }
+      location.replace('/u/' + encodeURIComponent(data.username) + '/');
+    }
+    retry.addEventListener('click', () => void openProfile());
+    void openProfile();
+  </script>
+</Layout>

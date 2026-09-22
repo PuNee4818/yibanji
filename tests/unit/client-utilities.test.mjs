@@ -6,7 +6,7 @@ import { normalizePreferences, defaults } from '../../src/lib/preferences.ts';
 import {safeLocalPath} from '../../src/lib/navigation.ts';
 
 test('login destinations reject protocol-relative, control-character and backslash redirects',()=>{
- for(const input of ['//evil.example','/\n/evil.example','/\\evil.example','https://evil.example',null])assert.equal(safeLocalPath(input,'https://example.com'),'/me/settings/');
+ for(const input of ['//evil.example','/\n/evil.example','/\\evil.example','https://evil.example',null])assert.equal(safeLocalPath(input,'https://example.com'),'/me/');
  assert.equal(safeLocalPath('/articles/a01/?resume=1#comments','https://example.com'),'/articles/a01/?resume=1#comments');
 });
 
