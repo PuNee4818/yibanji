@@ -40,6 +40,7 @@ if (root) {
       for (const [value, label] of [
         [s.view_count, '次阅读'],
         [s.like_count, '人点赞'],
+        [s.bookmark_count, '人收藏'],
         [s.egg_count, '枚臭鸡蛋'],
         [s.comment_count, '条评论'],
       ] as const) {

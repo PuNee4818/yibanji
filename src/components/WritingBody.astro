@@ -1,5 +1,5 @@
 ---
-import { writingBlocks, inlineWriting, isVerse } from '../lib/submissions';
+import { formattedWriting, inlineWriting, writingStyle } from '../lib/submissions';
 interface Props {
   body: string;
   genre: string;
@@ -8,18 +8,17 @@ interface Props {
 const { body, genre, indent = true } = Astro.props;
 ---
 
-<div
-  class:list={[
-    'writing-prose',
-    { 'writing-verse': isVerse(genre), 'writing-indent': indent && !isVerse(genre) },
-  ]}
->
-  {writingBlocks(body, isVerse(genre)).map((block, i) => {
+<div class={writingStyle(genre, indent).className}>
+  {formattedWriting(body, genre).map((block, i) => {
     const Tag = block.kind === 'heading' ? 'h2' : block.kind === 'quote' ? 'blockquote' : 'p';
     return block.kind === 'break' ? (
       <hr />
     ) : (
-      <Tag id={block.kind === 'heading' ? `writing-section-${i}` : undefined}>
+      <Tag
+        id={block.kind === 'heading' ? 'writing-section-' + i : 'writing-paragraph-' + i}
+        data-paragraph={i}
+        class:list={{ 'opening-paragraph': block.opening }}
+      >
         {inlineWriting(block.text).map((part) =>
           part.strong ? <strong>{part.text}</strong> : part.text,
         )}

@@ -64,10 +64,58 @@ export function writingBlocks(body: string, verse = false): WritingBlock[] {
       flush();
       result.push({ kind: 'break', text: '' });
     } else if (!verse && !line.trim()) flush();
-    else lines.push(line);
+    else if (!verse) {
+      flush();
+      lines.push(line.trim());
+      flush();
+    } else lines.push(line);
   }
   flush();
   return result;
+}
+export function writingStyle(genre: string, indent = true) {
+  const variant = isVerse(genre)
+    ? genre
+    : ['novel', 'story', 'flash'].includes(genre)
+      ? 'fiction'
+      : ['letter', 'diary', 'script'].includes(genre)
+        ? genre
+        : 'essay';
+  return {
+    variant,
+    className:
+      'prose writing-prose writing-' +
+      variant +
+      (indent && !isVerse(genre) && genre !== 'script' ? ' writing-indent' : ''),
+    dropcap: variant === 'essay' || variant === 'fiction',
+  };
+}
+export const writingHints: Record<string, string> = {
+  essay: '自动分段、首行缩进与首字下沉；空行会整理为舒适段距。',
+  fiction: '紧凑段距、首行缩进；“第…章 / 节 / 回”独立成行时自动生成章节目录。',
+  poetry: '保留每一次断行、空行与行首留白，左对齐，不使用首字下沉。',
+  classical: '诗句居中，保留原有断行，留出更从容的诗行间距。',
+  ci: '保留上下阕与断行，采用居中版心、左对齐诗行。',
+  letter: '保留称谓与落款分行，正文采用宽松段距，不使用首字下沉。',
+  diary: '自然分段、首行缩进，保留日记的轻松节奏。',
+  script: '角色与对白逐行排版，不缩进，不使用首字下沉。',
+};
+export function formattedWriting(body: string, genre: string) {
+  const style = writingStyle(genre);
+  let opening = true;
+  return writingBlocks(body, isVerse(genre)).map((block) => {
+    if (
+      style.variant === 'fiction' &&
+      block.kind === 'paragraph' &&
+      block.text.length <= 60 &&
+      /^第[零〇一二三四五六七八九十百千万两0-9]+[章回节卷部](?:\s|[：:、·]|$)/u.test(block.text)
+    )
+      block = { ...block, kind: 'heading' };
+    const dropcap = block.kind === 'paragraph' && opening && style.dropcap;
+    if (block.kind === 'paragraph') opening = false;
+    if (block.kind === 'heading' && style.variant === 'fiction') opening = true;
+    return { ...block, opening: dropcap };
+  });
 }
 export function inlineWriting(text: string): { text: string; strong: boolean }[] {
   return text
@@ -101,9 +149,14 @@ export interface Submission {
   published_at: string;
   updated_at: string;
   display_name: string;
+  author_verified?: boolean;
+  level?: number;
   username: string;
   like_count: number;
   comment_count: number;
+  bookmark_count?: number;
+  view_count?: number;
+  heat?: number;
 }
 export interface WritingDraft {
   id: string;

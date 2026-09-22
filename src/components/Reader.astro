@@ -1,8 +1,9 @@
 ---
 import { articleUrl, book, sections, type Article, type Chapter } from '../lib/book';
 import { genreOf, genreNames, readingMinutes } from '../lib/presentation';
+import AuthorLink from './AuthorLink.astro';
 import ReadingSettings from './ReadingSettings.astro';
-import ArticleActions from './ArticleActions.astro';
+import ReaderFrame from './ReaderFrame.astro';
 import Discussion from './Discussion.astro';
 import Prose from './Prose.astro';
 interface Props {
@@ -38,11 +39,15 @@ const next = chapter
 const words = chapter ? chapter.body.join('').length : article.chars;
 ---
 
-<div class="reading-progress" aria-hidden="true">
-  <span data-reading-progress></span>
-</div>
-<div class="reader-layout" data-genre={genreOf(article)}>
-  <aside class="reader-toc" aria-label="本卷目录">
+<ReaderFrame
+  id={article.id}
+  title={article.title}
+  genre={genreOf(article)}
+  chapter={chapter?.index}
+  chapterTitle={chapter?.title}
+  novel={!!article.chapters}
+>
+  <Fragment slot="toc">
     <details class="toc-tree" open>
       <summary>
         目录 <span>／ {category.name}</span>
@@ -88,124 +93,106 @@ const words = chapter ? chapter.body.join('').length : article.chars;
         ))}
       </nav>
     </details>
-  </aside>
-  <article class="reader" data-article-id={article.id} data-chapter={chapter?.index ?? 1}>
-    <nav class="reader-breadcrumb" aria-label="阅读位置">
-      <a href="/catalog/">文集</a>
-      <span>／</span>
-      <a href={'/catalog/#' + category.id}>{category.name}</a>
-      {chapter && (
-        <>
-          <span>／</span>
-          <a href={articleUrl(article)}>{article.title}</a>
-        </>
-      )}
-    </nav>
-    <header class="article-head">
-      <p class="eyebrow">
-        {genreNames[genreOf(article)]}{' '}
-        {chapter && ' / 第 ' + chapter.index + ' 章，共 ' + article.chapters!.length + ' 章'}
-      </p>
-      <h1>{chapter?.title ?? article.title}</h1>
-      {article.subtitle && <p class="article-subtitle">{article.subtitle}</p>}
-      <p class="muted">
-        {article.author} <span>·</span> {words.toLocaleString()} 字 <span>·</span> 约{' '}
-        {readingMinutes(words)} 分钟
-      </p>
-    </header>
-    <div class="reader-options">
-      <details>
-        <summary>
-          阅读设置 <span aria-hidden="true">Aa</span>
-        </summary>
-        <ReadingSettings />
-      </details>
-    </div>
-    {!chapter && article.chapters && (
-      <section class="novel-overview" aria-label="章节列表">
-        <p>一部长篇，从这里开始。</p>
-        <a class="button primary" href={articleUrl(article, 1)}>
-          开始读第一章 →
-        </a>
-        <h2>全书目录</h2>
-        <ol class="chapter-list">
-          {article.chapters.map((c) => (
-            <li>
-              <a href={articleUrl(article, c.index)}>{c.title}</a>
-            </li>
-          ))}
-        </ol>
-      </section>
+  </Fragment>
+  <nav class="reader-breadcrumb" aria-label="阅读位置">
+    <a href="/catalog/">文集</a>
+    <span>／</span>
+    <a href={'/catalog/#' + category.id}>{category.name}</a>
+    {chapter && (
+      <>
+        <span>／</span>
+        <a href={articleUrl(article)}>{article.title}</a>
+      </>
     )}
-    <Prose {article} {chapter} />
-    {article.notes && (
-      <aside id="article-notes" class="notes" aria-label="原文注释">
-        <h2>注释</h2>
-        {article.notes.map((note) => (
-          <p>{note}</p>
+  </nav>
+  <header class="article-head">
+    <p class="eyebrow">
+      {genreNames[genreOf(article)]}{' '}
+      {chapter && ' / 第 ' + chapter.index + ' 章，共 ' + article.chapters!.length + ' 章'}
+    </p>
+    <h1>{chapter?.title ?? article.title}</h1>
+    {article.subtitle && <p class="article-subtitle">{article.subtitle}</p>}
+    <p class="muted">
+      <AuthorLink name={article.author} badges /> <span>·</span> {words.toLocaleString()} 字{' '}
+      <span>·</span> 约 {readingMinutes(words)} 分钟
+    </p>
+  </header>
+  <div class="reader-options">
+    <details>
+      <summary>
+        阅读设置 <span aria-hidden="true">Aa</span>
+      </summary>
+      <ReadingSettings />
+    </details>
+  </div>
+  {!chapter && article.chapters && (
+    <section class="novel-overview" aria-label="章节列表">
+      <p>一部长篇，从这里开始。</p>
+      <a class="button primary" href={articleUrl(article, 1)}>
+        开始读第一章 →
+      </a>
+      <h2>全书目录</h2>
+      <ol class="chapter-list">
+        {article.chapters.map((c) => (
+          <li>
+            <a href={articleUrl(article, c.index)}>{c.title}</a>
+          </li>
         ))}
-      </aside>
-    )}
-    {article.colophon && (
-      <footer class="colophon">
-        <p>{article.colophon.signature}</p>
-        <p>{article.colophon.date}</p>
-      </footer>
-    )}
-    <div class="reading-end" aria-hidden="true">
-      · · ·
-    </div>
-    <nav class="chapter-nav" aria-label="翻章">
-      {previous ? (
-        <a data-read-prev href={previous.url}>
-          <small>← {chapter ? '上一章' : '上一篇'}</small>
-          <span>{previous.title}</span>
-        </a>
-      ) : (
-        <a href={'/catalog/#' + category.id}>
-          <small>← 返回本卷</small>
-          <span>{category.name}</span>
-        </a>
-      )}
-      {next ? (
-        <a data-read-next href={next.url}>
-          <small>{chapter ? '下一章' : '下一篇'} →</small>
-          <span>{next.title}</span>
-        </a>
-      ) : (
-        <a href="/catalog/">
-          <small>读完了</small>
-          <span>再翻一篇 →</span>
-        </a>
-      )}
-    </nav>
-    <Discussion kind="article" target={article.id} />
-    <section class="related">
-      <h2>同卷再读</h2>
-      {related.map((a) => (
-        <p>
-          <a href={articleUrl(a)}>
-            {a.title}
-            <small>{a.author}</small>
-          </a>
-        </p>
-      ))}
+      </ol>
     </section>
-  </article>
-  <ArticleActions
-    id={article.id}
-    title={article.title}
-    chapter={chapter?.index}
-    chapterTitle={chapter?.title}
-    novel={!!article.chapters}
-  />
-</div>
-<div class="focus-controls" hidden>
-  <button data-focus-settings>阅读设置 Aa</button>
-  <button class="exit-focus">
-    退出沉浸阅读 <kbd>Esc</kbd>
-  </button>
-</div>
-<script>
-  import '../scripts/reader';
-</script>
+  )}
+  <Prose {article} {chapter} />
+  {article.notes && (
+    <aside id="article-notes" class="notes" aria-label="原文注释">
+      <h2>注释</h2>
+      {article.notes.map((note) => (
+        <p>{note}</p>
+      ))}
+    </aside>
+  )}
+  {article.colophon && (
+    <footer class="colophon">
+      <p>{article.colophon.signature}</p>
+      <p>{article.colophon.date}</p>
+    </footer>
+  )}
+  <div class="reading-end" aria-hidden="true">
+    · · ·
+  </div>
+  <nav class="chapter-nav" aria-label="翻章">
+    {previous ? (
+      <a data-read-prev href={previous.url}>
+        <small>← {chapter ? '上一章' : '上一篇'}</small>
+        <span>{previous.title}</span>
+      </a>
+    ) : (
+      <a href={'/catalog/#' + category.id}>
+        <small>← 返回本卷</small>
+        <span>{category.name}</span>
+      </a>
+    )}
+    {next ? (
+      <a data-read-next href={next.url}>
+        <small>{chapter ? '下一章' : '下一篇'} →</small>
+        <span>{next.title}</span>
+      </a>
+    ) : (
+      <a href="/catalog/">
+        <small>读完了</small>
+        <span>再翻一篇 →</span>
+      </a>
+    )}
+  </nav>
+  <Discussion kind="article" target={article.id} />
+  <section class="related">
+    <h2>同卷再读</h2>
+    {related.map((a) => (
+      <p>
+        <a href={articleUrl(a)}>
+          {a.title}
+          <small>{a.author}</small>
+        </a>
+      </p>
+    ))}
+  </section>
+</ReaderFrame>

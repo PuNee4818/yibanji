@@ -45,6 +45,7 @@ test('Vercel has deployable Node functions for profiles and post details', () =>
   assert.equal(config.version, 3);
   for (const path of [
     '/u/example/',
+    '/authors/' + encodeURIComponent('王俊舾') + '/',
     '/community/posts/00000000-0000-4000-8000-000000000000/',
     '/submissions/00000000-0000-4000-8000-000000000000/',
   ]) {

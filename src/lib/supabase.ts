@@ -40,7 +40,13 @@ export function friendlyError(error: { message?: string; code?: string } | null)
   if (/INVALID_TAGS/.test(message)) return '最多选择 5 个标签，每个标签不超过 16 个字。';
   if (/DRAFT_LIMIT/.test(message)) return '草稿已达到 500 篇，请整理书桌后再创建。';
   if (/NOT_OWNER/.test(message)) return '只能编辑或删除自己发布的内容。';
-  if (/CONTENT_NOT_FOUND|POST_NOT_FOUND/.test(message)) return '这条内容已删除或暂时不可见。';
+  if (/ADMIN_REQUIRED/.test(message)) return '作者认证与身份关联仅限管理员操作。';
+  if (/PROFILE_NOT_FOUND/.test(message)) return '没有找到这个用户名，请核对账号用户名。';
+  if (/AUTHOR_ALREADY_LINKED/.test(message))
+    return '这位文集作者已经关联了其他账号，请先核对身份。';
+  if (/INVALID_AUTHOR/.test(message)) return '请选择已有文集署名，只有认证作者可以关联署名。';
+  if (/CONTENT_NOT_FOUND|POST_NOT_FOUND|ARTICLE_NOT_FOUND/.test(message))
+    return '这条内容已删除或暂时不可见。';
   if (/IDEMPOTENCY_CONFLICT/.test(message)) return '这次操作与之前的请求不一致，请刷新后再试。';
   if (/23505/.test(error?.code ?? '')) return '这个名字已经被使用，请换一个。';
   if (/Email not confirmed/i.test(message)) return '请先通过邮箱确认注册。';

@@ -1,3 +1,4 @@
+import { readingUrl } from '../lib/reading';
 import { supabase, rpc, getCurrentUser } from '../lib/supabase';
 import type { Discussion } from '../lib/discussion';
 import { discussionCard } from './discussion-render';
@@ -194,7 +195,7 @@ if (highlights) {
       for (const row of rows) {
         const p = document.createElement('p');
         const a = document.createElement('a');
-        a.href = `/articles/${row.id}/`;
+        a.href = readingUrl(row.id);
         a.textContent = row.title;
         p.append(a);
         highlights.append(p);

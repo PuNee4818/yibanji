@@ -1,5 +1,6 @@
 import { readStorage, parseBookmarks } from '../lib/storage';
 import { getCurrentUser, rpc, supabase } from '../lib/supabase';
+import { readingUrl } from '../lib/reading';
 interface Entry {
   id: string;
   title: string;
@@ -14,7 +15,28 @@ if (response?.ok) {
   const entries = (await response.json()) as Entry[];
   const find = (id: string) => entries.find((a) => a.id === id);
   const resume = document.querySelector<HTMLElement>('[data-continue-reading]');
-  function showResume(value: { id: string; chapter?: number } | null) {
+  let resumeRequest = 0,
+    bookmarksRequest = 0;
+  async function showResume(value: { id: string; chapter?: number } | null) {
+    const request = ++resumeRequest;
+    if (value && !find(value.id) && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(value.id)) {
+      const { data } = await supabase
+        .from('submission_public')
+        .select('id,title,display_name,genre,summary')
+        .eq('id', value.id)
+        .maybeSingle();
+      if (data)
+        entries.push({
+          id: data.id,
+          title: data.title,
+          author: data.display_name,
+          category: '自由来稿',
+          genre: data.genre,
+          excerpt: data.summary,
+          chapters: 0,
+        });
+    }
+    if (request !== resumeRequest) return;
     const a = value && find(value.id);
     if (!a || !resume) return;
     const chapter = Math.max(1, Math.min(a.chapters || 1, Number(value?.chapter) || 1));
@@ -25,17 +47,39 @@ if (response?.ok) {
     const title = document.createElement('strong');
     title.textContent = a.title + (a.chapters ? ' · 第 ' + chapter + ' 章' : '');
     const link = document.createElement('a');
-    link.href = '/articles/' + a.id + '/' + (a.chapters ? chapter + '/' : '') + '?resume=1';
+    link.href = readingUrl(a.id) + (a.chapters ? chapter + '/' : '') + '?resume=1';
     link.textContent = '接着读 →';
     resume.append(caption, title, link);
     resume.hidden = false;
   }
   try {
-    showResume(JSON.parse(readStorage('yb_last') ?? 'null'));
+    void showResume(JSON.parse(readStorage('yb_last') ?? 'null')).catch(() => {});
   } catch {
     /* No valid history yet. */
   }
-  function showBookmarks(ids: string[], account = false) {
+  async function showBookmarks(ids: string[], account = false) {
+    const request = ++bookmarksRequest;
+    const missing = ids
+      .filter((id) => !find(id) && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(id))
+      .slice(0, 100);
+    if (missing.length) {
+      const { data } = await supabase
+        .from('submission_public')
+        .select('id,title,display_name,genre,summary')
+        .in('id', missing);
+      for (const item of data ?? [])
+        if (!find(item.id))
+          entries.push({
+            id: item.id,
+            title: item.title,
+            author: item.display_name,
+            category: '自由来稿',
+            genre: item.genre,
+            excerpt: item.summary,
+            chapters: 0,
+          });
+    }
+    if (request !== bookmarksRequest) return;
     const section = document.querySelector<HTMLElement>('[data-home-bookmarks]')!;
     const list = section.querySelector('[data-home-bookmark-list]')!;
     const valid = ids.filter((id) => find(id));
@@ -46,14 +90,14 @@ if (response?.ok) {
       const a = find(id);
       if (a) {
         const link = document.createElement('a');
-        link.href = '/articles/' + id + '/';
+        link.href = readingUrl(id);
         link.textContent = '↗ ' + a.title;
         list.append(link);
       }
     }
     section.hidden = !list.childElementCount;
   }
-  showBookmarks(parseBookmarks(readStorage('yb_favs')));
+  void showBookmarks(parseBookmarks(readStorage('yb_favs'))).catch(() => {});
   void getCurrentUser()
     .then(async (user) => {
       if (!user) return;
@@ -71,7 +115,7 @@ if (response?.ok) {
           .limit(1),
       ]);
       if (!bookmarks.error)
-        showBookmarks(
+        await showBookmarks(
           bookmarks.data.map((x) => x.article_id),
           true,
         );
@@ -83,7 +127,7 @@ if (response?.ok) {
         /* Invalid local history. */
       }
       if (row && Date.parse(row.updated_at) > local)
-        showResume({ id: row.article_id, chapter: row.chapter });
+        await showResume({ id: row.article_id, chapter: row.chapter });
     })
     .catch(() => {});
   const caption = document.querySelector('[data-hot-caption]')!;
@@ -110,7 +154,7 @@ if (response?.ok) {
         if (!a) return;
         const link = document.createElement('a');
         link.className = 'hot-work';
-        link.href = '/articles/' + a.id + '/';
+        link.href = readingUrl(a.id);
         for (const [tag, cls, text] of [
           ['span', 'work-index', '0' + (i + 1)],
           ['span', 'eyebrow', genres[a.genre] + ' / ' + a.category],

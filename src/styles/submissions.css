@@ -1,6 +1,6 @@
 .submission-masthead {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 64px;
   align-items: center;
   padding: 64px 0 60px;
@@ -22,29 +22,40 @@
   align-items: center;
   margin-top: 28px;
 }
-.submission-letter {
-  max-width: 340px;
-  justify-self: end;
+.submission-art {
   width: 100%;
-  padding: 32px 40px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 2px 28px 2px 2px;
-  box-shadow: 8px 8px 0 color-mix(in srgb, var(--line) 25%, transparent);
+  max-width: 560px;
+  min-width: 0;
+  margin: 0;
+  justify-self: end;
 }
-.submission-letter p {
-  font: clamp(26px, 3vw, 34px)/1.9 var(--serif);
-  margin: 22px 0;
-}
-.submission-letter-rule {
+.submission-art svg {
   display: block;
-  height: 2px;
-  width: 40px;
-  background: var(--accent);
-  margin: 24px 0;
+  width: 100%;
+  height: auto;
 }
-.submission-letter small {
+.submission-art figcaption {
+  margin-top: 8px;
   color: var(--muted);
+  text-align: center;
+  font: 13px/1.8 var(--kai);
+  letter-spacing: 0.12em;
+}
+.submission-art-paper {
+  transform-origin: 290px 375px;
+  animation: paper-open 1.5s var(--ease) both;
+}
+.submission-art-sun {
+  transform-origin: 392px 124px;
+  animation: sun-rise 1.7s var(--ease) both;
+}
+.submission-art-sprig {
+  transform-origin: 441px 354px;
+  animation: leaf-sway 4s ease-in-out both;
+}
+.submission-art-pen,
+.submission-art-flight {
+  animation: settle 1.8s var(--ease) both;
 }
 .submission-discovery {
   padding: 44px 0;
@@ -383,44 +394,60 @@
   font: clamp(30px, 4vw, 44px)/1.5 var(--serif);
   overflow-wrap: anywhere;
 }
-.writing-prose {
-  font-family: var(--reading-font);
-  font-size: var(--reading-size);
-  line-height: var(--reading-line);
-  overflow-wrap: anywhere;
-}
 .writing-prose > p {
+  text-indent: 0;
+  margin-block: 0 1.4em;
   white-space: pre-wrap;
-  margin: 1.6em 0;
 }
-.writing-prose h2 {
-  font-size: 1.3em;
-  line-height: 1.6;
-  margin: 2.4em 0 1em;
-  scroll-margin-top: 80px;
+.writing-prose.writing-indent > p {
+  text-indent: 2em;
 }
-.writing-prose blockquote {
+.writing-prose.writing-fiction > p {
+  margin-bottom: 0.85em;
+}
+.writing-prose.writing-fiction > h2 {
+  text-align: center;
+  margin-block: 2.8em 1.5em;
+}
+.writing-prose.writing-poetry > p,
+.writing-prose.writing-ci > p,
+.writing-prose.writing-classical > p {
+  line-height: calc(var(--reading-line) + 0.15);
+  margin-block: 1.8em;
+}
+.writing-prose.writing-poetry > p,
+.writing-prose.writing-ci > p {
+  text-align: left;
+}
+.writing-prose.writing-classical > p {
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.writing-prose.writing-poetry,
+.writing-prose.writing-ci {
+  max-width: 34em;
+  margin-inline: auto;
+}
+.writing-prose.writing-script > p {
+  text-align: left;
+  margin-bottom: 0.7em;
+}
+.writing-prose > blockquote {
   white-space: pre-wrap;
   margin: 1.5em 0;
   border-left: 3px solid var(--accent);
   padding-left: 1.3em;
   color: var(--muted);
 }
-.writing-prose hr {
+.writing-prose > hr {
   border: 0;
   height: 1px;
   width: 64px;
   background: var(--line);
   margin: 2.6em auto;
 }
-.writing-indent > p {
-  text-indent: 2em;
-}
-.writing-verse {
-  line-height: 2.15;
-}
-.writing-verse > p {
-  text-indent: 0;
+.writing-prose [id] {
+  scroll-margin-top: 80px;
 }
 .writing-publish-dialog {
   width: min(560px, calc(100vw - 32px));
@@ -484,45 +511,6 @@
   flex-wrap: wrap;
   align-items: center;
 }
-.submission-reader-shell {
-  max-width: 920px;
-  margin: 32px auto 60px;
-}
-.submission-reader-head {
-  max-width: var(--reading-width);
-  margin: 40px auto 32px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 28px;
-}
-.submission-reader-head h1 {
-  font: 400 clamp(32px, 4.5vw, 48px)/1.5 var(--serif);
-  overflow-wrap: anywhere;
-  margin: 18px 0;
-}
-.submission-reader-head .submission-author {
-  font-size: 16px;
-}
-.submission-reading-options {
-  max-width: var(--reading-width);
-  margin: 24px auto;
-}
-.submission-reading-options summary {
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 14px;
-  padding: 10px 0;
-}
-.submission-reading-options .settings-fields {
-  padding: 20px 0;
-}
-.submission-reader-body {
-  max-width: var(--reading-width);
-  margin: 40px auto 60px;
-}
-.submission-reader-body > .writing-verse {
-  max-width: 600px;
-  margin-inline: auto;
-}
 .submission-reader-actions {
   display: flex;
   flex-wrap: wrap;
@@ -531,57 +519,11 @@
   border-block: 1px solid var(--line);
   align-items: center;
 }
-.submission-toc {
-  max-width: var(--reading-width);
-  margin: 20px auto;
-  padding: 16px 22px;
-  background: var(--panel);
-  border-radius: 8px;
-}
-.submission-toc summary {
-  cursor: pointer;
-}
-.submission-toc a {
-  display: block;
-  padding: 5px 0;
-}
-.submission-comments {
-  max-width: var(--reading-width);
-  margin: 48px auto;
-}
-.submission-comment-form textarea {
-  display: block;
-  width: 100%;
-  margin: 12px 0;
-}
-.submission-comment {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--line);
-}
-.submission-comment p {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
 .submission-related {
   margin-top: 44px;
 }
 .submission-related h2 {
   font-family: var(--serif);
-}
-.submission-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  z-index: 30;
-  pointer-events: none;
-}
-.submission-progress span {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: var(--accent);
 }
 .submission-library {
   margin: 36px 0 60px;
@@ -590,9 +532,6 @@
   .submission-masthead {
     gap: 30px;
     padding-block: 40px;
-  }
-  .submission-letter {
-    padding: 24px;
   }
   .writing-layout {
     grid-template-columns: minmax(0, 1fr) 220px;
@@ -617,20 +556,14 @@
   .submission-masthead h1 {
     margin-block: 16px;
   }
-  .submission-letter {
-    max-width: none;
-    padding: 20px 24px;
+  .submission-art {
+    max-width: 340px;
+    justify-self: center;
   }
-  .submission-letter p {
-    font-size: 22px;
-    line-height: 1.7;
-    margin: 12px 0;
-  }
-  .submission-letter p br {
-    display: none;
-  }
-  .submission-letter-rule {
-    margin: 16px 0;
+  .submission-art figcaption {
+    margin-top: 0;
+    font-size: 12px;
+    letter-spacing: 0.06em;
   }
   .submission-grid {
     grid-template-columns: 1fr;
@@ -723,16 +656,174 @@
   .writing-publish-dialog {
     padding: 20px;
   }
-  .submission-reader-head {
-    margin-top: 28px;
-  }
 }
 .home-writing-latest a {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;
 }
-.submission-comment > a,
 .writing-publish-dialog p {
   overflow-wrap: anywhere;
+}
+
+.submission-spotlight {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line);
+}
+.submission-spotlight-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 40px;
+  margin-top: 24px;
+}
+.submission-hot-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.submission-hot-item:first-child {
+  padding-top: 0;
+}
+.submission-hot-item:last-child {
+  border-bottom: 0;
+}
+.submission-hot-item > div {
+  min-width: 0;
+}
+.submission-hot-rank {
+  font: italic 30px/1.3 var(--serif);
+  color: var(--accent);
+  opacity: 0.7;
+}
+.submission-hot-item h3 {
+  font: 24px/1.5 var(--serif);
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.submission-hot-item h3 a {
+  text-decoration: none;
+}
+.submission-hot-item .eyebrow {
+  margin: 0;
+}
+.submission-hot-item .author-identity {
+  font-size: 12px;
+  color: var(--muted);
+}
+.submission-hot-excerpt {
+  color: var(--muted);
+  font-family: var(--serif);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  margin: 8px 0 14px;
+}
+.submission-writing-note {
+  background: var(--panel);
+  border-radius: 4px 24px 4px 4px;
+  padding: 28px;
+  align-self: start;
+}
+.submission-writing-note h3 {
+  font: 28px/1.6 var(--serif);
+  margin: 18px 0;
+}
+.submission-writing-note strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+.submission-writing-note a {
+  font-size: 13px;
+}
+.submission-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+}
+.submission-topics a {
+  text-decoration: none;
+  font-size: 12px;
+  padding: 5px 12px;
+  background: var(--panel);
+  border-radius: 20px;
+}
+.submission-feed-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.submission-feed-tabs button {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+.submission-feed-tabs button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.writing-reward-guide {
+  margin-block: 40px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.writing-reward-guide h2 {
+  font: 26px/1.5 var(--serif);
+}
+.writing-reward-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-block: 24px;
+}
+.writing-reward-grid strong {
+  font: 30px/1.4 var(--serif);
+  color: var(--accent);
+}
+.writing-reward-grid h3 {
+  font-size: 15px;
+}
+.writing-reward-grid p,
+.writing-reward-guide details {
+  font-size: 13px;
+  color: var(--muted);
+}
+.writing-reward-guide summary {
+  cursor: pointer;
+  padding-block: 8px;
+}
+@media (max-width: 700px) {
+  .submission-spotlight-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .submission-writing-note {
+    padding: 22px;
+  }
+  .submission-writing-note h3 {
+    font-size: 24px;
+  }
+  .submission-writing-note h3 br {
+    display: none;
+  }
+  .submission-hot-item {
+    gap: 16px;
+  }
+  .submission-hot-item h3 {
+    font-size: 21px;
+  }
+  .writing-reward-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .writing-reward-guide {
+    padding: 20px;
+  }
 }

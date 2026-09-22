@@ -1,7 +1,9 @@
+import { readingUrl } from './reading';
 export interface Discussion {
   title?: string | null;
   topic?: string | null;
   level?: number;
+  author_verified?: boolean;
   kind: 'article' | 'post' | 'post_comment';
   id: string;
   user_id: string;
@@ -21,6 +23,6 @@ export function discussionUrl(item: Discussion): string {
   return item.kind === 'post'
     ? `/community/posts/${item.id}/`
     : item.kind === 'article'
-      ? `/articles/${encodeURIComponent(item.target ?? '')}/#comment-${item.id}`
+      ? `${readingUrl(item.target ?? '')}#comment-${item.id}`
       : `/community/posts/${item.target}/#comment-${item.id}`;
 }

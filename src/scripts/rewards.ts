@@ -121,6 +121,10 @@ if (center) {
     }
   }
   const reasons: Record<string, string> = {
+    submission_publish: '发表作品',
+    submission_debut: '首次创作',
+    submission_like: '作品获得点赞',
+    submission_bookmark: '作品被收藏',
     daily_checkin: '每日签到',
     daily_task: '每日任务',
     weekly_task: '每周任务',

@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import SubmissionDiscovery from '../../components/SubmissionDiscovery.astro';
+import SubmissionArt from '../../components/SubmissionArt.astro';
 import { submissionGenres, submissionTags } from '../../lib/submissions';
 ---
 
@@ -29,19 +31,9 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
         <a href="/me/writing/">我的创作 →</a>
       </div>
     </div>
-    <aside class="submission-letter" aria-label="写给每一位作者">
-      <span class="eyebrow">给每一位提笔的人</span>
-      <p>
-        不必等到
-        <br />
-        故事完整，
-        <br />
-        才写下第一行。
-      </p>
-      <span class="submission-letter-rule"></span>
-      <small>自由写作 · 发布即与读者相见</small>
-    </aside>
+    <SubmissionArt />
   </section>
+  <SubmissionDiscovery />
   <section class="submission-discovery" aria-labelledby="submission-feed-title">
     <div class="section-heading">
       <div>
@@ -52,6 +44,17 @@ import { submissionGenres, submissionTags } from '../../lib/submissions';
         随缘读一篇 ↗
       </button>
     </div>
+    <nav class="submission-feed-tabs" aria-label="作品动态">
+      <button data-feed-tab="latest" aria-pressed="true">
+        最新发表
+      </button>
+      <button data-feed-tab="popular" aria-pressed="false">
+        热门作品
+      </button>
+      <button data-feed-tab="following" aria-pressed="false">
+        关注作者
+      </button>
+    </nav>
     <form class="submission-filters" id="submission-filters" role="search">
       <div class="submission-search">
         <label class="sr-only" for="submission-query">

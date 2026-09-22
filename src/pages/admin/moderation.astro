@@ -13,6 +13,41 @@ import Layout from '../../layouts/Layout.astro';
       正在核验管理权限…
     </p>
     <div id="admin-panel" hidden>
+      <details>
+        <summary>作者认证</summary>
+        <form id="author-verification-form" class="form-stack">
+          <label>
+            账号用户名
+            <input
+              name="username"
+              required
+              pattern="[a-z][a-z0-9_]{2,39}"
+              placeholder="例如 wjx_xix"
+            />
+          </label>
+          <label>
+            认证状态
+            <select name="verified">
+              <option value="true">认证为作者</option>
+              <option value="false">取消认证</option>
+            </select>
+          </label>
+          <label>
+            关联文集署名（可选）
+            <select name="author">
+              <option value="">不变更署名关联</option>
+              {['王俊舾', '孟祥霖', '张贺然', '翟竞源', '刘政阳', '黄思乐'].map((name) => (
+                <option>{name}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            认证依据<textarea name="reason" required minlength="5" maxlength="1000"></textarea>
+          </label>
+          <button>保存作者认证</button>
+          <p role="status" data-author-verification-status></p>
+        </form>
+      </details>
       <nav class="tabs" aria-label="管理分类">
         <button data-admin-tab="pending" aria-pressed="true">
           待处理

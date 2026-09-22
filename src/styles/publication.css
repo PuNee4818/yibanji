@@ -6,7 +6,7 @@
 .article-list li {
   border-bottom: 1px solid var(--line);
 }
-.article-list a {
+.article-list li > a {
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -240,7 +240,7 @@ kbd {
   .catalog-grid {
     grid-template-columns: 1fr;
   }
-  .article-list a {
+  .article-list li > a {
     flex-direction: column;
     gap: 4px;
   }

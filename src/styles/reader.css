@@ -326,6 +326,8 @@
 .focus-reading .reader-toc,
 .focus-reading .reader-actions,
 .focus-reading .discussion-section,
+.focus-reading .submission-reader-actions,
+.focus-reading .submission-related,
 .focus-reading .related {
   display: none;
 }
@@ -458,6 +460,8 @@
   .reading-progress,
   .focus-controls,
   .discussion-section,
+  .submission-reader-actions,
+  .submission-related,
   .chapter-nav,
   .related,
   #status,

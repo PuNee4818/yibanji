@@ -1,3 +1,4 @@
+import { writingStyle, writingHints } from '../lib/submissions';
 import { getCurrentUser, supabase, friendlyError } from '../lib/supabase';
 import {
   submissionGenres,
@@ -92,9 +93,8 @@ function refresh() {
   const n = countWords(body.value);
   document.querySelector('[data-writing-count]')!.textContent =
     `${n.toLocaleString()} 字 · 约 ${Math.max(1, Math.ceil(n / 450))} 分钟`;
-  document.querySelector('[data-writing-hint]')!.textContent = isVerse(genre.value)
-    ? '分行与空行会完整保留，让诗句自由呼吸。'
-    : '段落之间空一行，阅读时自动排版。';
+  document.querySelector('[data-writing-hint]')!.textContent =
+    writingHints[writingStyle(genre.value).variant]!;
   indent.disabled = isVerse(genre.value);
   body.style.height = 'auto';
   body.style.height = Math.max(400, body.scrollHeight) + 'px';

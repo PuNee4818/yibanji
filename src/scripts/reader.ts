@@ -1,4 +1,4 @@
-import { readStorage, writeStorage } from '../lib/storage';
+import { parseBookmarks, readStorage, writeStorage } from '../lib/storage';
 const reader = document.querySelector<HTMLElement>('[data-article-id]');
 if (reader) {
   const id = reader.dataset.articleId!;
@@ -25,7 +25,7 @@ if (reader) {
     prose.querySelectorAll('h2[id]').forEach((e) => {
       if (e.getBoundingClientRect().top < innerHeight * 0.4) current = e;
     });
-    document.querySelectorAll<HTMLAnchorElement>('.toc-tree a[href^="#section"]').forEach((a) => {
+    document.querySelectorAll<HTMLAnchorElement>('.toc-tree a[href^="#"]').forEach((a) => {
       if (current && a.hash === '#' + current.id) a.setAttribute('aria-current', 'location');
       else a.removeAttribute('aria-current');
     });
@@ -96,6 +96,15 @@ if (reader) {
   }
   writeStorage('yb_last', JSON.stringify({ id, chapter, ts: Date.now() }));
   writeStorage('yb_visited_' + id, String(chapter));
+  writeStorage(
+    'yb_reading_ids',
+    JSON.stringify(
+      [id, ...parseBookmarks(readStorage('yb_reading_ids')).filter((value) => value !== id)].slice(
+        0,
+        200,
+      ),
+    ),
+  );
   window.addEventListener(
     'scroll',
     () => {

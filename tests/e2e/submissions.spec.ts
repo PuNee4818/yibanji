@@ -38,8 +38,8 @@ test('independent submissions and comfortable guest writing retain poetry, draft
   await expect(page.getByLabel('文章正文', { exact: true })).toHaveValue(poem);
   await expect(page.locator('[name=tags]')).toHaveValue('校园，记忆');
   await page.locator('[data-writing-preview]').click();
-  await expect(page.locator('.writing-verse')).toHaveText(poem, { useInnerText: false });
-  expect(await page.locator('.writing-verse').evaluate((el) => el.textContent)).toBe(poem);
+  await expect(page.locator('.writing-poetry')).toHaveText(poem, { useInnerText: false });
+  expect(await page.locator('.writing-poetry').evaluate((el) => el.textContent)).toBe(poem);
   await page.locator('[data-writing-preview]').click();
   await page.locator('[data-writing-focus]').click();
   await expect(page.locator('.site-header')).toBeHidden();
@@ -97,16 +97,13 @@ test('cloud writing publishes immediately, keeps edits private and connects prof
     await live(page.locator('[data-writing-publish-dialog]')).toBeVisible();
     await page.locator('[data-writing-confirm]').click();
     await live(page).toHaveURL(new RegExp('/submissions/' + draftId + '/'));
-    await live(page.locator('.submission-reader-head h1')).toHaveText(title);
+    await live(page.locator('.article-head h1')).toHaveText(title);
     await live(page.locator('[data-submission-edit]')).toBeVisible();
-    await page.locator('[data-submission-mark="bookmark"]').click();
-    await live(page.locator('[data-submission-mark="bookmark"]')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
-    await page.locator('#submission-comment').fill('这里的文字，让我想起那年的夏天。');
-    await page.locator('.submission-comment-form button').click();
-    await live(page.locator('[data-submission-comments]')).toContainText('那年的夏天');
+    await page.locator('[data-article-bookmark]').click();
+    await live(page.locator('[data-article-bookmark]')).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('[data-comment-form] textarea').fill('这里的文字，让我想起那年的夏天。');
+    await page.locator('[data-comment-form] button').first().click();
+    await live(page.locator('[data-comments-list]')).toContainText('那年的夏天');
     await page.screenshot({
       path: `tmp/ux-review/submission-reader-${info.project.name}.png`,
       fullPage: true,

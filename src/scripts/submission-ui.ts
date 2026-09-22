@@ -1,8 +1,11 @@
+import { authorBadge } from '../lib/author';
+import { levelBadge } from '../lib/growth';
 import {
   submissionGenres,
   submissionUrl,
   isVerse,
-  writingBlocks,
+  formattedWriting,
+  writingStyle,
   inlineWriting,
   type Submission,
 } from '../lib/submissions';
@@ -33,11 +36,17 @@ export function submissionCard(item: Submission) {
       'muted small',
     ),
   );
+  const identity = el('div', '', 'author-identity');
+  identity.append(
+    link(item.display_name, '/u/' + encodeURIComponent(item.username) + '/', 'submission-author'),
+  );
+  if (item.level) identity.append(levelBadge(item.level));
+  if (item.author_verified) identity.append(authorBadge());
   const heading = el('h2');
   heading.append(link(item.title, submissionUrl(item.id)));
   const foot = el('div', '', 'submission-card-foot');
   foot.append(
-    link(item.display_name, '/u/' + encodeURIComponent(item.username) + '/', 'submission-author'),
+    identity,
     el(
       'span',
       new Date(item.published_at).toLocaleDateString('zh-CN') + ' · ' + item.like_count + ' 喜欢',
@@ -54,12 +63,8 @@ export function submissionCard(item: Submission) {
   return card;
 }
 export function renderWriting(target: HTMLElement, body: string, genre: string, indent: boolean) {
-  const prose = el(
-    'div',
-    '',
-    'writing-prose' + (isVerse(genre) ? ' writing-verse' : indent ? ' writing-indent' : ''),
-  );
-  writingBlocks(body, isVerse(genre)).forEach((block, i) => {
+  const prose = el('div', '', writingStyle(genre, indent).className);
+  formattedWriting(body, genre).forEach((block, i) => {
     const node = el(
       block.kind === 'break'
         ? 'hr'
@@ -69,7 +74,9 @@ export function renderWriting(target: HTMLElement, body: string, genre: string, 
             ? 'blockquote'
             : 'p',
     );
-    if (block.kind === 'heading') node.id = 'writing-section-' + i;
+    node.id = (block.kind === 'heading' ? 'writing-section-' : 'writing-paragraph-') + i;
+    node.dataset.paragraph = String(i);
+    if (block.opening) node.classList.add('opening-paragraph');
     for (const part of inlineWriting(block.text))
       node.append(part.strong ? el('strong', part.text) : document.createTextNode(part.text));
     prose.append(node);

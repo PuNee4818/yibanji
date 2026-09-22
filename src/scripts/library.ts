@@ -16,7 +16,7 @@ if (user) {
       document
         .querySelectorAll<HTMLElement>('[data-bookmark-item]')
         .forEach((el) => (el.hidden = !ids.has(el.dataset.bookmarkItem!)));
-      document.querySelector<HTMLElement>('#bookmark-empty')!.hidden = ids.size > 0;
+      document.querySelector<HTMLElement>('#bookmark-empty')!.hidden = Array.from(document.querySelectorAll<HTMLElement>('[data-bookmark-item]')).some(el => !el.hidden);
     };
     await refresh();
   }
@@ -45,7 +45,7 @@ if (user) {
           item.parentElement!.append(item);
         }
       }
-      document.querySelector<HTMLElement>('#history-empty')!.hidden = data.length > 0;
+      document.querySelector<HTMLElement>('#history-empty')!.hidden = Array.from(document.querySelectorAll<HTMLElement>('[data-history-item]')).some(el => !el.hidden);
     }
   }
 }

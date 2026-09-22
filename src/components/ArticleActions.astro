@@ -7,8 +7,9 @@ interface Props {
   chapterTitle?: string;
   chapter?: number;
   novel?: boolean;
+  source?: 'catalog' | 'submission';
 }
-const { id, title, chapterTitle, chapter, novel } = Astro.props;
+const { id, title, chapterTitle, chapter, novel, source = 'catalog' } = Astro.props;
 const pdf = '/pdf/' + id + (chapter ? '-' + chapter : '') + '.pdf';
 ---
 
@@ -26,17 +27,24 @@ const pdf = '/pdf/' + id + (chapter ? '-' + chapter : '') + '.pdf';
       <Icon name="bookmark" />
       <span data-action-label>收藏</span>
     </button>
-    <a
-      class="rail-action"
-      data-pdf-open
-      href={pdf}
-      aria-haspopup="dialog"
-      aria-controls="pdf-dialog"
-      data-astro-prefetch="false"
-    >
-      <Icon name="download" />
-      <span>PDF 预览</span>
-    </a>
+    {source === 'catalog' ? (
+      <a
+        class="rail-action"
+        data-pdf-open
+        href={pdf}
+        aria-haspopup="dialog"
+        aria-controls="pdf-dialog"
+        data-astro-prefetch="false"
+      >
+        <Icon name="download" />
+        <span>PDF 预览</span>
+      </a>
+    ) : (
+      <button data-print>
+        <Icon name="download" />
+        <span>打印 / PDF</span>
+      </button>
+    )}
     <button data-share>
       <Icon name="share" />
       <span>分享链接</span>
@@ -80,7 +88,7 @@ const pdf = '/pdf/' + id + (chapter ? '-' + chapter : '') + '.pdf';
     <p class="muted">只面向文章内容，可以重复投掷；点赞和臭鸡蛋互不冲突。</p>
   </dialog>
 </section>
-<PdfPreview {id} {title} {chapterTitle} {chapter} {novel} />
+{source === 'catalog' && <PdfPreview {id} {title} {chapterTitle} {chapter} {novel} />}
 <script>
   import '../scripts/article-interactions';
 </script>

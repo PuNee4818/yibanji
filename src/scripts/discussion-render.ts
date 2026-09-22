@@ -1,3 +1,4 @@
+import { authorBadge } from '../lib/author';
 import { levelBadge } from '../lib/growth';
 import { rpc } from '../lib/supabase';
 import { announce } from './site';
@@ -38,6 +39,7 @@ export function discussionCard(
   const byline = document.createElement('div');
   byline.className = 'discussion-byline';
   byline.append(author, levelBadge(item.level ?? 1));
+  if (item.author_verified) byline.append(authorBadge());
   meta.append(byline, time);
   card.append(meta);
   const kind = document.createElement('p');

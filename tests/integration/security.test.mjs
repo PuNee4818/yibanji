@@ -35,6 +35,8 @@ test('actual schema enforces RLS, restricted grants, safe functions, valid index
     'community_topics',
     'community_highlights',
     'profile_community',
+    'submission_feed',
+    'submission_highlights',
   ]);
   for (const f of fns.filter((f) => f.schema === 'public' && f.anon_exec))
     assert.ok(allowed.has(f.name), `Unexpected anon RPC ${f.name}`);
@@ -162,27 +164,23 @@ test('hidden content cannot be mutated, nested reply targets receive notificatio
     );
     assert.ok(
       (
-        await a
-          .from('notifications')
-          .insert({
-            user_id: ub.id,
-            kind: 'system',
-            title: 'forged',
-            href: '/',
-            target_key: 'forged',
-          })
+        await a.from('notifications').insert({
+          user_id: ub.id,
+          kind: 'system',
+          title: 'forged',
+          href: '/',
+          target_key: 'forged',
+        })
       ).error,
     );
     assert.ok(
       (
-        await a
-          .from('egg_throws')
-          .insert({
-            user_id: ua.id,
-            article_id: article,
-            quantity: 1,
-            idempotency_key: randomUUID(),
-          })
+        await a.from('egg_throws').insert({
+          user_id: ua.id,
+          article_id: article,
+          quantity: 1,
+          idempotency_key: randomUUID(),
+        })
       ).error,
     );
     assert.ok((await a.rpc('select_achievement', { p_achievement: 'streak100' })).error);

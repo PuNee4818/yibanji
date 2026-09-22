@@ -1,4 +1,6 @@
 ---
+import AuthorBadge from './AuthorBadge.astro';
+import { levelNames, normalizedLevel } from '../lib/growth';
 import { submissionGenres, submissionUrl, isVerse, type Submission } from '../lib/submissions';
 interface Props {
   item: Submission;
@@ -19,9 +21,17 @@ const { item } = Astro.props;
   </h2>
   <p class="submission-excerpt">{item.summary}</p>
   <div class="submission-card-foot">
-    <a class="submission-author" href={'/u/' + encodeURIComponent(item.username) + '/'}>
-      {item.display_name}
-    </a>
+    <div class="author-identity">
+      <a class="submission-author" href={'/u/' + encodeURIComponent(item.username) + '/'}>
+        {item.display_name}
+      </a>
+      {item.level && (
+        <span class="level-badge" data-level={normalizedLevel(item.level)}>
+          {levelNames[normalizedLevel(item.level) - 1]}
+        </span>
+      )}
+      {item.author_verified && <AuthorBadge />}
+    </div>
     <span class="muted small">
       {new Date(item.published_at).toLocaleDateString('zh-CN')} · {item.like_count} 喜欢
     </span>

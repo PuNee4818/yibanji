@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { book } from '../../lib/book';
+import { supabase } from '../../lib/supabase';
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 'no-store');
+const name = Astro.params.name ?? '';
+const works = book.articles.filter((a) => a.author === name);
+if (!works.length) Astro.response.status = 404;
+const { data } = works.length
+  ? await supabase.from('catalog_author_profiles').select('username').eq('name', name).maybeSingle()
+  : { data: null };
+if (data?.username)
+  return Astro.redirect('/u/' + encodeURIComponent(data.username) + '/?stream=works');
+---
+
+<Layout title={works.length ? name + '的作品' : '未找到作者'}>
+  <section class="narrow-page">
+    <header class="page-head">
+      <p class="eyebrow">一班集 · 文集作者</p>
+      <h1>{works.length ? name : '未找到这位作者'}</h1>
+      <p>
+        {works.length
+          ? '收录于文集的 ' + works.length + ' 篇文字。作者账号关联后，这里将通往个人主页。'
+          : '回到目录，继续寻找喜欢的文字。'}
+      </p>
+    </header>
+    <ArticleList articles={works} />
+    <a href="/catalog/">← 返回目录</a>
+  </section>
+</Layout>

@@ -1,4 +1,6 @@
 import { rpc, getCurrentUser } from '../lib/supabase';
+import { authorBadge } from '../lib/author';
+import { levelBadge } from '../lib/growth';
 import { submissionUrl, type Submission } from '../lib/submissions';
 import { submissionCard, emptySubmissions, el, link } from './submission-ui';
 const form = document.querySelector<HTMLFormElement>('#submission-filters')!;
@@ -45,6 +47,17 @@ async function load(append = false) {
   more.disabled = true;
   list.setAttribute('aria-busy', 'true');
   address();
+  document
+    .querySelectorAll<HTMLButtonElement>('[data-feed-tab]')
+    .forEach((button) =>
+      button.setAttribute('aria-pressed', String(button.dataset.feedTab === sort.value)),
+    );
+  document.querySelector('#submission-feed-title')!.textContent =
+    sort.value === 'popular'
+      ? '被读者珍藏的文字'
+      : sort.value === 'following'
+        ? '关注作者的新篇章'
+        : '新落在纸上的文字';
   state.textContent = '正在寻找文字…';
   if (!append) list.replaceChildren();
   try {
@@ -146,3 +159,71 @@ random.addEventListener('click', async () => {
 });
 readUrl();
 void load();
+
+document.querySelectorAll<HTMLButtonElement>('[data-feed-tab]').forEach((button) =>
+  button.addEventListener('click', () => {
+    sort.value = button.dataset.feedTab!;
+    void load();
+  }),
+);
+async function highlights() {
+  const target = document.querySelector<HTMLElement>('[data-submission-highlights]')!;
+  try {
+    const data = await rpc<{ popular: Submission[]; topics: { tag: string; works: number }[] }>(
+      'submission_highlights',
+    );
+    target.replaceChildren();
+    data.popular.slice(0, 3).forEach((item, index) => {
+      const row = el('article', '', 'submission-hot-item');
+      const content = el('div');
+      const identity = el('div', '', 'author-identity');
+      identity.append(link(item.display_name, '/u/' + encodeURIComponent(item.username) + '/'));
+      if (item.level) identity.append(levelBadge(item.level));
+      if (item.author_verified) identity.append(authorBadge());
+      const title = el('h3');
+      title.append(link(item.title, submissionUrl(item.id)));
+      content.append(
+        identity,
+        title,
+        el('p', item.summary, 'submission-hot-excerpt'),
+        el(
+          'span',
+          item.like_count +
+            ' 点赞 · ' +
+            (item.bookmark_count ?? 0) +
+            ' 收藏 · ' +
+            item.comment_count +
+            ' 讨论',
+          'muted small',
+        ),
+      );
+      row.append(el('span', String(index + 1).padStart(2, '0'), 'submission-hot-rank'), content);
+      target.append(row);
+    });
+    if (!data.popular.length)
+      target.append(
+        emptySubmissions(
+          '好文字的下一站，是这里。',
+          '还没有公开作品。写下第一篇，让故事开始流动。',
+        ),
+      );
+    const topics = document.querySelector<HTMLElement>('[data-submission-topics]')!;
+    for (const item of data.topics)
+      topics.append(
+        link(
+          '#' + item.tag + ' · ' + item.works,
+          '/submissions/?tag=' + encodeURIComponent(item.tag) + '#submission-feed-title',
+        ),
+      );
+    topics.hidden = !data.topics.length;
+  } catch {
+    target.replaceChildren(el('p', '推荐暂时没有加载出来，下面仍可浏览与搜索作品。', 'muted'));
+    const retry = el('button', '重新加载推荐', 'quiet-button');
+    retry.addEventListener('click', () => {
+      retry.disabled = true;
+      void highlights();
+    });
+    target.append(retry);
+  }
+}
+void highlights();

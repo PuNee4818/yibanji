@@ -1,4 +1,7 @@
 ---
+import AuthorBadge from '../../components/AuthorBadge.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { book } from '../../lib/book';
 import LevelGallery from '../../components/LevelGallery.astro';
 import ProfileEditor from '../../components/ProfileEditor.astro';
 import Icon from '../../components/Icon.astro';
@@ -6,6 +9,7 @@ import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 import { normalizedLevel, levelNames, levelDescriptions } from '../../lib/growth';
 export const prerender = false;
+Astro.response.headers.set('Cache-Control', 'no-store');
 const { data: profile, error } = await supabase
   .from('profile_summaries')
   .select('*')
@@ -16,6 +20,10 @@ const { data: progress } = profile
   ? await supabase.from('user_progress').select('level').eq('user_id', profile.id).maybeSingle()
   : { data: null };
 const level = progress ? normalizedLevel(progress.level) : null;
+const { data: authored } = profile
+  ? await supabase.from('articles').select('id').eq('source', 'catalog').eq('author_id', profile.id)
+  : { data: [] };
+const catalogWorks = book.articles.filter((a) => authored?.some((row) => row.id === a.id));
 ---
 
 <Layout title={profile?.display_name ?? '书友主页'}>
@@ -56,6 +64,7 @@ const level = progress ? normalizedLevel(progress.level) : null;
                 </span>
               )}
             </span>
+            {profile.author_verified && <AuthorBadge />}
           </div>
           <p class="profile-bio" data-profile-bio-text>
             {profile.bio || '在字里行间，慢慢相识。'}
@@ -116,6 +125,15 @@ const level = progress ? normalizedLevel(progress.level) : null;
           <a href="/me/rewards/">查看奖励与任务 →</a>
         </details>
       </section>
+      {catalogWorks.length > 0 && (
+        <section class="profile-catalog-works">
+          <div class="section-heading">
+            <h2>收录于一班集</h2>
+            <span class="muted small">{catalogWorks.length} 篇作品</span>
+          </div>
+          <ArticleList articles={catalogWorks} />
+        </section>
+      )}
       <section class="profile-publication" id="profile-activity">
         <div class="section-heading">
           <h2>留在这里的文字</h2>
@@ -124,7 +142,9 @@ const level = progress ? normalizedLevel(progress.level) : null;
           </a>
         </div>
         <nav class="tabs" aria-label="个人活动类型">
-          <a href="?stream=works" data-profile-stream="works">作品</a>
+          <a href="?stream=works" data-profile-stream="works">
+            作品
+          </a>
           <a href="?stream=posts" data-profile-stream="posts" aria-current="page">
             帖子
           </a>

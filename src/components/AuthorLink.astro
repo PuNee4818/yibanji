@@ -1,0 +1,18 @@
+---
+interface Props {
+  name: string;
+  badges?: boolean;
+}
+const { name, badges = false } = Astro.props;
+---
+
+<span
+  class="author-identity"
+  data-catalog-author={name}
+  data-author-badges={badges ? '' : undefined}
+>
+  <a href={'/authors/' + encodeURIComponent(name) + '/'}>{name}</a>
+</span>
+<script>
+  import '../scripts/catalog-authors';
+</script>
