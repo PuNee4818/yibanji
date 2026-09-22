@@ -1,3 +1,4 @@
+import { levelBadge } from '../lib/growth';
 import { rpc } from '../lib/supabase';
 import { announce } from './site';
 import { discussionUrl, type Discussion } from '../lib/discussion';
@@ -7,6 +8,7 @@ export function discussionCard(
   userId: string | undefined,
   refresh: () => Promise<void>,
   reply?: (item: Discussion) => void,
+  detailed = false,
 ): HTMLElement {
   const card = document.createElement('article');
   card.className = 'discussion-card';
@@ -33,22 +35,34 @@ export function discussionCard(
         : age < 86400000
           ? Math.floor(age / 3600000) + ' 小时前'
           : new Date(item.created_at).toLocaleDateString('zh-CN');
-  meta.append(author, time);
+  const byline = document.createElement('div');
+  byline.className = 'discussion-byline';
+  byline.append(author, levelBadge(item.level ?? 1));
+  meta.append(byline, time);
   card.append(meta);
   const kind = document.createElement('p');
   kind.className = 'discussion-kind';
   kind.textContent =
     item.kind === 'post'
-      ? '写下了一条动态'
+      ? (item.topic || '闲谈') + ' · 帖子'
       : item.kind === 'article'
-        ? '读后感 · 文章讨论'
-        : '回复了这条动态';
+        ? '读后感 · 文章评论'
+        : '帖子评论';
   card.append(kind);
+  if (item.kind === 'post' && !detailed) {
+    const heading = document.createElement('h2');
+    heading.className = 'post-title';
+    const titleLink = document.createElement('a');
+    titleLink.href = discussionUrl(item);
+    titleLink.textContent = item.title || item.content.slice(0, 36);
+    heading.append(titleLink);
+    card.append(heading);
+  }
   const body = document.createElement('p');
   body.className = 'discussion-content';
   body.textContent = item.content;
   card.append(body);
-  if (item.content.length > 320) {
+  if (item.content.length > 320 && !detailed) {
     body.classList.add('is-collapsed');
     const expand = document.createElement('button');
     expand.className = 'quiet-button';
@@ -59,7 +73,7 @@ export function discussionCard(
       expand.textContent = collapsed ? '展开全文' : '收起';
       expand.setAttribute('aria-expanded', String(!collapsed));
     });
-    card.append(expand);
+    if (item.kind !== 'post') card.append(expand);
   }
   if (item.target && item.kind !== 'post_comment') {
     catalog ??= fetch('/article-index.json').then((r) => {
@@ -139,6 +153,10 @@ export function discussionCard(
         '编辑',
         () => {
           menu.open = false;
+          if (item.kind === 'post') {
+            location.href = '/community/new/?edit=' + encodeURIComponent(item.id);
+            return;
+          }
           if (card.querySelector('form')) return;
           const form = document.createElement('form');
           form.className = 'form-stack';
@@ -146,7 +164,7 @@ export function discussionCard(
           label.textContent = '编辑内容';
           const area = document.createElement('textarea');
           area.value = item.content;
-          area.maxLength = item.kind === 'post' ? 500 : 2000;
+          area.maxLength = 2000;
           area.required = true;
           label.append(area);
           form.append(label);
@@ -212,8 +230,9 @@ export function discussionCard(
   }
   const link = document.createElement('a');
   link.href = discussionUrl(item);
-  link.textContent = item.kind === 'post' ? '打开动态与讨论' : '查看原文讨论';
-  actions.append(menu, link);
+  link.textContent = item.kind === 'post' ? '评论 ' + item.reply_count + ' →' : '查看原文评论 →';
+  actions.append(menu);
+  if (!detailed) actions.append(link);
   card.append(actions);
   return card;
 }

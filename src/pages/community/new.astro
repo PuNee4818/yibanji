@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { book } from '../../lib/book';
+---
+
+<Layout title="发布帖子">
+  <section class="post-editor narrow-page">
+    <nav class="reader-breadcrumb" aria-label="当前位置">
+      <a href="/community/">社区</a>
+      <span>／</span>
+      <span>写帖子</span>
+    </nav>
+    <header class="page-head">
+      <p class="eyebrow">起个标题，让话题有个开始</p>
+      <h1 data-editor-heading>写一篇帖子</h1>
+      <p>读书时的发现、一段随想，或者想和大家讨论的问题。</p>
+    </header>
+    <div class="empty-state" data-guest-only>
+      <h2>登录后，把这段话写下来</h2>
+      <a class="button primary" href="/auth/?next=/community/new/">
+        登录并发帖 →
+      </a>
+    </div>
+    <form id="post-form" class="form-stack" data-auth-only hidden>
+      <label>
+        帖子标题
+        <input name="title" maxlength="80" required placeholder="一句话，说清你想聊什么" />
+      </label>
+      <div class="post-editor-meta">
+        <label for="post-topic">
+          话题
+          <select id="post-topic" name="topic">
+            <option>读书</option>
+            <option>随笔</option>
+            <option>提问</option>
+            <option selected>闲谈</option>
+          </select>
+        </label>
+        <div class="reference-field">
+          <label for="post-article">引用作品（可选）</label>
+          <input
+            type="search"
+            data-reference-search
+            aria-label="查找引用作品"
+            placeholder="输入标题或作者，缩小作品列表"
+          />
+          <select id="post-article" name="article_id">
+            <option value="">不引用作品</option>
+            {book.articles.map((a) => (
+              <option value={a.id}>
+                {a.title} · {a.author}
+              </option>
+            ))}
+          </select>
+          <span data-reference-status class="muted small" role="status"></span>
+        </div>
+      </div>
+      <label>
+        帖子正文
+        <textarea
+          name="content"
+          maxlength="10000"
+          required
+          rows="12"
+          placeholder="可以分段慢慢写。发布后仍可编辑，评论会留在这篇帖子下面。"
+        ></textarea>
+      </label>
+      <div class="composer-foot">
+        <span class="muted small" data-draft-count>
+          0 / 10000
+        </span>
+        <span class="muted small" data-draft-state>
+          草稿保存在当前设备
+        </span>
+      </div>
+      <div class="post-editor-actions">
+        <button type="submit" class="button primary" data-post-submit>
+          发布帖子
+        </button>
+        <button type="button" data-post-preview aria-expanded="false">
+          预览帖子
+        </button>
+        <a href="/community/">返回社区</a>
+      </div>
+      <p data-post-status role="status"></p>
+    </form>
+    <section
+      class="post-draft-preview"
+      data-post-draft-preview
+      aria-label="帖子预览"
+      hidden
+    ></section>
+  </section>
+  <script>
+    import '../../scripts/post-editor';
+  </script>
+</Layout>

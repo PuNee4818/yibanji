@@ -1,0 +1,57 @@
+---
+import { levelNames, levelThresholds, levelDescriptions } from '../lib/growth';
+---
+
+<section class="level-gallery" aria-labelledby="level-gallery-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">墨迹渐深</p>
+      <h2 id="level-gallery-title">每一程，都有名字</h2>
+    </div>
+    <span>选择一个等级，看看它的模样</span>
+  </div>
+  <div class="level-choices" aria-label="预览等级">
+    {levelNames.map((name, index) => (
+      <button
+        type="button"
+        class="level-choice"
+        data-level-preview={index + 1}
+        aria-pressed={index === 0 ? 'true' : 'false'}
+      >
+        <span class="level-badge" data-level={index + 1}>
+          {['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ'][index]} {name}
+        </span>
+        <small>{levelThresholds[index]} 墨迹起</small>
+      </button>
+    ))}
+  </div>
+  <div class="level-example" aria-live="polite">
+    <div>
+      <span>一位书友</span>
+      <span data-level-example>
+        <span class="level-badge" data-level="1">
+          Ⅰ 初识
+        </span>
+      </span>
+      <small>样式预览</small>
+    </div>
+    <p data-level-description>{levelDescriptions[0]}</p>
+    <p class="muted small">等级随墨迹自动成长，预览不会更改你的实际等级。</p>
+  </div>
+</section>
+<script>
+  import { levelBadge, levelDescriptions } from '../lib/growth';
+  document.querySelectorAll<HTMLElement>('.level-gallery').forEach((gallery) => {
+    gallery.querySelectorAll<HTMLButtonElement>('[data-level-preview]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const level = Number(button.dataset.levelPreview);
+        gallery
+          .querySelectorAll('[data-level-preview]')
+          .forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+        gallery.querySelector('[data-level-example]')!.replaceChildren(levelBadge(level));
+        gallery.querySelector('[data-level-description]')!.textContent =
+          levelDescriptions[level - 1]!;
+      });
+    });
+  });
+</script>

@@ -75,8 +75,9 @@
 }
 .compose-glyph {
   color: var(--accent);
-  font-size: 48px;
-  font-family: var(--serif);
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
 }
 .guest-compose h2 {
   margin: 0 0 8px;
@@ -266,7 +267,7 @@
   margin: 16px 0;
   text-decoration: none;
   font: 16px var(--serif);
-  background: linear-gradient(90deg, var(--panel), transparent);
+  background: transparent;
 }
 .quoted-article small {
   display: block;
@@ -329,5 +330,130 @@
   }
   .composer-foot {
     gap: 8px;
+  }
+}
+
+.community-streams {
+  display: flex;
+  gap: 36px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+.community-streams a {
+  text-decoration: none;
+  padding: 0 0 16px;
+  font-family: var(--serif);
+  font-size: 22px;
+}
+.community-streams small {
+  display: block;
+  margin-top: 4px;
+  font: 11px var(--ui);
+}
+.community-streams [aria-current] {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+}
+.compose-entry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--muted);
+  font: 17px var(--serif);
+}
+.compose-entry > span {
+  margin-left: auto;
+  color: var(--accent);
+  font: 12px var(--ui);
+}
+.feed-controls {
+  display: flex;
+  align-items: start;
+  gap: 20px;
+}
+.feed-controls .tabs {
+  flex: 1;
+}
+.topic-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.discussion-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.post-title {
+  font-size: 25px;
+  margin: 18px 0 12px;
+}
+.post-title a {
+  text-decoration: none;
+}
+.post-editor .form-stack {
+  max-width: none;
+}
+.post-editor-meta {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+.reference-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.post-editor textarea {
+  font: 17px/1.9 var(--serif);
+  min-height: 320px;
+}
+.post-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.post-editor-actions > a {
+  margin-left: auto;
+  font-size: 13px;
+}
+.post-draft-preview {
+  margin-top: 28px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 680px) {
+  .community-streams {
+    gap: 24px;
+  }
+  .community-streams a {
+    font-size: 20px;
+  }
+  .feed-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .feed-controls .tabs {
+    flex-basis: 100%;
+    margin-bottom: 0;
+  }
+  .topic-filter {
+    margin-bottom: 16px;
+  }
+  .post-editor-meta {
+    grid-template-columns: 1fr;
+  }
+  .compose-entry {
+    flex-wrap: wrap;
+  }
+  .post-title {
+    font-size: 23px;
   }
 }

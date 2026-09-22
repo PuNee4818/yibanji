@@ -1,6 +1,7 @@
 import { legacyDestination } from '../lib/navigation';
 import { parseBookmarks, readStorage } from '../lib/storage';
 import './preferences';
+import './navigation';
 
 let announcementTimer: ReturnType<typeof setTimeout>;
 export function announce(message: string) {

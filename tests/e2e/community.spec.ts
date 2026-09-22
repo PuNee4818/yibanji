@@ -25,6 +25,7 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
     await live(page.locator('#checkin-submit')).toBeEnabled();
     await page.locator('#checkin-submit').click();
     await live(page.locator('#checkin-result')).toContainText('1 枚臭鸡蛋');
+    await expect(page.locator('.menu-caption .level-badge')).toHaveCount(1);
     await page.getByRole('button', { name: '关闭签到面板' }).click();
     await page.locator('[data-like]').click();
     await live(page.locator('[data-like]')).toHaveAttribute('aria-pressed', 'true');
@@ -39,7 +40,6 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
     ).data!;
     await expect(page.locator(`#comment-${c.id} img`)).toHaveCount(0);
     expect(await page.evaluate(() => Reflect.get(window, '__unsafe'))).toBeUndefined();
-    await page.getByLabel('更多文章操作').click();
     await page.locator('[data-egg-open]').click();
     await live(page.locator('[data-egg-wallet]')).toContainText('3 枚臭鸡蛋');
     await page.getByLabel('投掷数量').fill('2');
@@ -58,17 +58,66 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
     await page.goto('/me/history/');
     await live(page.locator('[data-history-item="a03"]')).toBeVisible();
     await page.goto(`/u/reader_${v!.id.replaceAll('-', '')}/`);
+    await page.locator('[data-level-preview="5"]').click();
+    await expect(page.locator('[data-level-example]')).toContainText('藏卷');
     await page.locator('[data-follow-user]').click();
     await live(page.locator('[data-follow-user]')).toHaveAttribute('aria-pressed', 'true');
     await page.goto('/community/?tab=latest');
     const postWords = `在社区里继续这段阅读，文字让彼此慢慢相识。${testInfo.project.name}`;
+    await page.getByRole('link', { name: '发布帖子', exact: true }).first().click();
+    await page
+      .getByLabel('帖子标题', { exact: true })
+      .fill('一段阅读的回声 ' + testInfo.project.name);
     await page.locator('#post-form textarea').fill(postWords);
-    await page.locator('#post-form button').click();
-    await live(page.locator('[data-feed]')).toContainText(postWords);
+    await page.getByRole('combobox', { name: '话题', exact: true }).selectOption('随笔');
+    await page.reload();
+    await live(page.locator('#post-form textarea')).toHaveValue(postWords);
+    await expect(page.getByRole('combobox', { name: '话题', exact: true })).toHaveValue('随笔');
+    await page.locator('[data-post-preview]').click();
+    await expect(page.locator('[data-post-draft-preview]')).toContainText(postWords);
+    await page.screenshot({
+      path: testInfo.outputPath('post-editor.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
+    await page.locator('[data-post-submit]').click();
+    await live(page.locator('[data-post-body]')).toContainText(postWords);
     const p = (await a!.from('community_posts').select('id').eq('user_id', u!.id).single()).data!;
-    await live(page.getByRole('heading', { name: '讨论最多', exact: true })).toBeVisible();
 
-    await page.goto('/search/?source=community&q=' + encodeURIComponent(postWords));
+    await expect(page.locator('[data-post-body] .level-badge')).toBeVisible();
+    await page.locator('[data-post-body]').getByLabel('更多讨论操作').click();
+    await page
+      .locator('[data-post-body]')
+      .getByRole('button', { name: '编辑', exact: true })
+      .click();
+    await live(page.getByLabel('帖子标题', { exact: true })).toHaveValue(
+      '一段阅读的回声 ' + testInfo.project.name,
+    );
+    await page
+      .getByLabel('帖子标题', { exact: true })
+      .fill('编辑后的阅读回声 ' + testInfo.project.name);
+    await page.locator('[data-post-submit]').click();
+    await live(page.locator('[data-post-title]')).toHaveText(
+      '编辑后的阅读回声 ' + testInfo.project.name,
+    );
+    await live(page.locator('[data-post-body] .level-badge')).toBeVisible();
+    await page.screenshot({
+      path: testInfo.outputPath('post-detail.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
+    await page.goto('/community/?tab=latest');
+    await live(page.locator('[data-feed]')).toContainText('编辑后的阅读回声');
+    await expect(page.locator('[data-feed] #comment-' + c.id)).toHaveCount(0);
+    await page.goto('/community/comments/?tab=latest');
+    await live(page.locator('[data-feed] #comment-' + c.id)).toBeVisible();
+    await expect(page.locator('[data-feed] #comment-' + p.id)).toHaveCount(0);
+    await expect(page.locator('[data-feed] #comment-' + c.id + ' .level-badge')).toBeVisible();
+
+    await page.goto(
+      '/search/?source=community&q=' +
+        encodeURIComponent('编辑后的阅读回声 ' + testInfo.project.name),
+    );
     await live(
       page.locator('#search-results a[href="/community/posts/' + p.id + '/"]'),
     ).toBeVisible();
@@ -120,7 +169,11 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
       (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
         .violations,
     ).toEqual([]);
-    await page.screenshot({ path: testInfo.outputPath('community-rewards.png'), fullPage: true });
+    await page.screenshot({
+      path: testInfo.outputPath('community-rewards.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
     expect(errors).toEqual([]);
   } finally {
     await page.goto('about:blank').catch(() => {});

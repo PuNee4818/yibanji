@@ -1,5 +1,4 @@
 import { readStorage, writeStorage } from '../lib/storage';
-import { announce } from './site';
 const reader = document.querySelector<HTMLElement>('[data-article-id]');
 if (reader) {
   const id = reader.dataset.articleId!;
@@ -186,7 +185,4 @@ if (reader) {
   for (const event of ['pointermove', 'pointerdown', 'keydown', 'scroll'])
     window.addEventListener(event, awake, { passive: true });
   document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
-  document
-    .querySelector('[data-pdf-download]')
-    ?.addEventListener('click', () => announce('正在下载排版后的 PDF。'));
 }

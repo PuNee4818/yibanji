@@ -29,10 +29,13 @@
 @keyframes leaf-sway {
   0%,
   100% {
-    transform: rotate(-2deg);
+    transform: rotate(0);
   }
-  50% {
+  40% {
     transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-1deg);
   }
 }
 @keyframes sun-rise {
@@ -118,7 +121,7 @@ button:active,
 }
 .art-leaf {
   transform-origin: 450px 273px;
-  animation: leaf-sway 4s ease-in-out 1;
+  animation: leaf-sway 4s ease-in-out both;
 }
 .art-bird {
   animation: settle 1.8s var(--ease) both;
@@ -131,34 +134,35 @@ button:active,
 .button svg {
   transition: transform 0.3s var(--ease);
 }
-.hot-work:hover,
-.volume-card:hover {
-  transform: translateY(-3px);
+/* Editorial links move their typography, never a rectangular wash. */
+.hot-work h3,
+.volume-card h3,
+.hot-work .text-link,
+.volume-meta,
+.article-actions svg {
+  transition:
+    transform 0.38s var(--ease),
+    color 0.24s;
 }
-.hot-work::after,
-.volume-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    100deg,
-    color-mix(in srgb, var(--accent) 5%, transparent),
-    transparent 65%
-  );
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
+@media (hover: hover) {
+  .hot-work:hover h3,
+  .volume-card:hover h3 {
+    transform: translateX(4px);
+  }
+  .hot-work:hover .text-link,
+  .volume-card:hover .volume-meta {
+    transform: translateX(6px);
+  }
+  .article-actions > :is(button, a):hover svg {
+    transform: translateY(-2px);
+  }
 }
-.volume-card {
-  position: relative;
-}
-.hot-work:hover::after,
-.volume-card:hover::after {
-  opacity: 1;
+.hot-work:focus-visible h3,
+.volume-card:focus-visible h3 {
+  color: var(--accent);
 }
 dialog[open],
-.user-menu[open] nav,
-.more-actions[open] .more-actions-menu {
+.user-menu[open] nav {
   animation: settle 0.24s var(--ease);
 }
 .article-actions button[aria-pressed='true'] svg {
@@ -173,7 +177,7 @@ dialog[open],
 }
 .skeleton {
   min-height: 90px;
-  background: linear-gradient(100deg, var(--panel), var(--paper));
+  background: var(--panel);
   border-radius: 12px;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -186,12 +190,43 @@ html[data-turn='prev'] .reader {
 .focus-controls {
   transition: opacity 0.35s;
 }
-@view-transition {
-  navigation: auto;
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-::view-transition-old(root) {
-  animation-duration: 0.16s;
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
 }
-::view-transition-new(root) {
-  animation-duration: 0.2s;
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  .site-header {
+    view-transition-name: site-header;
+  }
+  main {
+    view-transition-name: page-content;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 0.24s;
+    animation-timing-function: var(--ease);
+  }
+  ::view-transition-old(page-content) {
+    animation: page-out 0.12s ease both;
+  }
+  ::view-transition-new(page-content) {
+    animation: page-in 0.28s var(--ease) both;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

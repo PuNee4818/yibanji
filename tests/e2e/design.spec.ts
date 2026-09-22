@@ -35,11 +35,11 @@ test('reader has one action bar, a real PDF download, and accessible focus mode'
   expect(pdf.ok()).toBeTruthy();
   expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-');
   await expect(page.locator('[class*="seal"]')).toHaveCount(0);
-  await page.getByRole('button', { name: '专注阅读', exact: true }).click();
+  await page.getByRole('button', { name: '沉浸阅读', exact: true }).click();
   await expect(page.locator('.site-header')).toBeHidden();
   await page.keyboard.press('Escape');
   await expect(page.locator('.site-header')).toBeVisible();
-  await expect(page.getByRole('button', { name: '专注阅读', exact: true })).toBeFocused();
+  await expect(page.getByRole('button', { name: '沉浸阅读', exact: true })).toBeFocused();
   await page.locator('.reader-options summary').click();
   await page.getByLabel('正文字号').selectOption('24');
   await expect(page.locator('.prose')).toHaveCSS('font-size', '24px');

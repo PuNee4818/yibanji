@@ -1,13 +1,24 @@
 import { supabase, rpc, getCurrentUser } from '../lib/supabase';
-import { announce } from './site';
-import { readStorage, writeStorage } from '../lib/storage';
 import type { Discussion } from '../lib/discussion';
 import { discussionCard } from './discussion-render';
 const user = await getCurrentUser();
 const list = document.querySelector<HTMLElement>('[data-feed]');
 if (list) {
   const validTab = (value: string | null) =>
-    ['hot', 'latest', 'following'].includes(value ?? '') ? value! : 'hot';
+    ['hot', 'latest', 'following'].includes(value ?? '') ? value! : 'latest';
+  const stream =
+    document.querySelector<HTMLElement>('[data-community-stream]')!.dataset.communityStream!;
+  const topicSelect = document.querySelector<HTMLSelectElement>('[data-feed-topic]');
+  let topic = new URLSearchParams(location.search).get('topic') ?? '';
+  if (topicSelect) {
+    topicSelect.value = topic;
+    topic = topicSelect.value;
+  }
+  function address() {
+    const params = new URLSearchParams({ tab });
+    if (topic) params.set('topic', topic);
+    return '?' + params;
+  }
   let tab = validTab(new URLSearchParams(location.search).get('tab'));
   let page = 0;
   let request = 0;
@@ -21,9 +32,11 @@ if (list) {
     });
     description.textContent =
       tab === 'hot'
-        ? '最近七天，书友正在聊的事。'
+        ? '最近七天，受到关注的' + (stream === 'posts' ? '帖子。' : '文章评论。')
         : tab === 'latest'
-          ? '新写下的话，按时间排列。'
+          ? stream === 'posts'
+            ? '独立帖子，按发布时间排列。'
+            : '作品下的评论，按时间排列。'
           : '只看你关注的书友。';
   }
   function empty() {
@@ -37,9 +50,15 @@ if (list) {
           ? '这里还没有关注的书友动态。'
           : '还没有新的讨论，第一段感想可以由你写下。';
     const a = document.createElement('a');
-    a.href = tab === 'latest' ? '#compose' : '?tab=latest';
+    a.href =
+      tab === 'latest' ? (stream === 'posts' ? '/community/new/' : '/catalog/') : '?tab=latest';
     a.className = 'button';
-    a.textContent = tab === 'latest' ? '写点感想 →' : '看看最新讨论 →';
+    a.textContent =
+      tab === 'latest'
+        ? stream === 'posts'
+          ? '发布第一篇帖子 →'
+          : '挑一篇文章来读 →'
+        : '看看最新内容 →';
     box.append(p, a);
     return box;
   }
@@ -57,7 +76,7 @@ if (list) {
       p.className = 'empty-state';
       p.textContent = '登录后，看看你关注的书友最近聊了什么。';
       const a = document.createElement('a');
-      a.href = '/auth/?next=' + encodeURIComponent('/community/?tab=following');
+      a.href = '/auth/?next=' + encodeURIComponent(location.pathname + '?tab=following');
       a.textContent = '登录并发现书友 →';
       p.append(document.createElement('br'), a);
       list!.append(p);
@@ -69,7 +88,12 @@ if (list) {
     try {
       const groups = await Promise.all(
         (append ? [targetPage] : Array.from({ length: targetPage + 1 }, (_, i) => i)).map((p) =>
-          rpc<Discussion[]>('community_feed', { p_tab: tab, p_page: p }),
+          rpc<Discussion[]>('community_topics', {
+            p_stream: stream,
+            p_tab: tab,
+            p_topic: topic || null,
+            p_page: p,
+          }),
         ),
       );
       if (version !== request) return;
@@ -106,91 +130,26 @@ if (list) {
       event.preventDefault();
       tab = validTab(a.dataset.feedTab ?? null);
       page = 0;
-      history.pushState(null, '', '?tab=' + tab);
+      history.pushState(null, '', address());
       void refresh();
     }),
   );
   window.addEventListener('popstate', () => {
     tab = validTab(new URLSearchParams(location.search).get('tab'));
+    topic = new URLSearchParams(location.search).get('topic') ?? '';
+    if (topicSelect) {
+      topicSelect.value = topic;
+      topic = topicSelect.value;
+    }
     page = 0;
     void refresh();
   });
   more.addEventListener('click', () => void refresh(true));
-  const form = document.querySelector<HTMLFormElement>('#post-form')!;
-  const area = form.elements.namedItem('content') as HTMLTextAreaElement;
-  const reference = form.elements.namedItem('article_id') as HTMLSelectElement;
-  const draftKey = 'yb_post_draft_' + (user?.id ?? 'guest');
-  const count = document.querySelector('[data-draft-count]')!;
-  const status = document.querySelector('[data-post-status]')!;
-  let key = crypto.randomUUID();
-  let submitted = '';
-  try {
-    const draft = JSON.parse(readStorage(draftKey) ?? 'null');
-    if (draft && typeof draft.content === 'string') {
-      area.value = draft.content.slice(0, 500);
-      reference.value = String(draft.article ?? '');
-      status.textContent = '上次未发出的文字已保留。';
-    }
-  } catch {
-    /* Invalid drafts never block posting. */
-  }
-  function saveDraft() {
-    count.textContent = area.value.length + ' / 500';
-    writeStorage(draftKey, JSON.stringify({ content: area.value, article: reference.value }));
-  }
-  count.textContent = area.value.length + ' / 500';
-  area.addEventListener('input', saveDraft);
-  reference.addEventListener('change', saveDraft);
-  form
-    .querySelector<HTMLInputElement>('[data-reference-search]')
-    ?.addEventListener('input', (e) => {
-      const q = (e.target as HTMLInputElement).value.toLowerCase();
-      for (const option of reference.options)
-        option.hidden =
-          !!option.value &&
-          !((option.textContent ?? '') + ' ' + option.dataset.author).toLowerCase().includes(q);
-    });
-  document.querySelector('[data-compose-open]')?.addEventListener('click', () => {
-    if (user) requestAnimationFrame(() => area.focus());
-  });
-  if (location.hash === '#compose' && user) area.focus();
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (!user) {
-      location.href = '/auth/?next=' + encodeURIComponent('/community/#compose');
-      return;
-    }
-    const body = area.value;
-    const target = reference.value || null;
-    const fingerprint = JSON.stringify([body, target]);
-    if (submitted !== fingerprint) {
-      key = crypto.randomUUID();
-      submitted = fingerprint;
-    }
-    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-    button.disabled = true;
-    status.textContent = '正在发布…';
-    try {
-      await rpc('save_discussion', {
-        p_kind: 'post',
-        p_target: target,
-        p_content: body,
-        p_key: key,
-      });
-      form.reset();
-      submitted = '';
-      saveDraft();
-      tab = 'latest';
-      page = 0;
-      history.replaceState(null, '', '?tab=latest');
-      await refresh();
-      status.textContent = '已发布，新动态就在下方。';
-      announce('新动态已经写下。');
-    } catch (error) {
-      status.textContent = (error as Error).message;
-    } finally {
-      button.disabled = false;
-    }
+  topicSelect?.addEventListener('change', () => {
+    topic = topicSelect.value;
+    page = 0;
+    history.pushState(null, '', address());
+    void refresh();
   });
   void refresh();
 }
@@ -248,7 +207,11 @@ if (highlights) {
 const recent = document.querySelector('[data-recent-discussions]');
 if (recent) {
   try {
-    const rows = await rpc<Discussion[]>('community_feed', { p_tab: 'latest', p_page: 0 });
+    const rows = await rpc<Discussion[]>('community_topics', {
+      p_stream: 'posts',
+      p_tab: 'latest',
+      p_page: 0,
+    });
     recent.replaceChildren();
     for (const row of rows.slice(0, 3))
       recent.append(discussionCard(row, user?.id, async () => location.reload()));
@@ -261,15 +224,21 @@ const post = document.querySelector<HTMLElement>('[data-post-id]');
 if (post) {
   const id = post.dataset.postId!;
   const render = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('discussion_items')
       .select('*')
       .eq('kind', 'post')
       .eq('id', id)
-      .single();
+      .maybeSingle();
+    if (!error && (!data || data.status !== 'visible')) {
+      location.replace('/community/');
+      return;
+    }
     if (data) {
+      const heading = document.querySelector('[data-post-title]');
+      if (heading) heading.textContent = data.title || '书友帖子';
       const target = document.querySelector('[data-post-body]')!;
-      target.replaceChildren(discussionCard(data as Discussion, user?.id, render));
+      target.replaceChildren(discussionCard(data as Discussion, user?.id, render, undefined, true));
     }
   };
   await render();

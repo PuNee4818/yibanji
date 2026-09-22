@@ -1,0 +1,121 @@
+/* PDF sheets remain white in either interface theme. */
+.pdf-dialog {
+  width: min(1080px, calc(100vw - 32px));
+  max-height: min(94dvh, 1100px);
+  padding: 0;
+  overflow: hidden;
+}
+.pdf-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.pdf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 28px 12px;
+}
+.pdf-head h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+}
+.pdf-head p {
+  margin: 0 0 4px;
+}
+.pdf-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--line);
+}
+.pdf-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.pdf-toolbar select {
+  max-width: 220px;
+}
+.pdf-toolbar .button {
+  margin-left: auto;
+}
+.pdf-paging {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.pdf-status {
+  margin: 0;
+  padding: 8px 28px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.pdf-stage {
+  min-height: 180px;
+  height: 62dvh;
+  overflow: auto;
+  background: var(--panel);
+  padding: 16px;
+  overscroll-behavior: contain;
+}
+.pdf-stage canvas {
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 22px #00000014;
+}
+.pdf-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 8px 28px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.pdf-footer button {
+  font-size: inherit;
+  margin-left: auto;
+}
+@media (max-width: 680px) {
+  .pdf-dialog {
+    width: calc(100vw - 16px);
+    max-height: 96dvh;
+  }
+  .pdf-head,
+  .pdf-toolbar {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  .pdf-head h2 {
+    font-size: 21px;
+  }
+  .pdf-toolbar label {
+    gap: 4px;
+  }
+  .pdf-toolbar select {
+    max-width: 180px;
+  }
+  .pdf-toolbar .button {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .pdf-toolbar label:has([data-pdf-zoom]) {
+    margin-left: auto;
+  }
+  .pdf-status {
+    padding: 6px 16px;
+  }
+  .pdf-footer {
+    padding: 8px 16px;
+  }
+  .pdf-footer > span {
+    display: none;
+  }
+}

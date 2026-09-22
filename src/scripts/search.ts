@@ -299,13 +299,13 @@ document.querySelectorAll<HTMLElement>('[data-search-panel]').forEach((panel) =>
                 .filter((id) => /^[a-zA-Z0-9_-]+$/.test(id));
               let req = supabase
                 .from('discussion_items')
-                .select('kind,id,target,content,display_name,username,created_at')
+                .select('kind,id,target,content,display_name,username,created_at,title,topic')
                 .eq('status', 'visible')
                 .in('kind', ['article', 'post']);
               req = ids.length
                 ? req.or('target.is.null,target.in.(' + ids.join(',') + ')')
                 : req.is('target', null);
-              for (const word of query.split(/\s+/)) req = req.ilike('content', pattern(word));
+              for (const word of query.split(/\s+/)) req = req.ilike('search_text', pattern(word));
               const { data, error } = await req
                 .order('created_at', { ascending: false })
                 .order('id')
@@ -318,7 +318,10 @@ document.querySelectorAll<HTMLElement>('[data-search-panel]').forEach((panel) =>
                 const value = row as Discussion;
                 results.push({
                   key: row.kind + ':' + row.id,
-                  title: row.display_name + '的' + (row.kind === 'article' ? '文章评论' : '动态'),
+                  title:
+                    row.kind === 'post'
+                      ? row.title || row.display_name + '的帖子'
+                      : row.display_name + '的文章评论',
                   meta: '社区 · ' + new Date(row.created_at).toLocaleDateString('zh-CN'),
                   text: row.content.slice(0, 160),
                   href: discussionUrl(value),

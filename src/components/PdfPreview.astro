@@ -1,0 +1,98 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  id: string;
+  title: string;
+  chapter?: number;
+  chapterTitle?: string;
+  novel?: boolean;
+}
+const { id, title, chapter, chapterTitle, novel } = Astro.props;
+const filename = (name: string) =>
+  name
+    .replace(/[\\/:*?"<>|]/g, '－')
+    .split('')
+    .filter((c) => c.charCodeAt(0) >= 32)
+    .join('')
+    .trim() + '.pdf';
+const label = chapter ? title + ' · ' + (chapterTitle || '第' + chapter + '章') : title;
+const href = '/pdf/' + id + (chapter ? '-' + chapter : '') + '.pdf';
+---
+
+<dialog id="pdf-dialog" class="pdf-dialog" aria-labelledby="pdf-title">
+  <header class="pdf-head">
+    <div>
+      <p class="eyebrow">纸上阅读</p>
+      <h2 id="pdf-title">{title}</h2>
+    </div>
+    <form method="dialog">
+      <button class="icon-button" aria-label="关闭 PDF 预览">
+        <Icon name="close" />
+      </button>
+    </form>
+  </header>
+  <div class="pdf-toolbar">
+    <label class:list={{ 'sr-only': !(novel && chapter) }}>
+      预览范围
+      <select data-pdf-edition tabindex={novel && chapter ? undefined : -1}>
+        <option value={href} data-filename={filename(label)}>
+          {chapter ? '本章 · ' + chapterTitle : '整篇作品'}
+        </option>
+        {novel && chapter && (
+          <option value={'/pdf/' + id + '.pdf'} data-filename={filename(title)}>
+            全书 · {title}
+          </option>
+        )}
+      </select>
+    </label>
+    <div class="pdf-paging" aria-label="PDF 翻页">
+      <button data-pdf-prev class="icon-button" aria-label="PDF 上一页" disabled>
+        ←
+      </button>
+      <span data-pdf-pages>— / —</span>
+      <button data-pdf-next class="icon-button" aria-label="PDF 下一页" disabled>
+        →
+      </button>
+    </div>
+    <label>
+      缩放
+      <select data-pdf-zoom>
+        <option value="fit">适合宽度</option>
+        <option value="1">100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5">150%</option>
+      </select>
+    </label>
+    <a
+      class="button primary"
+      data-pdf-download
+      data-astro-prefetch="false"
+      {href}
+      download={filename(label)}
+    >
+      <Icon name="download" size={16} />
+      下载 PDF
+    </a>
+  </div>
+  <p data-pdf-status role="status" class="pdf-status">
+    打开后载入预览
+  </p>
+  <div class="pdf-stage" data-pdf-stage tabindex="0" aria-label="PDF 页面，可滚动查看">
+    <canvas data-pdf-canvas hidden role="img" aria-label="PDF 页面预览"></canvas>
+    <button data-pdf-retry hidden>
+      重新载入预览
+    </button>
+  </div>
+  <footer class="pdf-footer">
+    <span>预览与下载使用同一份文件</span>
+    <a data-pdf-external data-astro-prefetch="false" {href} target="_blank" rel="noopener">
+      在新页打开 ↗
+    </a>
+    <button class="quiet-button" data-print>
+      打印正文
+    </button>
+  </footer>
+</dialog>
+<script>
+  import '../scripts/pdf-preview';
+</script>

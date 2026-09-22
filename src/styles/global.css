@@ -3,10 +3,12 @@
 @import './base.css' layer(base);
 @import './layout.css' layer(layout);
 @import './publication.css' layer(components);
+@import './levels.css' layer(components);
 @import './home.css' layer(pages);
 @import './reader.css' layer(pages);
 @import './community.css' layer(pages);
 @import './search.css' layer(pages);
+@import './pdf.css' layer(pages);
 @import './motion.css' layer(motion);
 @layer accessibility {
   [hidden] {

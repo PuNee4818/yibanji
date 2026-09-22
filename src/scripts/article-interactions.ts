@@ -34,9 +34,25 @@ if (root) {
     const marked = user ? context.bookmarked : parseBookmarks(readStorage('yb_favs')).includes(id);
     bookmark.setAttribute('aria-pressed', String(marked));
     bookmark.querySelector('[data-action-label]')!.textContent = marked ? '已收藏' : '收藏';
-    root!.querySelector('[data-article-stats]')!.textContent = s
-      ? `${s.view_count} 次阅读 · ${s.like_count} 人点赞 · ${s.egg_count} 枚臭鸡蛋 · ${s.comment_count} 条评论`
-      : '互动暂时不可用';
+    const stats = root!.querySelector('[data-article-stats]')!;
+    stats.replaceChildren();
+    if (s) {
+      for (const [value, label] of [
+        [s.view_count, '次阅读'],
+        [s.like_count, '人点赞'],
+        [s.egg_count, '枚臭鸡蛋'],
+        [s.comment_count, '条评论'],
+      ] as const) {
+        const row = document.createElement('span');
+        row.className = 'article-stat';
+        const count = document.createElement('strong');
+        count.textContent = String(value);
+        const caption = document.createElement('span');
+        caption.textContent = label;
+        row.append(count, document.createTextNode(' '), caption);
+        stats.append(row);
+      }
+    } else stats.textContent = '互动暂时不可用';
     root!.querySelector('[data-egg-wallet]')!.textContent =
       `你有 ${context.balance ?? 0} 枚臭鸡蛋 · 已向本文投出 ${context.my_eggs} 枚`;
   }

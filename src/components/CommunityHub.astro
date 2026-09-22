@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from './Icon.astro';
+interface Props {
+  stream?: 'posts' | 'comments';
+}
+const { stream = 'posts' } = Astro.props;
+const posts = stream === 'posts';
+---
+
+<Layout title={posts ? '社区 · 帖子' : '社区 · 文章评论'}>
+  <header class="page-head community-head">
+    <div>
+      <p class="eyebrow">文字之外，还有回声</p>
+      <h1>书友之间</h1>
+      <p>{posts ? '开一个话题，把想说的话慢慢写完。' : '读后的一句话，留在原文旁边。'}</p>
+    </div>
+    <a class="button primary" href="/community/new/">
+      <Icon name="note" size={18} />
+      发布帖子
+    </a>
+  </header>
+  <nav class="community-streams" aria-label="社区内容类型">
+    <a href="/community/" aria-current={posts ? 'page' : undefined}>
+      帖子广场 <small>独立话题与交流</small>
+    </a>
+    <a href="/community/comments/" aria-current={!posts ? 'page' : undefined}>
+      文章评论 <small>从作品继续读起</small>
+    </a>
+  </nav>
+  <div class="community-layout">
+    <section data-community-stream={stream}>
+      <div id="compose" class="compose-section">
+        <div class="guest-compose" data-guest-only>
+          <span class="compose-glyph" aria-hidden="true">
+            <Icon name="note" size={36} />
+          </span>
+          <div>
+            <h2>你的这一页，写些什么？</h2>
+            <p>开一个新话题，或去文章下留一段读后感。</p>
+            <a href={'/auth/?next=' + encodeURIComponent('/community/new/')} class="text-link">
+              登录参与 →
+            </a>
+          </div>
+        </div>
+        <a class="compose-entry" href="/community/new/" data-auth-only hidden>
+          <Icon name="note" />
+          写下一个标题，开始新话题 <span>发布帖子 ↗</span>
+        </a>
+      </div>
+      <div class="feed-controls">
+        <nav class="tabs" aria-label="社区排序">
+          <a href="?tab=hot" data-feed-tab="hot">
+            热门
+          </a>
+          <a href="?tab=latest" data-feed-tab="latest">
+            最新
+          </a>
+          <a href="?tab=following" data-feed-tab="following">
+            关注
+          </a>
+        </nav>
+        {posts && (
+          <label class="topic-filter">
+            话题
+            <select data-feed-topic>
+              <option value="">全部</option>
+              <option>读书</option>
+              <option>随笔</option>
+              <option>提问</option>
+              <option>闲谈</option>
+            </select>
+          </label>
+        )}
+      </div>
+      <p class="muted small" data-feed-description>
+        正在翻开{posts ? '帖子' : '文章评论'}…
+      </p>
+      <div data-feed aria-live="polite">
+        <div class="skeleton" role="status" aria-label="正在加载讨论"></div>
+      </div>
+      <button data-more-feed hidden>
+        查看更多{posts ? '帖子' : '评论'}
+      </button>
+    </section>
+    <aside>
+      <section class="community-guide">
+        <span class="eyebrow">初次见面</span>
+        <h2>{posts ? '让一个话题展开' : '从一篇文章开始'}</h2>
+        <p>帖子有自己的标题和讨论页；文章评论会带你回到对应的原文。</p>
+        <a href="/catalog/">挑一篇来读 →</a>
+        <a href="/me/rewards/">看看墨迹与等级 →</a>
+      </section>
+      <div data-highlights></div>
+      <a class="community-rules" href="/community/guidelines/">
+        社区规范 ↗
+      </a>
+    </aside>
+  </div>
+  <script>
+    import '../scripts/community';
+  </script>
+</Layout>

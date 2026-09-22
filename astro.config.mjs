@@ -6,13 +6,17 @@ import { validatePublicEnv } from './tools/public-env.mjs';
 
 export default defineConfig({
   output: 'static',
+  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   adapter: process.env.VERCEL === '1' ? vercel() : node({ mode: 'standalone' }),
   trailingSlash: 'always',
   vite: { build: { sourcemap: false } },
-  integrations: [{
-    name: 'validate-public-configuration',
-    hooks: {
-      'astro:build:start': () => validatePublicEnv(loadEnv('production', process.cwd(), 'PUBLIC_')),
+  integrations: [
+    {
+      name: 'validate-public-configuration',
+      hooks: {
+        'astro:build:start': () =>
+          validatePublicEnv(loadEnv('production', process.cwd(), 'PUBLIC_')),
+      },
     },
-  }],
+  ],
 });

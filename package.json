@@ -47,7 +47,8 @@
     "@astrojs/node": "^11.1.6",
     "@astrojs/vercel": "^11.0.10",
     "@supabase/supabase-js": "^2.116.0",
-    "astro": "^7.3.3"
+    "astro": "^7.3.3",
+    "pdfjs-dist": "^6.3.289"
   },
   "type": "module",
   "overrides": {

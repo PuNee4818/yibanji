@@ -1,5 +1,5 @@
 import { supabase, rpc, getCurrentUser } from '../lib/supabase';
-import { levelNames, type Growth, type Task } from '../lib/growth';
+import { levelBadge, levelNames, type Growth, type Task } from '../lib/growth';
 import { announce } from './site';
 interface Badge {
   id: string;
@@ -14,7 +14,7 @@ export function growthCard(g: { exp: number; level: number }): HTMLElement {
   box.className = 'growth-card';
   const title = document.createElement('h2');
   title.textContent = `${levelNames[g.level - 1]} · ${g.exp} 墨迹`;
-  box.append(title);
+  box.append(levelBadge(g.level), title);
   const next = [50, 150, 400, 900, 1800][g.level - 1];
   if (next) {
     const label = document.createElement('label');
