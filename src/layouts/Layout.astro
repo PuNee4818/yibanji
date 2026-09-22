@@ -59,6 +59,14 @@ const path = Astro.url.pathname;
         <a href="/catalog/" aria-current={path.startsWith('/catalog') ? 'page' : undefined}>
           目录
         </a>
+        <a
+          href="/submissions/"
+          aria-current={
+            path.startsWith('/submissions') || path.startsWith('/write') ? 'page' : undefined
+          }
+        >
+          投稿
+        </a>
         <a href="/community/" aria-current={path.startsWith('/community') ? 'page' : undefined}>
           社区
         </a>
@@ -119,6 +127,8 @@ const path = Astro.url.pathname;
             <a href="/me/" data-my-profile data-auth-only hidden>
               我的主页
             </a>
+            <a href="/me/writing/">我的创作</a>
+            <a href="/write/">写一篇文章</a>
             <a href="/me/bookmarks/">我的收藏</a>
             <a href="/me/history/">阅读历史</a>
             <a href="/notifications/" data-auth-only hidden>

@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="我的创作">
+  <header class="page-head writing-desk-head">
+    <div>
+      <p class="eyebrow">我的书桌</p>
+      <h1>写过的，正写着的。</h1>
+      <p>还没写完也没关系，下次从这里接着写。</p>
+    </div>
+    <a href="/write/" class="button primary">
+      新写一篇 ↗
+    </a>
+  </header>
+  <nav class="tabs" aria-label="创作状态">
+    <button data-writing-tab="draft" aria-pressed="true">
+      草稿
+    </button>
+    <button data-writing-tab="published" aria-pressed="false">
+      已发布
+    </button>
+    <button data-writing-tab="withdrawn" aria-pressed="false">
+      已撤回
+    </button>
+  </nav>
+  <p data-writing-list-status role="status">
+    正在整理书桌…
+  </p>
+  <div class="writing-draft-list" data-writing-list></div>
+  <script>
+    import '../../scripts/writing-desk';
+  </script>
+</Layout>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import HomeWriting from '../components/HomeWriting.astro';
 import HeroArt from '../components/HeroArt.astro';
 import Icon from '../components/Icon.astro';
 import { book, articleUrl } from '../lib/book';
@@ -35,6 +36,9 @@ const descriptions: Record<string, string> = {
       <div class="hero-actions">
         <a class="button primary" href="/catalog/">
           翻开文集 <Icon name="arrow" size={18} />
+        </a>
+        <a class="button" href="/write/">
+          写一篇文章 ↗
         </a>
         <span class="muted">九卷 · 五十四篇</span>
       </div>
@@ -89,6 +93,7 @@ const descriptions: Record<string, string> = {
       })}
     </div>
   </section>
+  <HomeWriting />
   <section class="volume-section">
     <div class="section-heading">
       <div>

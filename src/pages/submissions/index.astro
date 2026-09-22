@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { submissionGenres, submissionTags } from '../../lib/submissions';
+---
+
+<Layout
+  title="自由来稿"
+  description="把想说的话，写成可以重逢的一页。在一班集阅读与发表散文、诗歌、小说和更多文字。"
+>
+  <section class="submission-masthead">
+    <div>
+      <p class="eyebrow">
+        <span class="red-dot"></span> 一班集 · 自由来稿
+      </p>
+      <h1>
+        让文字，
+        <br />
+        在这里相遇。
+      </h1>
+      <p class="submission-intro">
+        生活里未说完的话，想象中未走完的路。
+        <br />
+        写下来，总有人会读到。
+      </p>
+      <div class="submission-actions">
+        <a class="button primary" href="/write/">
+          写一篇文章 ↗
+        </a>
+        <a href="/me/writing/">我的创作 →</a>
+      </div>
+    </div>
+    <aside class="submission-letter" aria-label="写给每一位作者">
+      <span class="eyebrow">给每一位提笔的人</span>
+      <p>
+        不必等到
+        <br />
+        故事完整，
+        <br />
+        才写下第一行。
+      </p>
+      <span class="submission-letter-rule"></span>
+      <small>自由写作 · 发布即与读者相见</small>
+    </aside>
+  </section>
+  <section class="submission-discovery" aria-labelledby="submission-feed-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">从一页文字，认识一个人</p>
+        <h2 id="submission-feed-title">新落在纸上的文字</h2>
+      </div>
+      <button type="button" data-submission-random class="quiet-button">
+        随缘读一篇 ↗
+      </button>
+    </div>
+    <form class="submission-filters" id="submission-filters" role="search">
+      <div class="submission-search">
+        <label class="sr-only" for="submission-query">
+          搜索来稿
+        </label>
+        <input
+          id="submission-query"
+          name="q"
+          type="search"
+          maxlength="100"
+          placeholder="篇名、作者，或记得的一句话"
+        />
+        <button type="submit">寻找文字 →</button>
+      </div>
+      <div class="submission-filter-row">
+        <label>
+          文体
+          <select name="genre">
+            <option value="">全部文体</option>
+            {Object.entries(submissionGenres).map(([key, label]) => (
+              <option value={key}>{label}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          主题
+          <select name="tag">
+            <option value="">全部主题</option>
+            {submissionTags.map((tag) => (
+              <option>{tag}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          排序
+          <select name="sort">
+            <option value="latest">最新发表</option>
+            <option value="popular">近期受欢迎</option>
+            <option value="following">我关注的</option>
+          </select>
+        </label>
+        <label class="submission-short">
+          <input type="checkbox" name="short" /> 读一篇短文 <small>千字以内</small>
+        </label>
+      </div>
+    </form>
+    <div class="submission-feed-status">
+      <p role="status" data-submission-status>
+        正在翻开来稿…
+      </p>
+      <button type="button" data-submission-reset class="quiet-button" hidden>
+        清除筛选
+      </button>
+    </div>
+    <div class="submission-grid" data-submission-list aria-busy="true"></div>
+    <button class="submission-more" data-submission-more hidden>
+      再读一些
+    </button>
+    <noscript>
+      <p>请启用 JavaScript 浏览与搜索最新来稿。通过作品链接可以直接阅读全文。</p>
+    </noscript>
+  </section>
+  <script>
+    import '../../scripts/submissions';
+  </script>
+</Layout>

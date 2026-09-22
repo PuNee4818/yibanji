@@ -1,3 +1,4 @@
+import { submissionGenres, submissionUrl, type Submission } from '../lib/submissions';
 import { searchHits, type SearchArticle } from '../lib/search';
 import { parseBookmarks, readStorage, writeStorage } from '../lib/storage';
 import { discussionUrl, type Discussion } from '../lib/discussion';
@@ -236,7 +237,7 @@ document.querySelectorAll<HTMLElement>('[data-search-panel]').forEach((panel) =>
     errors = [];
     remoteMore = false;
     more.hidden = true;
-    genre.disabled = !['works', 'all'].includes(source.value);
+    genre.disabled = !['works', 'all', 'submissions'].includes(source.value);
     if (!query) {
       state.textContent = '输入几个字，从这里找起。';
       if (full) historyReplace();
@@ -285,6 +286,30 @@ document.querySelectorAll<HTMLElement>('[data-search-panel]').forEach((panel) =>
         if (!current()) return;
         const pending: Promise<void>[] = [];
         const start = remotePage * 20;
+        if (['all', 'submissions'].includes(source.value))
+          pending.push(
+            (async () => {
+              const { data, error } = await supabase
+                .rpc('submission_feed', {
+                  p_query: query,
+                  p_genre: genre.value,
+                  p_page: remotePage,
+                })
+                .abortSignal(signal);
+              if (error) throw new Error('投稿作品暂时不可用');
+              if (!current()) return;
+              remoteMore ||= data.length === 20;
+              for (const row of data as Submission[])
+                results.push({
+                  key: 'submission:' + row.id,
+                  title: row.title,
+                  meta: '投稿 · ' + row.display_name + ' · ' + submissionGenres[row.genre],
+                  text: row.summary,
+                  href: submissionUrl(row.id),
+                  preview: [row.summary],
+                });
+            })(),
+          );
         if (['all', 'community'].includes(source.value))
           pending.push(
             (async () => {
@@ -441,7 +466,7 @@ document.querySelectorAll<HTMLElement>('[data-search-panel]').forEach((panel) =>
   if (full) {
     const p = new URLSearchParams(location.search);
     input.value = (p.get('q') ?? '').slice(0, 100);
-    source.value = ['all', 'community', 'people'].includes(p.get('source') ?? '')
+    source.value = ['all', 'community', 'people', 'submissions'].includes(p.get('source') ?? '')
       ? p.get('source')!
       : 'works';
     genre.value = p.get('genre') ?? '';

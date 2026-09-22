@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { randomUUID } from 'node:crypto';
 import { fixtures } from '../integration/fixtures.mjs';
 
-test('real reading-to-community loop: likes, migration, comments, multi/repeat eggs, posts, follow and notifications', async ({
+test('real reading-to-community loop: likes, bookmarks, comments, multi/repeat eggs, posts, follow and notifications', async ({
   page,
 }, testInfo) => {
   test.setTimeout(210000);
@@ -51,9 +51,9 @@ test('real reading-to-community loop: likes, migration, comments, multi/repeat e
     await expect(page.locator('[data-like]')).toHaveAttribute('aria-pressed', 'true');
     await page.evaluate(() => localStorage.setItem('yb_favs', '["a01","a03"]'));
     await page.goto('/me/bookmarks/');
-    await live(page.locator('#import-bookmarks')).toBeVisible();
-    await page.locator('#import-bookmarks').click();
-    await live(page.locator('[data-bookmark-item="a01"]')).toBeVisible();
+    await expect(page.locator('#import-bookmarks')).toHaveCount(0);
+    await live(page.locator('[data-bookmark-item="a03"]')).toBeVisible();
+    await live(page.locator('[data-bookmark-item="a01"]')).toBeHidden();
     expect(await page.evaluate(() => localStorage.getItem('yb_favs'))).toBe('["a01","a03"]');
     await page.goto('/me/history/');
     await live(page.locator('[data-history-item="a03"]')).toBeVisible();

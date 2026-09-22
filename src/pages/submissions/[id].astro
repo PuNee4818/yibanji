@@ -1,0 +1,150 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ReadingSettings from '../../components/ReadingSettings.astro';
+import WritingBody from '../../components/WritingBody.astro';
+import SubmissionCard from '../../components/SubmissionCard.astro';
+import { supabase } from '../../lib/supabase';
+import { submissionGenres, isVerse, writingBlocks, type Submission } from '../../lib/submissions';
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 'no-store');
+const id = Astro.params.id || '';
+const valid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+const { data, error } = valid
+  ? await supabase.from('submission_public').select('*').eq('id', id).maybeSingle()
+  : { data: null, error: null };
+const item = data as Submission | null;
+if (!item) Astro.response.status = error ? 503 : 404;
+const headings = item
+  ? writingBlocks(item.body!, isVerse(item.genre))
+      .map((block, index) => ({ ...block, index }))
+      .filter((block) => block.kind === 'heading')
+  : [];
+let related: Submission[] = [];
+if (item) {
+  const { data: rows } = await supabase.rpc('submission_feed', { p_genre: item.genre });
+  related = (rows || []).filter((row: Submission) => row.id !== id).slice(0, 2);
+}
+---
+
+<Layout title={item?.title || '来稿阅读'} description={item?.summary || '阅读一班集的自由来稿。'}>
+  {item ? (
+    <div
+      class="submission-reader-shell"
+      data-submission-reader={item.id}
+      data-submission-author={item.user_id}
+    >
+      <div class="submission-progress" aria-hidden="true">
+        <span data-submission-progress></span>
+      </div>
+      <nav class="reader-breadcrumb" aria-label="阅读位置">
+        <a href="/submissions/">自由来稿</a>
+        <span>／</span>
+        <a href={'/submissions/?genre=' + item.genre}>{submissionGenres[item.genre]}</a>
+      </nav>
+      <header class="submission-reader-head">
+        <p class="eyebrow">{submissionGenres[item.genre]} · 自由来稿</p>
+        <h1>{item.title}</h1>
+        <div class="submission-card-foot">
+          <a class="submission-author" href={'/u/' + encodeURIComponent(item.username) + '/'}>
+            {item.display_name} ↗
+          </a>
+          <span class="muted small">
+            {new Date(item.published_at).toLocaleDateString('zh-CN')} ·{' '}
+            {item.word_count.toLocaleString()} 字 · 约{' '}
+            {Math.max(1, Math.ceil(item.word_count / 450))} 分钟
+          </span>
+        </div>
+        <div class="submission-tags">
+          {item.tags.map((tag) => (
+            <a href={'/submissions/?tag=' + encodeURIComponent(tag)}>#{tag}</a>
+          ))}
+        </div>
+      </header>
+      <details class="submission-reading-options">
+        <summary>阅读设置 · 字号、行距与纸色</summary>
+        <ReadingSettings />
+      </details>
+      {headings.length > 0 && (
+        <details class="submission-toc">
+          <summary>这篇文章的目录 · {headings.length} 节</summary>
+          <nav aria-label="文章目录">
+            {headings.map((h) => (
+              <a href={'#writing-section-' + h.index}>{h.text}</a>
+            ))}
+          </nav>
+        </details>
+      )}
+      <article class="submission-reader-body" aria-label="文章正文">
+        <WritingBody body={item.body!} genre={item.genre} indent={item.indent} />
+      </article>
+      <p class="reading-end" aria-hidden="true">
+        · · ·
+      </p>
+      <div class="submission-reader-actions">
+        <button disabled data-submission-mark="like" aria-pressed="false">
+          喜欢 <span data-submission-like-count>{item.like_count}</span>
+        </button>
+        <button disabled data-submission-mark="bookmark" aria-pressed="false">
+          收藏
+        </button>
+        <button data-share>分享这篇文字</button>
+        <button disabled data-submission-follow aria-pressed="false">
+          关注作者
+        </button>
+        <a class="button" href={'/write/?draft=' + item.id} data-submission-edit hidden>
+          编辑作品
+        </a>
+      </div>
+      <section class="submission-comments" aria-labelledby="submission-comments-heading">
+        <h2 id="submission-comments-heading">读后的回声</h2>
+        <p class="muted">留下一句感受，让作者知道你曾读到这里。</p>
+        <form class="submission-comment-form">
+          <label for="submission-comment">写下读后感</label>
+          <textarea
+            id="submission-comment"
+            maxlength="2000"
+            rows="3"
+            required
+            placeholder="哪一句，让你停留了一会儿？"
+          ></textarea>
+          <button type="submit" disabled>
+            留下回声
+          </button>
+          <p role="status" data-submission-comment-status></p>
+        </form>
+        <div data-submission-comments></div>
+        <button data-submission-comments-more hidden>
+          更多回声
+        </button>
+      </section>
+      <section class="submission-related">
+        <div class="section-heading">
+          <h2>继续翻一页</h2>
+          <a href={'/u/' + encodeURIComponent(item.username) + '/?stream=works'}>
+            这位作者的其他作品 ↗
+          </a>
+        </div>
+        <div class="submission-grid">
+          {related.map((row) => (
+            <SubmissionCard item={row} />
+          ))}
+        </div>
+        <div class="submission-actions">
+          <a href="/submissions/">回到自由来稿 →</a>
+          <a href="/write/">也写下一篇 ↗</a>
+        </div>
+      </section>
+    </div>
+  ) : (
+    <section class="submission-empty">
+      <h1>{error ? '这一页暂时没有打开' : '这篇文字暂时不可阅读'}</h1>
+      <p>{error ? '请稍后重试，或先看看其他来稿。' : '作品可能尚未发布、已撤回或已删除。'}</p>
+      <a class="button" href="/submissions/">
+        去阅读其他来稿 →
+      </a>
+    </section>
+  )}
+  <script>
+    import '../../scripts/submission-reader';
+  </script>
+</Layout>

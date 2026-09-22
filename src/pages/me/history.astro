@@ -1,5 +1,26 @@
 ---
+import SubmissionLibrary from '../../components/SubmissionLibrary.astro';
 import Layout from '../../layouts/Layout.astro';
 import { book } from '../../lib/book';
 ---
-<Layout title="阅读历史"><header class="page-head"><h1>读到这里</h1><p>从上次停下的地方继续。</p></header><p id="history-empty">还没有阅读记录，去目录挑一篇吧。</p><ul class="article-list">{book.articles.map(a => <li data-history-item={a.id} hidden><a href={`/articles/${a.id}/`}>{a.title} · {a.author}</a></li>)}</ul><script>import '../../scripts/library';</script></Layout>
+
+<Layout title="阅读历史">
+  <header class="page-head">
+    <h1>读到这里</h1>
+    <p>从上次停下的地方继续。</p>
+  </header>
+  <p id="history-empty">还没有阅读记录，去目录挑一篇吧。</p>
+  <ul class="article-list">
+    {book.articles.map((a) => (
+      <li data-history-item={a.id} hidden>
+        <a href={`/articles/${a.id}/`}>
+          {a.title} · {a.author}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <script>
+    import '../../scripts/library';
+  </script>
+  <SubmissionLibrary kind="history" />
+</Layout>

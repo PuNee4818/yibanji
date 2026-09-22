@@ -3,6 +3,7 @@ interface Props {
   full?: boolean;
 }
 const { full = false } = Astro.props;
+import { submissionGenres } from '../lib/submissions';
 const prefix = full ? 'search' : 'quick';
 ---
 
@@ -27,6 +28,7 @@ const prefix = full ? 'search' : 'quick';
         <select data-search-source name="source">
           <option value="works">文集</option>
           <option value="all">全部来源</option>
+          <option value="submissions">投稿作品</option>
           <option value="community">社区讨论</option>
           <option value="people">书友</option>
         </select>
@@ -38,7 +40,12 @@ const prefix = full ? 'search' : 'quick';
           <option value="poetry">诗歌</option>
           <option value="essay">散文</option>
           <option value="story">短篇小说</option>
-          <option value="novel">长篇小说</option>
+          <option value="novel">小说</option>
+          {Object.entries(submissionGenres)
+            .filter(([key]) => !['poetry', 'essay', 'story', 'novel'].includes(key))
+            .map(([key, label]) => (
+              <option value={key}>{label}</option>
+            ))}
         </select>
       </label>
     </div>

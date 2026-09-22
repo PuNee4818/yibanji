@@ -1,0 +1,176 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { submissionGenres, submissionTags } from '../../lib/submissions';
+---
+
+<Layout title="写文章">
+  <div class="writing-workspace" data-writing-workspace>
+    <div class="writing-topbar">
+      <a href="/me/writing/">← 我的创作</a>
+      <span class="writing-save-state" role="status" data-writing-state>
+        准备稿纸…
+      </span>
+      <div class="writing-top-actions">
+        <button type="button" data-writing-save>
+          保存
+        </button>
+        <button type="button" data-writing-focus aria-pressed="false">
+          专注
+        </button>
+        <button type="button" data-writing-preview aria-expanded="false">
+          预览
+        </button>
+        <button type="button" class="button primary" data-writing-publish>
+          发布文章
+        </button>
+      </div>
+    </div>
+    <p class="writing-guest-note" data-writing-guest hidden>
+      先安心写，草稿会保存在这台设备。
+      <a data-writing-login href="/auth/?next=/write/">
+        登录后同步云端并发布 →
+      </a>
+    </p>
+    <div class="writing-alert" data-writing-alert role="status" hidden></div>
+    <div class="writing-conflict" data-writing-conflict hidden>
+      <p>这篇草稿在别处更新了。本机文字已保留，请将它保存为独立草稿后再比较。</p>
+      <button type="button" data-writing-copy>
+        保留这份文字为新草稿
+      </button>
+      <a href="/me/writing/">查看云端草稿</a>
+    </div>
+    <form id="writing-form" class="writing-layout">
+      <fieldset class="writing-paper" data-writing-fields disabled>
+        <legend class="sr-only">文章内容</legend>
+        <p class="eyebrow">一页新的开始</p>
+        <label for="writing-title" class="sr-only">
+          文章标题
+        </label>
+        <input
+          id="writing-title"
+          name="title"
+          class="writing-title"
+          maxlength="100"
+          placeholder="给这一页起个名字"
+          autocomplete="off"
+        />
+        <div class="writing-toolbar" aria-label="正文排版工具">
+          <button type="button" data-writing-insert="heading" title="插入小标题">
+            小标题
+          </button>
+          <button type="button" data-writing-insert="bold" title="加粗选中文字">
+            加粗
+          </button>
+          <button type="button" data-writing-insert="quote" title="插入引用">
+            引用
+          </button>
+          <button type="button" data-writing-insert="break" title="插入分隔线">
+            分隔线
+          </button>
+          <button type="button" data-writing-undo>
+            撤销
+          </button>
+          <button type="button" data-writing-redo>
+            重做
+          </button>
+          <span>排版随文体自动适配</span>
+        </div>
+        <label for="writing-body" class="sr-only">
+          文章正文
+        </label>
+        <textarea
+          id="writing-body"
+          name="body"
+          class="writing-body"
+          maxlength="100000"
+          rows="18"
+          placeholder="从此刻想起的那一句开始……"
+        ></textarea>
+        <div class="writing-paper-foot">
+          <span data-writing-count>0 字</span>
+          <span data-writing-hint>段落之间空一行，阅读时自动排版。</span>
+        </div>
+      </fieldset>
+      <aside class="writing-sidebar">
+        <details open>
+          <summary>这篇文字的模样</summary>
+          <div class="writing-metadata">
+            <label>
+              文体
+              <select name="genre">
+                {Object.entries(submissionGenres).map(([key, label]) => (
+                  <option value={key}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <label class="writing-indent-control">
+              <input type="checkbox" name="indent" checked /> 正文首行缩进
+            </label>
+            <label>
+              主题标签 <span class="muted small">最多 5 个</span>
+              <input name="tags" maxlength="84" placeholder="例如：故乡，记忆" />
+            </label>
+            <div class="writing-tag-suggestions" aria-label="常用主题标签">
+              {submissionTags.map((tag) => (
+                <button type="button" data-writing-tag={tag} aria-pressed="false">
+                  {tag}
+                </button>
+              ))}
+            </div>
+            <label>
+              内容提要 <span class="muted small">选填</span>
+              <textarea
+                name="summary"
+                maxlength="240"
+                rows="4"
+                placeholder="留空时，从正文中摘取开头。"
+              ></textarea>
+            </label>
+            <p class="muted small">
+              诗歌保留分行和空行；散文与小说自动适配段距。预览就是读者看到的模样。
+            </p>
+            <button type="button" data-writing-export>
+              导出文字备份 ↓
+            </button>
+          </div>
+        </details>
+      </aside>
+    </form>
+    <section class="writing-preview" data-writing-preview-panel hidden aria-label="文章预览">
+      <p class="eyebrow">阅读预览 · 尚未公开</p>
+      <h1 data-writing-preview-title></h1>
+      <p class="muted" data-writing-preview-meta></p>
+      <div data-writing-preview-body></div>
+    </section>
+    <dialog
+      class="writing-publish-dialog"
+      data-writing-publish-dialog
+      aria-labelledby="writing-publish-heading"
+    >
+      <form method="dialog">
+        <button class="quiet-button" aria-label="关闭发布预览">
+          关闭 ×
+        </button>
+      </form>
+      <p class="eyebrow">把这一页，交给读者</p>
+      <h2 id="writing-publish-heading">准备好与大家见面了吗？</h2>
+      <p data-writing-publish-summary></p>
+      <p class="muted">发布后立即公开。之后仍可编辑，修改稿会单独保存，直到你再次发布。</p>
+      <div class="submission-actions">
+        <button type="button" class="button primary" data-writing-confirm>
+          确认发布
+        </button>
+        <button type="button" data-writing-back>
+          再读一遍
+        </button>
+      </div>
+      <p role="status" data-writing-publish-state></p>
+    </dialog>
+    <noscript>
+      <p>写作与自动保存需要 JavaScript，请启用后继续。</p>
+    </noscript>
+  </div>
+  <script>
+    import '../../scripts/writing';
+  </script>
+</Layout>

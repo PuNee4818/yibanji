@@ -1,0 +1,36 @@
+---
+import { submissionGenres, submissionUrl, isVerse, type Submission } from '../lib/submissions';
+interface Props {
+  item: Submission;
+}
+const { item } = Astro.props;
+---
+
+<article class:list={['submission-card', { 'submission-card-verse': isVerse(item.genre) }]}>
+  <div class="submission-card-top">
+    <span class="eyebrow">{submissionGenres[item.genre] || '作品'}</span>
+    <span class="muted small">
+      {item.word_count.toLocaleString()} 字 · 约 {Math.max(1, Math.ceil(item.word_count / 450))}{' '}
+      分钟
+    </span>
+  </div>
+  <h2>
+    <a href={submissionUrl(item.id)}>{item.title}</a>
+  </h2>
+  <p class="submission-excerpt">{item.summary}</p>
+  <div class="submission-card-foot">
+    <a class="submission-author" href={'/u/' + encodeURIComponent(item.username) + '/'}>
+      {item.display_name}
+    </a>
+    <span class="muted small">
+      {new Date(item.published_at).toLocaleDateString('zh-CN')} · {item.like_count} 喜欢
+    </span>
+  </div>
+  {item.tags.length > 0 && (
+    <div class="submission-tags">
+      {item.tags.map((tag) => (
+        <a href={'/submissions/?tag=' + encodeURIComponent(tag)}>#{tag}</a>
+      ))}
+    </div>
+  )}
+</article>

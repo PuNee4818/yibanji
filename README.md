@@ -50,3 +50,7 @@ Vercel 使用仓库根目录和 `main` 生产分支；`vercel.json` 固定 Astro
 可选 PDF 验收：安装 PyMuPDF 后运行 `python tools/verify-pdfs.py --render`，逐段核验正文、注释、落款、字体嵌入和空白页，并在 `tmp/ux-review/pdf/` 输出检查结果与抽样页面。`npm run audit:styles` 使用 CSS 解析器检查重复规则、属性、跨文件同条件覆盖和不合理的强制优先级。
 
 本轮范围、历史功能恢复及验证结果见 [重构验收记录](docs/UX_REFACTOR_ACCEPTANCE_2026-09-21.md)。
+
+## 自由来稿
+
+独立投稿入口为 `/submissions/`，写作入口为 `/write/`。支持 16 种文体、主题标签、自动保存草稿、无需审核直接发布、阅读互动、个人主页作品展示与投稿检索。使用方式、保存规则和验证说明见 [自由来稿说明](docs/SUBMISSIONS.md)。

@@ -4,6 +4,7 @@ import ProfileEditor from '../../components/ProfileEditor.astro';
 import Icon from '../../components/Icon.astro';
 import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
+import { normalizedLevel, levelNames, levelDescriptions } from '../../lib/growth';
 export const prerender = false;
 const { data: profile, error } = await supabase
   .from('profile_summaries')
@@ -11,6 +12,10 @@ const { data: profile, error } = await supabase
   .eq('username', Astro.params.username ?? '')
   .maybeSingle();
 if (!profile) Astro.response.status = error ? 503 : 404;
+const { data: progress } = profile
+  ? await supabase.from('user_progress').select('level').eq('user_id', profile.id).maybeSingle()
+  : { data: null };
+const level = progress ? normalizedLevel(progress.level) : null;
 ---
 
 <Layout title={profile?.display_name ?? '书友主页'}>
@@ -32,9 +37,26 @@ if (!profile) Astro.response.status = error ? 503 : 404;
         </div>
         <div class="profile-identity">
           <p class="eyebrow">
-            书友 / <span data-profile-handle title={profile.username}>@{profile.username}</span>
+            书友 /{' '}
+            <span data-profile-handle title={profile.username}>
+              @{profile.username}
+            </span>
           </p>
-          <h1 data-profile-display-name>{profile.display_name}</h1>
+          <div class="profile-name">
+            <h1 data-profile-display-name>{profile.display_name}</h1>
+            <span data-profile-level>
+              {level && (
+                <span
+                  class="level-badge"
+                  data-level={level}
+                  aria-label={'等级 ' + level + '，' + levelNames[level - 1]}
+                  title={levelDescriptions[level - 1]}
+                >
+                  {['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ'][level - 1]} {levelNames[level - 1]}
+                </span>
+              )}
+            </span>
+          </div>
           <p class="profile-bio" data-profile-bio-text>
             {profile.bio || '在字里行间，慢慢相识。'}
           </p>
@@ -81,14 +103,28 @@ if (!profile) Astro.response.status = error ? 503 : 404;
         </button>
         <span class="profile-social-note">文字之外，还有同路人。</span>
       </nav>
+      <section class="profile-private" data-profile-private hidden aria-label="我的成长">
+        <details class="profile-growth-panel">
+          <summary>
+            <span>我的墨迹与成长</span>
+            <small>查看等级与成长记录 · 仅自己可见</small>
+          </summary>
+          <div id="profile-growth" aria-live="polite">
+            正在翻开成长记录…
+          </div>
+          <LevelGallery />
+          <a href="/me/rewards/">查看奖励与任务 →</a>
+        </details>
+      </section>
       <section class="profile-publication" id="profile-activity">
         <div class="section-heading">
           <h2>留在这里的文字</h2>
-          <a href="/community/new/" data-profile-write hidden>
-            写一篇帖子 ↗
+          <a href="/me/writing/" data-profile-write hidden>
+            我的创作 ↗
           </a>
         </div>
         <nav class="tabs" aria-label="个人活动类型">
+          <a href="?stream=works" data-profile-stream="works">作品</a>
           <a href="?stream=posts" data-profile-stream="posts" aria-current="page">
             帖子
           </a>
@@ -100,19 +136,6 @@ if (!profile) Astro.response.status = error ? 503 : 404;
         <button data-profile-more hidden>
           查看更多活动
         </button>
-      </section>
-      <section class="profile-private" data-profile-private hidden aria-label="我的成长">
-        <details class="profile-growth-panel">
-          <summary>
-            <span>我的墨迹与成长</span>
-            <small>仅自己可见</small>
-          </summary>
-          <div id="profile-growth" aria-live="polite">
-            正在翻开成长记录…
-          </div>
-          <LevelGallery />
-          <a href="/me/rewards/">查看奖励与任务 →</a>
-        </details>
       </section>
       <ProfileEditor />
       <dialog

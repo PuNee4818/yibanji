@@ -1,0 +1,738 @@
+.submission-masthead {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding: 64px 0 60px;
+  border-bottom: 1px solid var(--line);
+}
+.submission-masthead h1 {
+  font: 400 clamp(40px, 5vw, 66px)/1.35 var(--serif);
+  letter-spacing: 0.035em;
+  margin: 22px 0;
+}
+.submission-intro {
+  color: var(--muted);
+  line-height: 2;
+}
+.submission-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  margin-top: 28px;
+}
+.submission-letter {
+  max-width: 340px;
+  justify-self: end;
+  width: 100%;
+  padding: 32px 40px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 2px 28px 2px 2px;
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--line) 25%, transparent);
+}
+.submission-letter p {
+  font: clamp(26px, 3vw, 34px)/1.9 var(--serif);
+  margin: 22px 0;
+}
+.submission-letter-rule {
+  display: block;
+  height: 2px;
+  width: 40px;
+  background: var(--accent);
+  margin: 24px 0;
+}
+.submission-letter small {
+  color: var(--muted);
+}
+.submission-discovery {
+  padding: 44px 0;
+}
+.submission-filters {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--raised);
+}
+.submission-search {
+  display: flex;
+  gap: 12px;
+}
+.submission-search input {
+  flex: 1;
+  min-width: 0;
+  background: var(--paper);
+}
+.submission-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 18px;
+  align-items: end;
+}
+.submission-filter-row > label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--muted);
+  flex: 1;
+  min-width: 130px;
+}
+.submission-filter-row .submission-short {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 190px;
+  align-self: center;
+  flex: 1.25;
+}
+.submission-short input,
+.writing-indent-control input {
+  min-height: 20px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.submission-feed-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 68px;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.submission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.submission-card {
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--raised);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.submission-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  box-shadow: 0 8px 24px #33271608;
+}
+.submission-card-top,
+.submission-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.submission-card h2 {
+  font: 25px/1.55 var(--serif);
+  margin: 20px 0 12px;
+  overflow-wrap: anywhere;
+}
+.submission-card h2 a {
+  text-decoration: none;
+}
+.submission-excerpt {
+  color: var(--muted);
+  font-family: var(--serif);
+  line-height: 1.95;
+  margin: 0 0 24px;
+  min-height: 5.85em;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.submission-card-verse .submission-excerpt {
+  padding-left: 16px;
+  border-left: 2px solid var(--line);
+}
+.submission-author {
+  font-size: 14px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.submission-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.submission-tags a {
+  text-decoration: none;
+}
+.submission-more {
+  display: block;
+  margin: 32px auto 0;
+  min-width: 160px;
+}
+.submission-empty {
+  grid-column: 1 / -1;
+  padding: 54px 24px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+}
+.submission-empty h3 {
+  font: 24px/1.5 var(--serif);
+  margin: 0 0 12px;
+}
+.submission-empty p {
+  color: var(--muted);
+}
+.home-writing {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: center;
+  padding: 36px 40px;
+  margin: 48px 0;
+  background: var(--panel);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 12px 12px;
+}
+.home-writing h2 {
+  font: clamp(24px, 3vw, 34px)/1.5 var(--serif);
+  margin: 10px 0;
+}
+.home-writing p {
+  color: var(--muted);
+}
+.home-writing .submission-actions {
+  justify-content: flex-end;
+  margin: 0;
+}
+.home-writing-latest {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font-size: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.writing-workspace {
+  padding-top: 20px;
+}
+.writing-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 14px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.writing-topbar > a {
+  text-decoration: none;
+  font-size: 14px;
+}
+.writing-save-state {
+  color: var(--muted);
+  font-size: 12px;
+  flex: 1;
+}
+.writing-top-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.writing-top-actions button {
+  font-size: 13px;
+  padding: 8px 14px;
+}
+.writing-guest-note,
+.writing-alert,
+.writing-conflict {
+  padding: 14px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  font-size: 14px;
+}
+.writing-conflict button {
+  margin-right: 16px;
+}
+.writing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 32px;
+  margin: 28px 0 48px;
+  align-items: start;
+}
+.writing-paper {
+  border: 1px solid var(--line);
+  background: var(--raised);
+  border-radius: 4px;
+  padding: 32px 40px 24px;
+  margin: 0;
+  min-width: 0;
+  box-shadow: 0 6px 30px #33271605;
+}
+.writing-paper > .eyebrow {
+  margin: 0 0 22px;
+}
+.writing-title {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: 30px/1.55 var(--serif);
+  padding: 0 0 20px;
+}
+.writing-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 10px 0;
+  border-block: 1px solid var(--line);
+  align-items: center;
+  margin-bottom: 20px;
+}
+.writing-toolbar button {
+  background: transparent;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+.writing-toolbar span {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.writing-body {
+  display: block;
+  width: 100%;
+  min-height: 520px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  font: 18px/2 var(--serif);
+  resize: none;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+}
+.writing-paper-foot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-top: 14px;
+}
+.writing-sidebar {
+  position: sticky;
+  top: 100px;
+  min-width: 0;
+}
+.writing-sidebar summary {
+  font: 18px/1.7 var(--serif);
+  cursor: pointer;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.writing-metadata {
+  display: grid;
+  gap: 22px;
+  padding-top: 22px;
+  font-size: 14px;
+}
+.writing-metadata > label {
+  display: grid;
+  gap: 8px;
+}
+.writing-metadata .writing-indent-control {
+  display: flex;
+  align-items: center;
+}
+.writing-tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.writing-tag-suggestions button {
+  padding: 6px 9px;
+  min-height: 36px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+}
+.writing-preview {
+  max-width: var(--reading-width);
+  margin: 50px auto 80px;
+}
+.writing-preview > h1 {
+  font: clamp(30px, 4vw, 44px)/1.5 var(--serif);
+  overflow-wrap: anywhere;
+}
+.writing-prose {
+  font-family: var(--reading-font);
+  font-size: var(--reading-size);
+  line-height: var(--reading-line);
+  overflow-wrap: anywhere;
+}
+.writing-prose > p {
+  white-space: pre-wrap;
+  margin: 1.6em 0;
+}
+.writing-prose h2 {
+  font-size: 1.3em;
+  line-height: 1.6;
+  margin: 2.4em 0 1em;
+  scroll-margin-top: 80px;
+}
+.writing-prose blockquote {
+  white-space: pre-wrap;
+  margin: 1.5em 0;
+  border-left: 3px solid var(--accent);
+  padding-left: 1.3em;
+  color: var(--muted);
+}
+.writing-prose hr {
+  border: 0;
+  height: 1px;
+  width: 64px;
+  background: var(--line);
+  margin: 2.6em auto;
+}
+.writing-indent > p {
+  text-indent: 2em;
+}
+.writing-verse {
+  line-height: 2.15;
+}
+.writing-verse > p {
+  text-indent: 0;
+}
+.writing-publish-dialog {
+  width: min(560px, calc(100vw - 32px));
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.writing-publish-dialog::backdrop {
+  background: #14141488;
+}
+.writing-publish-dialog > form {
+  text-align: right;
+}
+.writing-publish-dialog h2 {
+  font: 26px/1.5 var(--serif);
+}
+.writing-focus .site-header,
+.writing-focus .site-footer,
+.writing-focus .writing-sidebar {
+  display: none;
+}
+.writing-focus .writing-layout {
+  display: block;
+  max-width: 840px;
+  margin-inline: auto;
+}
+.writing-desk-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+}
+.writing-draft-list {
+  margin-bottom: 60px;
+}
+.writing-draft-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+.writing-draft-card h2 {
+  font: 23px/1.5 var(--serif);
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.writing-draft-card p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.writing-draft-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.submission-reader-shell {
+  max-width: 920px;
+  margin: 32px auto 60px;
+}
+.submission-reader-head {
+  max-width: var(--reading-width);
+  margin: 40px auto 32px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 28px;
+}
+.submission-reader-head h1 {
+  font: 400 clamp(32px, 4.5vw, 48px)/1.5 var(--serif);
+  overflow-wrap: anywhere;
+  margin: 18px 0;
+}
+.submission-reader-head .submission-author {
+  font-size: 16px;
+}
+.submission-reading-options {
+  max-width: var(--reading-width);
+  margin: 24px auto;
+}
+.submission-reading-options summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 10px 0;
+}
+.submission-reading-options .settings-fields {
+  padding: 20px 0;
+}
+.submission-reader-body {
+  max-width: var(--reading-width);
+  margin: 40px auto 60px;
+}
+.submission-reader-body > .writing-verse {
+  max-width: 600px;
+  margin-inline: auto;
+}
+.submission-reader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 24px 0;
+  border-block: 1px solid var(--line);
+  align-items: center;
+}
+.submission-toc {
+  max-width: var(--reading-width);
+  margin: 20px auto;
+  padding: 16px 22px;
+  background: var(--panel);
+  border-radius: 8px;
+}
+.submission-toc summary {
+  cursor: pointer;
+}
+.submission-toc a {
+  display: block;
+  padding: 5px 0;
+}
+.submission-comments {
+  max-width: var(--reading-width);
+  margin: 48px auto;
+}
+.submission-comment-form textarea {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+}
+.submission-comment {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.submission-comment p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.submission-related {
+  margin-top: 44px;
+}
+.submission-related h2 {
+  font-family: var(--serif);
+}
+.submission-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 30;
+  pointer-events: none;
+}
+.submission-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+}
+.submission-library {
+  margin: 36px 0 60px;
+}
+@media (max-width: 850px) {
+  .submission-masthead {
+    gap: 30px;
+    padding-block: 40px;
+  }
+  .submission-letter {
+    padding: 24px;
+  }
+  .writing-layout {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 20px;
+  }
+  .writing-paper {
+    padding: 24px;
+  }
+  .writing-topbar {
+    gap: 10px;
+  }
+  .home-writing {
+    padding: 28px;
+  }
+}
+@media (max-width: 640px) {
+  .submission-masthead {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 30px 0;
+  }
+  .submission-masthead h1 {
+    margin-block: 16px;
+  }
+  .submission-letter {
+    max-width: none;
+    padding: 20px 24px;
+  }
+  .submission-letter p {
+    font-size: 22px;
+    line-height: 1.7;
+    margin: 12px 0;
+  }
+  .submission-letter p br {
+    display: none;
+  }
+  .submission-letter-rule {
+    margin: 16px 0;
+  }
+  .submission-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .submission-card {
+    padding: 22px;
+  }
+  .submission-filters {
+    padding: 14px;
+  }
+  .submission-search {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .submission-search input {
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .submission-search button {
+    width: 100%;
+  }
+  .submission-filter-row {
+    gap: 12px;
+  }
+  .submission-filter-row > label {
+    min-width: 110px;
+  }
+  .submission-filter-row .submission-short {
+    min-width: 100%;
+  }
+  .submission-discovery .section-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .home-writing {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 20px;
+  }
+  .home-writing .submission-actions {
+    justify-content: flex-start;
+  }
+  .writing-topbar {
+    padding-block: 10px;
+  }
+  .writing-save-state {
+    text-align: right;
+  }
+  .writing-top-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .writing-top-actions button {
+    padding: 8px 10px;
+  }
+  .writing-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 18px;
+  }
+  .writing-paper {
+    width: 100%;
+    padding: 20px 16px;
+  }
+  .writing-title {
+    font-size: 25px;
+  }
+  .writing-body {
+    font-size: 18px;
+    min-height: 400px;
+  }
+  .writing-sidebar {
+    order: -1;
+    position: static;
+    width: 100%;
+  }
+  .writing-toolbar span {
+    display: none;
+  }
+  .writing-desk-head {
+    display: block;
+  }
+  .writing-draft-card {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .writing-publish-dialog {
+    padding: 20px;
+  }
+  .submission-reader-head {
+    margin-top: 28px;
+  }
+}
+.home-writing-latest a {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.submission-comment > a,
+.writing-publish-dialog p {
+  overflow-wrap: anywhere;
+}

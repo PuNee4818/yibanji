@@ -9,6 +9,9 @@ test('Vercel serves the rebuilt homepage and community static routes', () => {
     'index.html',
     'catalog/index.html',
     'community/index.html',
+    'submissions/index.html',
+    'write/index.html',
+    'me/writing/index.html',
     'auth/index.html',
     'me/rewards/index.html',
     'me/index.html',
@@ -40,7 +43,11 @@ test('Vercel serves the rebuilt homepage and community static routes', () => {
 test('Vercel has deployable Node functions for profiles and post details', () => {
   const config = JSON.parse(readFileSync('.vercel/output/config.json', 'utf8'));
   assert.equal(config.version, 3);
-  for (const path of ['/u/example/', '/community/posts/00000000-0000-4000-8000-000000000000/']) {
+  for (const path of [
+    '/u/example/',
+    '/community/posts/00000000-0000-4000-8000-000000000000/',
+    '/submissions/00000000-0000-4000-8000-000000000000/',
+  ]) {
     const route = config.routes.find((r) => r.dest === '_render' && new RegExp(r.src).test(path));
     assert.ok(route, 'Missing dynamic route: ' + path);
   }

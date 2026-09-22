@@ -1,0 +1,23 @@
+---
+interface Props {
+  kind: 'bookmarks' | 'history';
+}
+const { kind } = Astro.props;
+---
+
+<section class="submission-library" data-submission-library={kind}>
+  <div class="section-heading">
+    <h2>自由来稿</h2>
+    <a href="/submissions/">发现更多文字 ↗</a>
+  </div>
+  <p data-submission-library-state role="status">
+    正在翻开来稿记录…
+  </p>
+  <div class="submission-grid" data-submission-library-list></div>
+  <button class="submission-more" data-submission-library-more hidden>
+    再看一些
+  </button>
+</section>
+<script>
+  import '../scripts/submission-library';
+</script>

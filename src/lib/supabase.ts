@@ -35,6 +35,10 @@ export function friendlyError(error: { message?: string; code?: string } | null)
   if (/INSUFFICIENT_EGGS/.test(message)) return '臭鸡蛋不够了，签到和任务可以继续领取。';
   if (/DUPLICATE_CONTENT/.test(message)) return '这段内容已经发布过，可以回到原帖继续交流。';
   if (/INVALID_POST/.test(message)) return '请填写 1–80 字的标题，并选择一个话题。';
+  if (/DRAFT_CONFLICT/.test(message)) return '草稿在别处更新了，请保留本机版本后再继续。';
+  if (/EMPTY_SUBMISSION/.test(message)) return '请填写文章标题和正文。';
+  if (/INVALID_TAGS/.test(message)) return '最多选择 5 个标签，每个标签不超过 16 个字。';
+  if (/DRAFT_LIMIT/.test(message)) return '草稿已达到 500 篇，请整理书桌后再创建。';
   if (/NOT_OWNER/.test(message)) return '只能编辑或删除自己发布的内容。';
   if (/CONTENT_NOT_FOUND|POST_NOT_FOUND/.test(message)) return '这条内容已删除或暂时不可见。';
   if (/IDEMPOTENCY_CONFLICT/.test(message)) return '这次操作与之前的请求不一致，请刷新后再试。';

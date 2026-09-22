@@ -33,6 +33,18 @@ test('profile owns editing and growth, visitor preview and social lists behave l
       '/u/' + other + '/',
     );
     await page.getByRole('button', { name: '关闭关注与粉丝' }).click();
+    await expect(page.locator('[data-profile-level] .level-badge')).toBeVisible();
+    expect(
+      await page.locator('[data-profile-private]').evaluate((growth) => {
+        const activity = document.querySelector('.profile-publication')!;
+        return Boolean(growth.compareDocumentPosition(activity) & Node.DOCUMENT_POSITION_FOLLOWING);
+      }),
+    ).toBe(true);
+    await page.screenshot({
+      path: info.outputPath('growth-entry.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
     await page.locator('.profile-growth-panel summary').click();
     await live(page.locator('#profile-growth')).toContainText('墨迹');
     await page.locator('[data-level-preview="6"]').click();
@@ -41,10 +53,40 @@ test('profile owns editing and growth, visitor preview and social lists behave l
     await expect(page.locator('[data-profile-private]')).toBeHidden();
     await expect(page.locator('[data-profile-edit]')).toBeHidden();
     await expect(page.locator('[data-follow-user]')).toBeDisabled();
+    await expect(page.locator('[data-profile-owner]')).toBeHidden();
+    await expect(page.locator('[data-profile-level] .level-badge')).toBeVisible();
+    const viewport = page.viewportSize()!;
+    for (const width of [viewport.width, 320]) {
+      await page.setViewportSize({ width, height: viewport.height });
+      const layout = await page.locator('[data-follow-user]').evaluate((button) => {
+        const range = document.createRange();
+        range.selectNodeContents(button);
+        const bounds = button.getBoundingClientRect();
+        const identity = document.querySelector('.profile-identity')!.getBoundingClientRect();
+        return {
+          lines: range.getClientRects().length,
+          height: bounds.height,
+          inActionColumn: innerWidth <= 680 || bounds.left >= identity.right,
+          fitsPage: document.documentElement.scrollWidth <= innerWidth,
+        };
+      });
+      expect(layout.lines).toBe(1);
+      expect(layout.height).toBeLessThanOrEqual(56);
+      expect(layout.inActionColumn).toBe(true);
+      expect(layout.fitsPage).toBe(true);
+    }
+    await page.setViewportSize(viewport);
+    await page.screenshot({
+      path: info.outputPath('visitor-preview.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
     await page.reload();
     await live(page.locator('[data-profile-preview-notice]')).toBeVisible();
     await expect(page.locator('[data-profile-private]')).toBeHidden();
+    await expect(page.locator('[data-profile-owner]')).toBeHidden();
     await page.locator('[data-profile-preview-exit]').click();
+    await expect(page.locator('[data-profile-owner]')).toBeVisible();
     await page.locator('[data-profile-edit]').click();
     await page.getByLabel('显示名称', { exact: true }).fill('纸边的书友');
     await page.getByLabel('个人简介', { exact: true }).fill('喜欢诗，也喜欢长长的故事。');
@@ -62,6 +104,7 @@ test('profile owns editing and growth, visitor preview and social lists behave l
     await expect(page.getByLabel('外观')).toBeVisible();
     await page.goto('/u/' + other + '/');
     await live(page.locator('[data-follow-user]')).toBeEnabled();
+    await expect(page.locator('[data-profile-level] .level-badge')).toBeVisible();
     await expect(page.locator('[data-profile-owner]')).toBeHidden();
     await expect(page.locator('[data-profile-private]')).toBeHidden();
     await expect(page.locator('[data-follower-count]')).toHaveText('1');

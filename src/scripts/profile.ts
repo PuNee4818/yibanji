@@ -1,10 +1,13 @@
 import { supabase, rpc, getCurrentUser } from '../lib/supabase';
 import { growthCard } from './rewards';
 import { discussionCard } from './discussion-render';
+import { submissionCard } from './submission-ui';
+import type { Submission } from '../lib/submissions';
 import type { Discussion } from '../lib/discussion';
 import { setupRelations } from './profile-relations';
 import { setupProfileEditor } from './profile-editor';
 import { announce } from './site';
+import { levelBadge, type Growth } from '../lib/growth';
 const profile = document.querySelector<HTMLElement>('[data-profile-id]');
 if (profile) {
   const id = profile.dataset.profileId!;
@@ -17,8 +20,15 @@ if (profile) {
   const ownerActions = profile.querySelector<HTMLElement>('[data-profile-owner]')!;
   const previewButton = profile.querySelector<HTMLButtonElement>('[data-profile-preview]')!;
   let growthLoaded = false;
+  document.addEventListener('growth-updated', (event) => {
+    if (!owner) return;
+    const progress = (event as CustomEvent<Growth>).detail.progress;
+    profile!.querySelector('[data-profile-level]')!.replaceChildren(levelBadge(progress.level));
+    growthLoaded = false;
+    if (!preview) void loadGrowth();
+  });
   function displayMode() {
-    ownerActions.hidden = !owner;
+    ownerActions.hidden = !owner || preview;
     profile!.querySelector<HTMLElement>('[data-profile-edit]')!.hidden = preview;
     profile!.querySelector<HTMLElement>('[data-profile-write]')!.hidden = !owner || preview;
     privateSection.hidden = !owner || preview;
@@ -86,8 +96,11 @@ if (profile) {
   let page = 0,
     request = 0,
     busy = false;
-  let stream =
-    new URLSearchParams(location.search).get('stream') === 'comments' ? 'comments' : 'posts';
+  let stream = ['comments', 'works'].includes(
+    new URLSearchParams(location.search).get('stream') || '',
+  )
+    ? new URLSearchParams(location.search).get('stream')!
+    : 'posts';
   const more = document.querySelector<HTMLButtonElement>('[data-profile-more]')!;
   const activity = document.querySelector('[data-profile-activity]')!;
   async function render(append = false) {
@@ -100,8 +113,19 @@ if (profile) {
       if (a.dataset.profileStream === stream) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
+    activity.classList.toggle('submission-grid', stream === 'works');
     activity.querySelector('.error-state')?.remove();
     try {
+      if (stream === 'works') {
+        const works = await rpc<Submission[]>('submission_feed', { p_user: id, p_page: nextPage });
+        if (version !== request) return;
+        if (!append) activity.replaceChildren();
+        page = nextPage;
+        for (const work of works) activity.append(submissionCard(work));
+        if (!works.length && !append) activity.textContent = '还没有公开作品，文字正在酝酿中。';
+        more.hidden = works.length < 20;
+        return;
+      }
       const rows = await rpc<Discussion[]>('community_topics', {
         p_user: id,
         p_stream: stream,
@@ -161,8 +185,11 @@ if (profile) {
   window.addEventListener('popstate', () => {
     preview = owner && new URLSearchParams(location.search).get('view') === 'public';
     displayMode();
-    stream =
-      new URLSearchParams(location.search).get('stream') === 'comments' ? 'comments' : 'posts';
+    stream = ['comments', 'works'].includes(
+      new URLSearchParams(location.search).get('stream') || '',
+    )
+      ? new URLSearchParams(location.search).get('stream')!
+      : 'posts';
     void render();
   });
   more.addEventListener('click', () => void render(true));
