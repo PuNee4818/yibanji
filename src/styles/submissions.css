@@ -723,18 +723,38 @@
   margin: 8px 0 14px;
 }
 .submission-writing-note {
-  background: var(--panel);
-  border-radius: 4px 24px 4px 4px;
-  padding: 28px;
+  border-left: 1px solid var(--line);
+  padding: 0 0 0 28px;
   align-self: start;
 }
 .submission-writing-note h3 {
-  font: 28px/1.6 var(--serif);
-  margin: 18px 0;
+  font: 20px/1.7 var(--serif);
+  margin: 10px 0 20px;
 }
-.submission-writing-note strong {
+.submission-writing-awards {
+  margin: 0 0 18px;
+}
+.submission-writing-awards > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-block: 8px;
+}
+.submission-writing-awards dt {
+  font-size: 13px;
+  color: var(--muted);
+}
+.submission-writing-awards dd {
+  margin: 0;
+  font: 23px/1.4 var(--serif);
   color: var(--accent);
-  font-weight: 500;
+  white-space: nowrap;
+}
+.submission-writing-awards dd span {
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--muted);
 }
 .submission-writing-note a {
   font-size: 13px;
@@ -805,13 +825,9 @@
     gap: 24px;
   }
   .submission-writing-note {
-    padding: 22px;
-  }
-  .submission-writing-note h3 {
-    font-size: 24px;
-  }
-  .submission-writing-note h3 br {
-    display: none;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 20px 0 0;
   }
   .submission-hot-item {
     gap: 16px;
